@@ -1,0 +1,27 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+build/
+dist/
+work/
+outputs/
+models/
+*.xcodeproj/xcuserdata/
+.build/
+# Local credentials and distributable artifacts
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.mobileprovision
+*.safetensors
+*.npz
+*.pth
+*.pt
+*.dmg
+*.app/

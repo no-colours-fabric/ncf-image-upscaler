@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: macOS ARM64 / Python ${{ matrix.python }}
+    runs-on: macos-15
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.12', '3.13', '3.14']
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+      UV_PYTHON_PREFERENCE: only-managed
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Install locked development environment
+        env:
+          PYTHON_VERSION: ${{ matrix.python }}
+        run: |
+          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          export UV_CACHE_DIR="$APP_HOME/cache/uv"
+          export UV_PROJECT_ENVIRONMENT="$APP_HOME/runtime/env"
+          export UV_PYTHON_INSTALL_DIR="$APP_HOME/runtime/python"
+          printf '%s\n' "UV_CACHE_DIR=$UV_CACHE_DIR" "UV_PROJECT_ENVIRONMENT=$UV_PROJECT_ENVIRONMENT" "UV_PYTHON_INSTALL_DIR=$UV_PYTHON_INSTALL_DIR" >> "$GITHUB_ENV"
+          python3 -m venv "$APP_HOME/runtime/tooling"
+          "$APP_HOME/runtime/tooling/bin/python" -m pip install --disable-pip-version-check --no-cache-dir 'uv==0.13.4'
+          UV="$APP_HOME/runtime/tooling/bin/uv"
+          "$UV" python install "$PYTHON_VERSION"
+          "$UV" sync --locked --python "$PYTHON_VERSION"
+      - name: Lint, formatting, and unit tests (no model downloads)
+        run: |
+          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          "$APP_HOME/runtime/env/bin/ruff" check .
+          "$APP_HOME/runtime/env/bin/ruff" format --check .
+          "$APP_HOME/runtime/env/bin/python" -m pytest -m 'not integration' -ra
+      - name: Native checks and local app build (no model downloads)
+        if: matrix.python == '3.12'
+        run: |
+          ./scripts/test-native.sh
+          ./scripts/build-app.sh
+          /usr/bin/codesign --verify --deep --strict "$HOME/Library/Application Support/image-upscaler/runtime/native-build/Image Upscaler.app"
+      - name: Build and inspect source and Python distributions
+        if: matrix.python == '3.12'
+        run: |
+          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          export UV_CACHE_DIR="$APP_HOME/cache/uv"
+          "$APP_HOME/runtime/tooling/bin/uv" build --no-sources --out-dir "$APP_HOME/runtime/distributions"
+          "$APP_HOME/runtime/env/bin/python" scripts/check-distributions.py "$APP_HOME/runtime/distributions"
+          "$APP_HOME/runtime/env/bin/python" scripts/check-source-install.py "$APP_HOME"/runtime/distributions/*.tar.gz

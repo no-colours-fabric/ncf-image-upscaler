@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a reproducible problem in Image Upscaler.
+body:
+  - type: markdown
+    attributes:
+      value: Do not include private images or sensitive logs. Use SECURITY.md for vulnerabilities.
+  - type: input
+    id: version
+    attributes:
+      label: App version or commit
+      description: Use upscale --version for the CLI.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Mac chip, macOS version, Python version, and installation mode.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Include the preset, scale, and image format when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics or screenshots
+      description: Remove personal paths and private data. Include a small sample only if you can share it.

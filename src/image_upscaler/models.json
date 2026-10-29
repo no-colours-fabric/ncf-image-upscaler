@@ -1,0 +1,47 @@
+{
+  "x4plus": {
+    "title": "Real-ESRGAN ×4 — photos",
+    "repository": "mlx-community/Real-ESRGAN-x4plus",
+    "revision": "16c284e716eeec6a5634154c813b9148d35e8ea8",
+    "sha256": "b6abde4aa36e24bd586e4f5e4ff8b55d0aa719acb05520d31745e444c1d990c8",
+    "size": 33461689,
+    "architecture": "rrdb",
+    "scale": 4,
+    "blocks": 23,
+    "license": "BSD-3-Clause"
+  },
+  "x2plus": {
+    "title": "Real-ESRGAN ×2 — photos",
+    "repository": "mlx-community/Real-ESRGAN-x2plus",
+    "revision": "c42bece4e3bfcd84a9a264dee0145fea637e5775",
+    "sha256": "93c875ee5637ca326bae14420fbbb5be8a19f0eb7d3b0c6af08a8ef9c0180020",
+    "size": 33472058,
+    "architecture": "rrdb",
+    "scale": 2,
+    "blocks": 23,
+    "license": "BSD-3-Clause"
+  },
+  "anime": {
+    "title": "Real-ESRGAN ×4 — anime and illustrations",
+    "repository": "mlx-community/Real-ESRGAN-x4plus-anime-6B",
+    "revision": "5fa0cb713afb4daa2c4146c615f10cec886a8759",
+    "sha256": "a184441d498d3d570f4af2ae9efdfadb8a5f43dde16d20f08f94a18e37ecac71",
+    "size": 8953050,
+    "architecture": "rrdb",
+    "scale": 4,
+    "blocks": 6,
+    "license": "BSD-3-Clause"
+  },
+  "fast": {
+    "title": "Real-ESRGAN general ×4 — lightweight model",
+    "repository": "mlx-community/Real-ESRGAN-general-x4v3",
+    "revision": "e9a382fa779f227abf65ad49d4e5b90c1202d683",
+    "sha256": "86f4714b7420203457f2b70a24ee52640098acb2b3fc4ceb5eab120de96b4265",
+    "size": 2434666,
+    "architecture": "srvgg",
+    "scale": 4,
+    "blocks": 32,
+    "license": "BSD-3-Clause"
+  }
+}
+

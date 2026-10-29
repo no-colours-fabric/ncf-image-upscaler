@@ -1,0 +1,63 @@
+[project]
+name = "image-upscaler"
+version = "0.2.0"
+description = "Offline image upscaling for Apple Silicon, with transparency support"
+keywords = ["image", "upscaling", "macos", "apple-silicon", "mlx", "realesrgan"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: MacOS X",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Graphics",
+]
+readme = "README.md"
+requires-python = ">=3.12,<3.15"
+license = "BSD-3-Clause AND Apache-2.0"
+license-files = ["LICENSE", "THIRD_PARTY.md", "licenses/*.txt"]
+dependencies = [
+    "mlx==0.32.4",
+    "numpy==2.5.4",
+    "Pillow==13.0.0",
+    "scipy==1.18.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/no-colours-fabric/image-upscaler"
+Repository = "https://github.com/no-colours-fabric/image-upscaler"
+Issues = "https://github.com/no-colours-fabric/image-upscaler/issues"
+Changelog = "https://github.com/no-colours-fabric/image-upscaler/blob/main/CHANGELOG.md"
+
+[project.scripts]
+upscale = "image_upscaler.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "ruff>=0.14,<1"]
+
+[build-system]
+requires = ["hatchling==1.33.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/image_upscaler"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src", "/native", "/scripts", "/tests", "/licenses", "/docs", "/.github",
+    "/README.md", "/LICENSE", "/THIRD_PARTY.md", "/CHANGELOG.md",
+    "/CONTRIBUTING.md", "/SECURITY.md", "/AGENTS.md", "/.gitignore",
+    "/.gitattributes", "/pyproject.toml", "/uv.lock", "/upscale",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["integration: uses downloaded model weights and the Apple GPU"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = ["src/image_upscaler/_vendor"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
