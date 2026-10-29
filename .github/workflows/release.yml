@@ -14,7 +14,7 @@ concurrency:
 jobs:
   dmg:
     name: Build and verify Apple Silicon DMG
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 40
     permissions:
       contents: write

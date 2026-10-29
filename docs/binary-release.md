@@ -68,7 +68,7 @@ network connections and verify exact alpha, unchanged inputs, and compositing on
 light and dark backgrounds. They do not download weights.
 
 This isolation is not a claim that a separate physical Mac was used. Hosted CI
-also tests the actual generated DMG on macOS 15; local GPU and interface checks
+also tests the actual generated DMG on macOS 26; local GPU and interface checks
 are recorded in `docs/verification.md`.
 
 ## Publish
@@ -78,7 +78,7 @@ are recorded in `docs/verification.md`.
 3. Push the source commit and wait for CI to pass.
 4. Push the matching version tag, such as `v0.3.0`.
 
-The tag-triggered **Binary release** workflow builds a fresh DMG on macOS 15,
+The tag-triggered **Binary release** workflow builds a fresh DMG on macOS 26,
 verifies a relocated installation without models or system Python, and only then
 creates and publishes a GitHub Release with the DMG, `SHA256SUMS.txt`, and
 `packaging/RELEASE_NOTES.md`. Its GitHub token has content-write permission only

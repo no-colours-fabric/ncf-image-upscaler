@@ -30,7 +30,7 @@ standalone CPython 3.12.15; developer checks use Python 3.14.4.
 
 These tests isolate the existing source/runtime installation on the same Mac;
 a separate physical Mac was not used. The release workflow independently checks
-the generated DMG on macOS 15 before publishing it. The app is ad-hoc signed and
+the generated DMG on macOS 26 before publishing it. The app is ad-hoc signed and
 not notarized by Apple; no Gatekeeper acceptance is implied by local signature
 verification. See [binary release process](binary-release.md).
 
