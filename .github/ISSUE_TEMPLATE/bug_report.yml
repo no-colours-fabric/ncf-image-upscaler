@@ -15,7 +15,7 @@ body:
     id: environment
     attributes:
       label: Environment
-      description: Mac chip, macOS version, Python version, and installation mode.
+      description: Mac chip, macOS version, and installation method (DMG or source). Include Python version for a source installation.
     validations:
       required: true
   - type: textarea

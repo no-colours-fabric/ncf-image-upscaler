@@ -7,6 +7,22 @@ Drag the app into Applications and open it. No system Python or Xcode is needed.
 This build is not notarized by Apple; follow the first-launch instructions in the README
 and the included `INSTALL.txt` only if you trust the release and have checked its checksum.
 
+### Verify a download
+
+Download both the DMG and `SHA256SUMS.txt` from the **same release** into the same folder.
+Open Terminal in that folder and run:
+
+```sh
+shasum -a 256 -c SHA256SUMS.txt
+```
+
+The result should show `ImageUpscaler-0.3.0-arm64.dmg: OK` for version 0.3.0.
+If it reports a mismatch, do not install that file; download both files again from
+the [official releases](https://github.com/no-colours-fabric/image-upscaler/releases).
+The checksum checks that the file matches the published download; it is not Apple notarization.
+
+### First launch
+
 The first launch verifies and extracts the bundled engine without accessing the network.
 The versioned engine is installed under `runtime/portable/PAYLOAD_SHA256/` in the data
 directory. It is independent of the source installer's `runtime/env/` and will not replace it.
@@ -22,8 +38,16 @@ The DMG app uses the current user's Application Support directory, without a pat
 the build machine. Copying or moving the app does not change its installed engine location.
 It does not create a command in `PATH` or modify shell settings.
 
+### Update the DMG app
 
-## Install or update
+Check [the latest release](https://github.com/no-colours-fabric/image-upscaler/releases/latest),
+download its DMG and checksum, and verify the download. Save your results and quit
+Image Upscaler before replacing the app in Applications with the new copy.
+Downloaded models remain in Application Support and are reused when their pinned
+versions match. A new engine payload is installed locally on the next launch.
+The source checkout is not needed for installation or updates.
+
+## Install or update from source
 
 Use a source download or clone, open Terminal in its root, and run
 `./scripts/install.sh`. Re-running the installer updates the installed Python
@@ -47,15 +71,21 @@ explicit step: `upscale models download all`.
 ├── runtime/
 │   ├── tooling/         # uv installation tooling
 │   ├── env/             # installed package, dependencies, and CLI entry point
-│   └── native-build/    # local app and native test builds
+│   ├── native-build/    # local app and native test builds
+│   └── portable/        # DMG engines, one directory per payload SHA-256
 ├── models/              # model ID / pinned revision / model.safetensors
 └── cache/uv/            # installation cache
 
-~/Applications/Image Upscaler.app
-~/.local/bin/upscale     # symlink to the installed CLI entry point
+/Applications/Image Upscaler.app   # usual DMG destination
+~/Applications/Image Upscaler.app  # source installer destination
+~/.local/bin/upscale               # source installation's CLI symlink
 ```
 
-The installer registers the app with Finder, without changing default file
+A DMG installation uses the portable engine and shared model folders. The source
+installer also creates `tooling/`, `env/`, `native-build/` (for the native app),
+and the CLI symlink. You can keep the DMG app in another folder if you prefer.
+
+The source installer registers the app with Finder, without changing default file
 associations. It refuses to replace an unrelated app or CLI command.
 If `~/.local/bin` is absent from `PATH`, it appends a marked block to `~/.zprofile`
 (or `~/.bash_profile` for Bash). Zsh's `ZDOTDIR` is respected. Existing settings
@@ -79,9 +109,17 @@ reinstall or use editable development mode.
 
 ## Troubleshooting
 
+- **The DMG app is blocked on its first launch:** follow the
+  [README's first-launch instructions](../README.md#download-for-mac). This release
+  is not notarized. Do not override a malware or damaged-app warning.
+- **Model setup failed or was cancelled:** open **Image Upscaler → Models…** and
+  choose **Download Models** to retry. Verified installed models are kept. When all
+  models are ready, **Verify Again** checks them without downloading.
 - **`python3` is missing or unsupported:** install Python 3.12–3.14 separately,
-  then select it with `IMAGE_UPSCALER_PYTHON`.
-- **Swift compiler is missing:** install Xcode Command Line Tools, or use `--cli-only`.
+  then select it with `IMAGE_UPSCALER_PYTHON` for a source installation. The DMG
+  already includes Python.
+- **Swift compiler is missing during a source installation:** install Xcode Command
+  Line Tools, or use `--cli-only`. The DMG does not require a compiler.
 - **`upscale` is not found:** open a new terminal and check that `~/.local/bin` is
   in `PATH`. The installed command can also be run by its full path.
 - **A model is missing or corrupted:** run `upscale models download MODEL_ID`,
@@ -94,13 +132,17 @@ reinstall or use editable development mode.
 
 ## Remove the installation
 
-Quit the app and save any results you want to keep. Delete the app from
-`~/Applications`, then remove `~/.local/bin/upscale` **only if it is this project's
-symlink**. Delete `~/Library/Application Support/image-upscaler` to remove the
-runtime, models, and installation caches. For a custom installation, remove its
-selected data directory instead.
+Save any results you want to keep and quit the app. Delete the app from
+`/Applications` for a typical DMG installation, `~/Applications` for a source
+installation, or the folder where you placed it. If you installed the CLI, remove
+`~/.local/bin/upscale` **only if it is this project's symlink**.
 
-Remove only the block between `# >>> image-upscaler PATH >>>` and
+Delete `~/Library/Application Support/image-upscaler` to remove the
+runtime, models, and installation caches. For a custom installation, remove its
+selected data directory instead. This data is shared by DMG and source installations;
+keep it if you still use either installation.
+
+For a source installation, remove only the block between `# >>> image-upscaler PATH >>>` and
 `# <<< image-upscaler PATH <<<` from the shell profile if it is no longer wanted.
 The source folder is independent and may be kept or deleted. Saved output images
 are not removed by any of these steps.

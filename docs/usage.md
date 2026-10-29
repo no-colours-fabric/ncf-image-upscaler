@@ -2,6 +2,24 @@
 
 ## Native app
 
+### First launch and model setup
+
+Install the [Apple Silicon DMG](https://github.com/no-colours-fabric/image-upscaler/releases/latest)
+or use the [source installer](installation.md#install-or-update-from-source).
+The DMG includes its engine; no separate Python or Xcode installation is needed.
+
+On the DMG app's first launch, wait for the bundled engine to be installed locally.
+In **Image Upscaler Setup**, choose **Download Models** to fetch all four models
+(about 78 MB). This is the step that needs an internet connection.
+Wait for **Ready for offline image processing.** before enhancing images.
+
+Use **Cancel Download** to stop a download. You can reopen setup with
+**Image Upscaler → Models…** and retry; successfully installed models are retained.
+When all models are installed, **Verify Again** checks them without network access.
+Processing never downloads a missing model automatically.
+
+### Open and enhance an image
+
 Open an image or folder with **⌘O**, drag it into the window, or use Finder's
 **Open With → Image Upscaler**. Each folder gets its own window. The sidebar
 shows supported images in that folder, excluding hidden files and subfolders.

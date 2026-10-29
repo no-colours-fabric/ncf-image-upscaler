@@ -43,6 +43,22 @@ Open **Image Upscaler → Models…** to check models, finish downloading them, 
 an interrupted download. The app never downloads models when you start inference.
 Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations).
 
+## Documentation
+
+| Guide | What it covers |
+| --- | --- |
+| [Installation and storage](docs/installation.md) | Verify a download, install or update, find local files, troubleshoot, and uninstall |
+| [User guide](docs/usage.md) | First launch, models, image comparison, saving, keyboard shortcuts, and CLI options |
+| [Contributing](CONTRIBUTING.md) | Architecture, development setup, and checks |
+| [Binary release guide](docs/binary-release.md) | Build and verify a standalone macOS DMG |
+| [Verification notes](docs/verification.md) | Recorded checks and their limits |
+| [Changelog](CHANGELOG.md) | Changes by version |
+
+For a reproducible problem, [open a bug report](https://github.com/no-colours-fabric/image-upscaler/issues/new?template=bug_report.yml).
+Include the app version, Mac chip, macOS version, installation method, and steps to reproduce.
+Share images only if they are safe to make public. For security vulnerabilities,
+follow [SECURITY.md](SECURITY.md).
+
 ## Install from source
 
 Source installation requires **Python 3.12–3.14** and **Xcode Command Line Tools**
