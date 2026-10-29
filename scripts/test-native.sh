@@ -7,6 +7,8 @@ mkdir -p "$BUILD_DIR/module-cache"
 xcrun swiftc -swift-version 5 -target arm64-apple-macos14.0 \
     -module-cache-path "$BUILD_DIR/module-cache" \
     "$PROJECT_DIR/native/Sources/Support.swift" \
+    "$PROJECT_DIR/native/Sources/PortableRuntime.swift" \
+    "$PROJECT_DIR/native/Sources/ModelSetupController.swift" \
     "$PROJECT_DIR/native/Sources/FileOperations.swift" \
     "$PROJECT_DIR/native/Sources/ThumbnailLayout.swift" \
     "$PROJECT_DIR/native/Sources/ThumbnailCache.swift" \

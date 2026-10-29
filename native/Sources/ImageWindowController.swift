@@ -59,6 +59,7 @@ final class ImageWindowController: NSWindowController, NSWindowDelegate, NSToolb
     private(set) var sourceURL: URL?
     var folderURL: URL? { folder?.directory ?? openingDirectory }
     var onOpen: (() -> Void)?
+    var prepareEnhancement: ((String, Int) -> Bool)?
     var onDrop: ((URL) -> Void)?
     var onClosed: (() -> Void)?
     var hasUnsavedResult: Bool { folder?.documents.contains(where: { $0.hasUnsavedResult }) == true }
@@ -415,6 +416,9 @@ final class ImageWindowController: NSWindowController, NSWindowDelegate, NSToolb
 
     @objc func enhance() {
         guard !isBusy, !isLoading, !isManagingFiles, let document = folder?.selected, sourceAsset != nil else { return }
+        let preset = ["photo", "anime", "fast"][modelPopup.indexOfSelectedItem]
+        let scale = ImageDocument.outputScales[scaleControl.selectedSegment]
+        guard prepareEnhancement?(preset, scale) ?? true else { return }
         if document.hasUnsavedResult {
             let alert = NSAlert()
             alert.messageText = "Replace the unsaved result?"

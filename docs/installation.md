@@ -1,5 +1,28 @@
 # Installation and storage
 
+## Standalone DMG
+
+Download the Apple Silicon DMG from [Releases](https://github.com/no-colours-fabric/image-upscaler/releases).
+Drag the app into Applications and open it. No system Python or Xcode is needed.
+This build is not notarized by Apple; follow the first-launch instructions in the README
+and the included `INSTALL.txt` only if you trust the release and have checked its checksum.
+
+The first launch verifies and extracts the bundled engine without accessing the network.
+The versioned engine is installed under `runtime/portable/PAYLOAD_SHA256/` in the data
+directory. It is independent of the source installer's `runtime/env/` and will not replace it.
+Models are shared between both installations. Old portable engines remain available for
+older app versions; you can remove unused version folders after closing those versions.
+
+Choose **Download Models** in the setup window to download the missing models explicitly.
+Use **Image Upscaler → Models…** to check, retry, or cancel. Successfully verified models
+are reused; failed or cancelled downloads are not published as installed weights.
+An enhancement request never initiates a download.
+
+The DMG app uses the current user's Application Support directory, without a path from
+the build machine. Copying or moving the app does not change its installed engine location.
+It does not create a command in `PATH` or modify shell settings.
+
+
 ## Install or update
 
 Use a source download or clone, open Terminal in its root, and run

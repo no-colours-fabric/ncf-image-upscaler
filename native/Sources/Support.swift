@@ -11,13 +11,21 @@ enum AppFailure: LocalizedError {
 
 enum AppPaths {
     static var data: URL {
+        if let path = ProcessInfo.processInfo.environment["IMAGE_UPSCALER_HOME"], !path.isEmpty {
+            return URL(fileURLWithPath: path, isDirectory: true).standardizedFileURL
+        }
         if let path = Bundle.main.object(forInfoDictionaryKey: "ImageUpscalerDataDirectory") as? String {
             return URL(fileURLWithPath: path, isDirectory: true)
         }
         return FileManager.default.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Application Support/image-upscaler", isDirectory: true)
     }
-    static var python: URL { data.appendingPathComponent("runtime/env/bin/python") }
+    static var python: URL {
+        if let installer = try? PortableRuntimeInstaller.bundled(resources: Bundle.main.resourceURL, data: data) {
+            return installer.python
+        }
+        return data.appendingPathComponent("runtime/env/bin/python")
+    }
     static var sessions: URL {
         FileManager.default.temporaryDirectory
             .appendingPathComponent("image-upscaler-sessions", isDirectory: true)

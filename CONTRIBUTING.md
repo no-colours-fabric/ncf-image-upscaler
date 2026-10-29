@@ -78,3 +78,9 @@ screenshots for interface changes and mention checks you could not run.
 Keep unrelated changes separate. Contributions are accepted under the project's
 BSD-3-Clause license; third-party components retain their existing licenses.
 See [SECURITY.md](SECURITY.md) for private vulnerability reporting.
+
+## Binary packaging
+
+See [binary-release.md](docs/binary-release.md) for the standalone DMG builder,
+pinned Python provenance, license packaging, and relocation/GPU verification.
+Model setup is an explicit adapter in `setup_models.py`; inference stays offline.

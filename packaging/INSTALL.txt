@@ -1,0 +1,21 @@
+Image Upscaler — Apple Silicon, macOS 14 or later
+
+1. Drag Image Upscaler.app into Applications.
+2. Open it from Applications. The bundled engine is installed locally on first launch.
+3. Choose Download Models in the setup window (approximately 78 MB for all presets).
+   Model downloads are explicit. After setup, image processing works offline.
+
+This build is NOT NOTARIZED BY APPLE. It has a local ad-hoc code signature,
+not an Apple Developer ID signature. macOS may block the first launch.
+If you trust this release and have checked its source and checksum, use:
+System Settings > Privacy & Security > Open Anyway, then confirm Open.
+This allows this particular app. See Apple's instructions:
+https://support.apple.com/en-us/102445
+Do not override a warning that macOS detected malware or a damaged app.
+
+No Python, Xcode, Apple account, subscription, or activation is needed.
+The engine, models, and installation files stay under:
+~/Library/Application Support/image-upscaler/
+
+Downloads and source:
+https://github.com/no-colours-fabric/image-upscaler

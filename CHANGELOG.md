@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0 — 2026-10-29
+
+- Standalone Apple Silicon DMG with a pinned, relocatable Python/MLX engine.
+- Offline first-launch engine extraction into Application Support; no system Python or Xcode required.
+- Native model setup with explicit downloads, verification, progress, and cancellation.
+- Bundled CA certificates for model downloads and full runtime/component license notices.
+- Local ad-hoc signatures, explicit non-notarized-build instructions, and a published SHA-256 checksum.
+- Release workflow builds and verifies a relocated installation before publishing assets.
+
+
 ## 0.2.0 — 2026-10-29
 
 First public source release for macOS on Apple Silicon.

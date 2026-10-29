@@ -23,12 +23,16 @@ final class WorkerTask {
     init(session: TemporarySession) { self.session = session }
 
     func start(input: URL, output destination: URL, scale: Int, model: String) throws {
+        try start(arguments: ["-m", "image_upscaler.worker", "--input", input.path,
+                             "--output", destination.path, "--scale", String(scale), "--model", model])
+    }
+
+    func start(arguments: [String]) throws {
         guard FileManager.default.isExecutableFile(atPath: AppPaths.python.path) else {
             throw AppFailure.message("The engine is not installed. Run the Image Upscaler installer.")
         }
         process.executableURL = AppPaths.python
-        process.arguments = ["-m", "image_upscaler.worker", "--input", input.path,
-                             "--output", destination.path, "--scale", String(scale), "--model", model]
+        process.arguments = ["-I", "-B"] + arguments
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
         environment["PYTHONDONTWRITEBYTECODE"] = "1"

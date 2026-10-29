@@ -1,5 +1,39 @@
 # Verification notes
 
+## Standalone DMG 0.3.0 — 2026-10-29
+
+Local environment: Apple M4 Pro, macOS 26.5.2. The packaged interpreter is
+standalone CPython 3.12.15; developer checks use Python 3.14.4.
+
+- Full pytest suite: **39 passed**, including 11 actual-model integration checks.
+- Native suite: **477 assertions passed**, including payload validation, offline
+  extraction, repeat bootstrap, isolation, and checksum-failure rejection.
+- The builder checked and locally signed **168 native runtime files**, including
+  their minimum macOS versions and external library references. Wheels explicitly
+  target macOS 14 arm64 rather than the build machine's macOS version.
+- The DMG was built and its checksum verified. Its app was copied into a path
+  containing spaces, then installed into an empty isolated data directory with a
+  restricted PATH and invalid external Python/Xcode settings. Runtime imports,
+  CA roots, CLI, model status, and safe missing-model failure passed after the
+  copied app was removed.
+- Actual packaged inference passed for Photo ×4/×2, Illustration ×4, Fast ×4,
+  and all three ×1 presets. Network connections were denied by the Python test.
+  Exact alpha, light/dark compositing, colored edges, and unchanged source bytes
+  were verified.
+- A separate test app identity and data directory were used for the real native
+  interface. First launch installed the engine without downloading models. The
+  explicit download was cancelled: no `.download-*` or model file remained.
+  Retrying downloaded and verified all models, and the window reported readiness
+  for offline processing. Photo ×4 enhancement and saving were then completed
+  through the actual interface: 480×360 → 1920×1440, RGBA, with exact resized alpha
+  and a separate indexed output filename. The isolated test app was closed.
+
+These tests isolate the existing source/runtime installation on the same Mac;
+a separate physical Mac was not used. The release workflow independently checks
+the generated DMG on macOS 15 before publishing it. The app is ad-hoc signed and
+not notarized by Apple; no Gatekeeper acceptance is implied by local signature
+verification. See [binary release process](binary-release.md).
+
 ## Publication preparation — 2026-10-29
 
 Environment: Apple M4 Pro, macOS 26.5.2, Python 3.14.4, MLX 0.32.4.

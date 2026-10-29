@@ -60,7 +60,8 @@ Commit and push the approved tree, wait for hosted CI, then create the matching
 version tag and GitHub release. Record the changes in a dated changelog entry. Release notes should describe installation from
 source, supported platforms, limitations, and the validation actually performed.
 
-The initial distribution is source-based. The locally built app contains a path
-to its local runtime and is ad-hoc signed. Do not upload that app as a portable
-binary release. A standalone app download would need a separate packaging,
-dependency-notice, signing, and distribution process.
+Version 0.3.0 also ships a standalone DMG. Follow the [binary release process](binary-release.md)
+for its separate build, relocation checks, license packaging, and tag-triggered publication.
+The regular `build-app.sh` result remains tied to a source-installed runtime; only
+`build-dmg.py` creates the portable distribution. Neither build uses Developer ID
+signing or Apple notarization.

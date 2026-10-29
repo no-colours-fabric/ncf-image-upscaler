@@ -1670,4 +1670,48 @@ if manager.isExecutableFile(atPath: AppPaths.python.path),
 } else {
     print("Native GPU bridge checks skipped: install the local runtime and x2plus model to run them")
 }
+
+// The portable installer must work without Python and must reject damaged payloads.
+let engineFixture = root.appendingPathComponent("engine fixture with spaces")
+let engineResources = root.appendingPathComponent("relocated resources")
+let engineData = root.appendingPathComponent("isolated engine data")
+try manager.createDirectory(at: engineFixture.appendingPathComponent("runtime/bin"), withIntermediateDirectories: true)
+try manager.createDirectory(at: engineResources, withIntermediateDirectories: true)
+let fakePython = engineFixture.appendingPathComponent("runtime/bin/python3")
+try Data("#!/bin/sh\nexit 0\n".utf8).write(to: fakePython)
+try manager.setAttributes([.posixPermissions: 0o755], ofItemAtPath: fakePython.path)
+let engineArchive = engineResources.appendingPathComponent("runtime.tar")
+let tar = Process()
+tar.executableURL = URL(fileURLWithPath: "/usr/bin/tar")
+tar.arguments = ["-cf", engineArchive.path, "-C", engineFixture.path, "runtime"]
+try tar.run()
+tar.waitUntilExit()
+expect(tar.terminationStatus == 0, "portable fixture archive created")
+let engineDigest = try PortableRuntimeInstaller.sha256(engineArchive)
+let engineManifest = PortableRuntimeManifest(archive: "runtime.tar", sha256: engineDigest, version: "test")
+expect(engineManifest.isValid, "portable manifest accepts a pinned payload")
+expect(!PortableRuntimeManifest(archive: "../runtime.tar", sha256: engineDigest, version: "test").isValid,
+       "portable manifest rejects archive traversal")
+expect(!PortableRuntimeManifest(archive: "runtime.tar", sha256: "../invalid", version: "test").isValid,
+       "portable manifest rejects invalid runtime identifiers")
+let engineInstaller = PortableRuntimeInstaller(resources: engineResources, data: engineData, manifest: engineManifest)
+expect(!engineInstaller.isInstalled, "portable engine starts uninstalled")
+try engineInstaller.install()
+expect(engineInstaller.isInstalled && manager.isExecutableFile(atPath: engineInstaller.python.path),
+       "portable engine installs into isolated Application Support layout")
+expect(engineInstaller.python.path.hasPrefix(engineData.path), "portable engine does not use source or bundle paths")
+let engineTime = try engineInstaller.python.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+try engineInstaller.install()
+let engineTimeAgain = try engineInstaller.python.resourceValues(forKeys: [.contentModificationDateKey]).contentModificationDate
+expect(engineTimeAgain == engineTime,
+       "repeat bootstrap reuses the installed engine")
+let badEngine = PortableRuntimeInstaller(resources: engineResources, data: engineData,
+    manifest: PortableRuntimeManifest(archive: "runtime.tar", sha256: String(repeating: "0", count: 64), version: "test"))
+do {
+    try badEngine.install()
+    expect(false, "damaged payload must fail")
+} catch {
+    expect(!manager.fileExists(atPath: badEngine.directory.path), "checksum failure never publishes an engine")
+}
+
 print("Native tests: \(assertions) assertions passed")

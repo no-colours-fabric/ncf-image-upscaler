@@ -95,16 +95,44 @@ Installed separately, with versions and distribution hashes in `uv.lock`:
 - NumPy — BSD-3-Clause.
 - Pillow — MIT-CMU.
 - SciPy — BSD-3-Clause; bundled components have their own notices.
+- certifi — MPL-2.0; the Mozilla CA bundle is supplied as source data.
 
 The installed distributions retain their license files. Development and
-installation tools retain their respective distribution licenses. The native
-app is a local shell around this separately installed environment; it does not
-embed or redistribute these Python dependencies inside the app bundle.
+installation tools retain their respective distribution licenses. Source-built apps use that separately installed environment. The standalone DMG
+redistributes a prepared runtime payload, including those distributions and their
+complete installed license notices. The active environment is extracted to Application Support.
 
 ## Packaging
 
 The Python wheel and source archive include this file and the license texts.
 The locally built app includes them in `Contents/Resources/Licenses`.
-If distributing a bundled runtime in the future, include all dependency notices
-from the exact distributions shipped; the app's current license folder alone
-would not cover such a bundled runtime.
+The standalone DMG includes `Contents/Resources/Licenses/Runtime/` with each
+installed distribution's license files and metadata, the CPython license, and
+the complete component-license references from the pinned full Python build.
+`bundled-distributions.json` lists the distributions actually shipped.
+
+## Standalone Python distribution
+
+The binary build uses Astral's python-build-standalone CPython 3.12.15 for
+aarch64-apple-darwin, release `20261013`, install-only stripped archive.
+The archive URL, size, SHA-256, and the corresponding full archive used for
+component licenses are pinned in `packaging/python-runtime.json`. CPython uses
+PSF-2.0/Python-2.0 terms; its built-in libraries retain their respective terms.
+The full build's `PYTHON.json` and all applicable component-license files are included.
+The upstream macOS metadata mentions a missing zlib-ng notice, although this
+interpreter links Apple's system `libz` and does not ship zlib-ng. The binary
+checks that linkage and includes `SYSTEM-LIBRARY-NOTES.txt` documenting the
+upstream metadata discrepancy; the provided zlib notice is retained.
+Source: <https://github.com/astral-sh/python-build-standalone/releases/tag/20261013>.
+
+Packaging rewrites Python entry-point launchers to use the interpreter beside
+them, removes build-machine `direct_url.json` metadata and bytecode caches,
+applies local ad-hoc signatures to Mach-O files, and refreshes distribution
+RECORD hashes after these packaging changes. It does not change model algorithms
+or third-party Python module implementations. All original notices are retained.
+Dependency wheels are selected for macOS 14 arm64, and native deployment targets
+are checked before packaging. No downloaded model weights are included.
+
+Release-only tooling (including zstandard) is pinned in the development group of
+`uv.lock` and is not added to the runtime payload. The full Python build is used
+only for license metadata; the shipped interpreter comes from the stripped archive.

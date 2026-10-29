@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import ssl
 import tempfile
 from dataclasses import dataclass
 from importlib.resources import files
@@ -59,7 +60,7 @@ def require_model(spec: ModelSpec) -> Path:
     return path
 
 
-def download_model(spec: ModelSpec) -> Path:
+def download_model(spec: ModelSpec, progress=None) -> Path:
     destination = model_path(spec)
     if destination.is_file():
         try:
@@ -67,18 +68,23 @@ def download_model(spec: ModelSpec) -> Path:
         except ValueError:
             pass
     destination.parent.mkdir(parents=True, exist_ok=True)
+    import certifi
+
+    context = ssl.create_default_context(cafile=certifi.where())
     fd, name = tempfile.mkstemp(prefix=".download-", dir=destination.parent)
     temporary = Path(name)
     try:
         request = Request(spec.url, headers={"User-Agent": f"image-upscaler/{__version__}"})
         with os.fdopen(fd, "wb") as target:
-            with urlopen(request, timeout=60) as source:
+            with urlopen(request, timeout=60, context=context) as source:
                 received = 0
                 while chunk := source.read(1024 * 1024):
                     received += len(chunk)
                     if received > spec.size:
                         raise ValueError(f"Unexpected model size for {spec.id}")
                     target.write(chunk)
+                    if progress:
+                        progress(received, spec.size)
         if temporary.stat().st_size != spec.size or sha256(temporary) != spec.sha256:
             raise ValueError(f"Model checksum mismatch for {spec.id}")
         os.replace(temporary, destination)

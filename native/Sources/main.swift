@@ -3,10 +3,12 @@ import AppKit
 final class ApplicationDelegate: NSObject, NSApplicationDelegate {
     private var controllers: [ImageWindowController] = []
     private var terminating = false
+    private let setup = ModelSetupController()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         TemporarySession.removeAbandoned()
         installMenu()
+        setup.prepare()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) { [weak self] in
             guard let self else { return }
             let arguments = CommandLine.arguments.dropFirst().filter { !$0.hasPrefix("-") }
@@ -32,6 +34,16 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if terminating { return .terminateLater }
+        if setup.isPreparing {
+            terminating = true
+            setup.waitForPreparation { [weak self] in
+                guard let self else { return }
+                self.terminating = false
+                let reply = self.applicationShouldTerminate(sender)
+                if reply != .terminateLater { sender.reply(toApplicationShouldTerminate: reply == .terminateNow) }
+            }
+            return .terminateLater
+        }
         let fileWork = controllers.filter { $0.hasFileWork }
         if !fileWork.isEmpty {
             terminating = true
@@ -84,6 +96,9 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate {
     @discardableResult private func makeWindow() -> ImageWindowController {
         let controller = ImageWindowController()
         controller.onOpen = { [weak self] in self?.openPanel() }
+        controller.prepareEnhancement = { [weak self] preset, scale in
+            self?.setup.canEnhance(preset: preset, scale: scale) ?? false
+        }
         controller.onDrop = { [weak self] url in self?.open(url) }
         controller.onClosed = { [weak self, weak controller] in
             self?.controllers.removeAll { $0 === controller }
@@ -132,11 +147,13 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate {
     @objc func actual() { active?.actualSize() }
     @objc func zoomIn() { active?.zoomIn() }
     @objc func zoomOut() { active?.zoomOut() }
+    @objc func showModels() { setup.showSetup() }
 
     private func installMenu() {
         let bar = NSMenu()
         let application = NSMenu()
         application.addItem(withTitle: "About Image Upscaler", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        add(application, "Models…", #selector(showModels), "")
         application.addItem(.separator())
         application.addItem(withTitle: "Hide Image Upscaler", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         application.addItem(.separator())
@@ -200,6 +217,21 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate {
         let item = menu.addItem(withTitle: title, action: action, keyEquivalent: key)
         item.target = self
         return item
+    }
+}
+
+// Used by distribution verification; does not open a window or access the network.
+if Array(CommandLine.arguments.dropFirst()) == ["--prepare-runtime"] {
+    do {
+        guard let installer = try PortableRuntimeInstaller.bundled(resources: Bundle.main.resourceURL, data: AppPaths.data) else {
+            throw AppFailure.message("This app does not contain a portable engine.")
+        }
+        try installer.install()
+        print(installer.python.path)
+        exit(0)
+    } catch {
+        fputs("\(error.localizedDescription)\n", stderr)
+        exit(1)
     }
 }
 

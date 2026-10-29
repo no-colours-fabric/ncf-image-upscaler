@@ -19,20 +19,34 @@ soft shadows, and partial alpha intact. Your images stay on your Mac.
 - **Safe outputs.** Processing never replaces the original. Results are saved as separate PNGs.
 - **Scriptable.** Use the same processing engine through the `upscale` command.
 
-## Requirements
+## Download for Mac
 
-- A Mac with **Apple Silicon** (M1 or later), running **macOS 14 or later**.
-- **Python 3.12–3.14** available as `python3` (or selected explicitly below).
-- **Xcode Command Line Tools** for the native app. Install with `xcode-select --install`.
-- Internet access for installing dependencies and explicitly downloading models.
-  Once installed, image processing works offline. All four models total approximately 78 MB.
+**[Download Image Upscaler 0.3.0 for Apple Silicon](https://github.com/no-colours-fabric/image-upscaler/releases/download/v0.3.0/ImageUpscaler-0.3.0-arm64.dmg)** · [All releases and checksums](https://github.com/no-colours-fabric/image-upscaler/releases)
 
-Intel Macs, Windows, and Linux are not supported. This is an early release;
-see [limitations](#limitations) before choosing it for a workflow.
+Requires **macOS 14 or later** and **Apple Silicon** (M1 or later).
+No separate Python or Xcode installation is needed. There are no accounts,
+subscriptions, or activation.
+
+1. Open the DMG and drag **Image Upscaler** into **Applications**.
+2. Open the app. It installs its bundled engine locally on the first launch.
+3. Choose **Download Models** in the setup window. All presets total about 78 MB;
+   this is an explicit download. After setup, processing works offline.
+4. Open an image or folder, select a model and scale, click **Enhance**, then **Save**.
+
+**Not notarized by Apple.** This build uses a local ad-hoc signature rather than
+an Apple Developer ID signature. If macOS blocks the first launch and you trust
+the downloaded release, use **System Settings → Privacy & Security → Open Anyway**,
+then confirm **Open**. See [Apple's instructions](https://support.apple.com/en-us/102445).
+The release includes a SHA-256 checksum. Do not override a malware or damaged-app warning.
+
+Open **Image Upscaler → Models…** to check models, finish downloading them, or retry
+an interrupted download. The app never downloads models when you start inference.
+Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations).
 
 ## Install from source
 
-Clone the repository and run the installer:
+Source installation requires **Python 3.12–3.14** and **Xcode Command Line Tools**
+(for the native app). Install the latter with `xcode-select --install`.
 
 ```sh
 git clone https://github.com/no-colours-fabric/image-upscaler.git
@@ -40,35 +54,26 @@ cd image-upscaler
 ./scripts/install.sh
 ```
 
-Alternatively, use **Code → Download ZIP**, extract the archive, and run
-`./scripts/install.sh` from the extracted folder.
+Alternatively, use **Code → Download ZIP**, extract the archive, and run the installer
+from its folder. The installer creates `~/Applications/Image Upscaler.app` and the
+`upscale` command. It does not download Python or model weights. If it adds
+`~/.local/bin` to your shell profile, open a new terminal before using the command.
 
-The installer creates `~/Applications/Image Upscaler.app` and the `upscale` command.
-It does not download Python or model weights. If it adds `~/.local/bin` to your shell
-profile, open a new terminal before using the command.
-
-Download the models explicitly and check the runtime:
+Download models from the app's **Models…** window or explicitly from the CLI:
 
 ```sh
 upscale models download all
 upscale doctor
 ```
 
-Open **Image Upscaler** from `~/Applications`, or choose it in Finder's **Open With** menu.
-Open an image or folder, choose a model and scale, click **Enhance**, then **Save**.
+Use `./scripts/install.sh --cli-only` for the command-line tool alone. The DMG does
+not modify your shell profile or install a command into `PATH`.
+Select a source-build interpreter with
+`IMAGE_UPSCALER_PYTHON=/path/to/python3.12 ./scripts/install.sh`.
 
-For command-line use only, install with `./scripts/install.sh --cli-only`.
-To select a Python interpreter:
-
-```sh
-IMAGE_UPSCALER_PYTHON=/path/to/python3.12 ./scripts/install.sh
-```
-
-Normal installation copies the Python package into Application Support; the source
+Normal source installation copies the package into Application Support; the source
 folder can then be moved or deleted. Keep the selected Python installation available.
-The app is built and signed locally with an ad-hoc signature. No Apple developer
-account is needed for this local build. A portable, signed app download is not
-provided by this source installation.
+The DMG contains a separate standalone engine and does not depend on a source installation.
 
 ## Command-line usage
 
@@ -98,6 +103,9 @@ transparency handling, and troubleshooting.
 Inference runs on the local Apple GPU. The native app starts a local Python worker;
 it does not run a web server. Processing never downloads a missing model automatically.
 Downloads use public model URLs without tokens, pinned to revisions and verified by SHA-256.
+
+The first-launch engine installation uses only the bundled payload, with integrity checks
+and no network access. Model downloads use a bundled CA certificate store for HTTPS.
 
 Models, dependencies, runtime environments, and installation caches live under
 `~/Library/Application Support/image-upscaler/`, outside the repository.
