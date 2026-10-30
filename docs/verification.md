@@ -14,6 +14,10 @@
   and no network access during processing were checked.
 - The actual interface completed Photo ×4 inference on the synthetic RGBA sample.
   A fresh screenshot is included in the README.
+- Source archive and wheel checks passed; the renamed CLI continued working after
+  source removal in a separate, non-editable installation.
+- GitHub Actions passed the Python 3.12/3.13/3.14 CI matrix and built, checked,
+  and published the standalone 0.4.0 DMG independently of the local build.
 
 These are local checks on the same Mac, not verification on a separate physical
 machine. The release is ad-hoc signed and is not notarized by Apple.

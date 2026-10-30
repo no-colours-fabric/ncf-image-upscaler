@@ -59,5 +59,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
         run: |
           APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
-          gh release create "$RELEASE_TAG" --repo "$REPOSITORY" --verify-tag --draft --title "NCF Image Upscaler ${RELEASE_TAG#v}" --notes-file packaging/RELEASE_NOTES.md "$APP_HOME"/runtime/releases/*/NCFImageUpscaler-*-arm64.dmg "$APP_HOME"/runtime/releases/*/SHA256SUMS.txt
+          gh release create "$RELEASE_TAG" --repo "$REPOSITORY" --verify-tag --draft --title "NCF Image Upscaler ${RELEASE_TAG#v}" --notes-file packaging/RELEASE_NOTES.md "$APP_HOME"/runtime/releases/*/NCFImageUpscaler-*-arm64.dmg
+          gh release upload "$RELEASE_TAG" --repo "$REPOSITORY" "$APP_HOME"/runtime/releases/*/SHA256SUMS.txt
+          gh release view "$RELEASE_TAG" --repo "$REPOSITORY" --json assets --jq '.assets[].name' | "$APP_HOME/runtime/env/bin/python" -c 'import os, sys; names=set(sys.stdin.read().splitlines()); expected={"SHA256SUMS.txt", "NCFImageUpscaler-" + os.environ["RELEASE_TAG"].removeprefix("v") + "-arm64.dmg"}; assert expected <= names, f"Missing release assets: {expected - names}"'
           gh release edit "$RELEASE_TAG" --repo "$REPOSITORY" --draft=false
