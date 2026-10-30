@@ -2,7 +2,7 @@
 
 ## Standalone DMG
 
-Download the Apple Silicon DMG from [Releases](https://github.com/no-colours-fabric/image-upscaler/releases).
+Download the Apple Silicon DMG from [Releases](https://github.com/no-colours-fabric/ncf-image-upscaler/releases).
 Drag the app into Applications and open it. No system Python or Xcode is needed.
 This build is not notarized by Apple; follow the first-launch instructions in the README
 and the included `INSTALL.txt` only if you trust the release and have checked its checksum.
@@ -16,9 +16,9 @@ Open Terminal in that folder and run:
 shasum -a 256 -c SHA256SUMS.txt
 ```
 
-The result should show `ImageUpscaler-0.3.0-arm64.dmg: OK` for version 0.3.0.
+The result should show `NCFImageUpscaler-0.4.0-arm64.dmg: OK` for version 0.4.0.
 If it reports a mismatch, do not install that file; download both files again from
-the [official releases](https://github.com/no-colours-fabric/image-upscaler/releases).
+the [official releases](https://github.com/no-colours-fabric/ncf-image-upscaler/releases).
 The checksum checks that the file matches the published download; it is not Apple notarization.
 
 ### First launch
@@ -30,7 +30,7 @@ Models are shared between both installations. Old portable engines remain availa
 older app versions; you can remove unused version folders after closing those versions.
 
 Choose **Download Models** in the setup window to download the missing models explicitly.
-Use **Image Upscaler → Models…** to check, retry, or cancel. Successfully verified models
+Use **NCF Image Upscaler → Models…** to check, retry, or cancel. Successfully verified models
 are reused; failed or cancelled downloads are not published as installed weights.
 An enhancement request never initiates a download.
 
@@ -40,12 +40,31 @@ It does not create a command in `PATH` or modify shell settings.
 
 ### Update the DMG app
 
-Check [the latest release](https://github.com/no-colours-fabric/image-upscaler/releases/latest),
+Check [the latest release](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/latest),
 download its DMG and checksum, and verify the download. Save your results and quit
-Image Upscaler before replacing the app in Applications with the new copy.
+NCF Image Upscaler before replacing the app in Applications with the new copy.
 Downloaded models remain in Application Support and are reused when their pinned
 versions match. A new engine payload is installed locally on the next launch.
 The source checkout is not needed for installation or updates.
+
+### Upgrade from Image Upscaler 0.3.x
+
+Version 0.4.0 is named **NCF Image Upscaler**. Install `NCF Image Upscaler.app`,
+open it, and let it finish checking models before removing the old app.
+The new version copies matching, checksum-verified models from
+`~/Library/Application Support/image-upscaler/models/` into
+`~/Library/Application Support/ncf-image-upscaler/models/` without a download.
+Existing files in the new model directory are never overwritten during migration.
+The old installation is left intact. Sidebar settings are imported once on first launch.
+Custom data directories selected with `NCF_IMAGE_UPSCALER_HOME` stay isolated and
+do not automatically import models from an older installation.
+
+Source users should run the installer again and use **`ncf-upscale`**.
+The Python module is now `ncf_image_upscaler`, and environment overrides are
+`NCF_IMAGE_UPSCALER_HOME` and `NCF_IMAGE_UPSCALER_PYTHON`.
+After verifying the new installation, remove the old app and the old `upscale`
+symlink only if it belongs to this project. The old data directory can then be
+removed separately once it is no longer needed by an older version.
 
 ## Install or update from source
 
@@ -62,12 +81,12 @@ Keep the selected Python interpreter installed: the virtual environment uses it.
 The installer pins uv and resolves project dependencies from `uv.lock` with
 `--locked`. It does not upgrade or modify the system Python. Build dependencies
 and downloaded packages use the uv cache below. Model downloads are a separate,
-explicit step: `upscale models download all`.
+explicit step: `ncf-upscale models download all`.
 
 ## Files created
 
 ```text
-~/Library/Application Support/image-upscaler/
+~/Library/Application Support/ncf-image-upscaler/
 ├── runtime/
 │   ├── tooling/         # uv installation tooling
 │   ├── env/             # installed package, dependencies, and CLI entry point
@@ -76,9 +95,9 @@ explicit step: `upscale models download all`.
 ├── models/              # model ID / pinned revision / model.safetensors
 └── cache/uv/            # installation cache
 
-/Applications/Image Upscaler.app   # usual DMG destination
-~/Applications/Image Upscaler.app  # source installer destination
-~/.local/bin/upscale               # source installation's CLI symlink
+/Applications/NCF Image Upscaler.app   # usual DMG destination
+~/Applications/NCF Image Upscaler.app  # source installer destination
+~/.local/bin/ncf-upscale               # source installation's CLI symlink
 ```
 
 A DMG installation uses the portable engine and shared model folders. The source
@@ -98,9 +117,9 @@ files, not installation caches or model weights.
 
 ## Custom paths
 
-Set `IMAGE_UPSCALER_PYTHON` when installing to choose an interpreter.
-Set `IMAGE_UPSCALER_HOME` to change the data directory. For CLI use, keep that
-variable set when running `upscale`. The locally built app remembers its data
+Set `NCF_IMAGE_UPSCALER_PYTHON` when installing to choose an interpreter.
+Set `NCF_IMAGE_UPSCALER_HOME` to change the data directory. For CLI use, keep that
+variable set when running `ncf-upscale`. The locally built app remembers its data
 directory and passes it to the worker.
 
 To rebuild only the native app, use `./scripts/build-app.sh --install`.
@@ -112,20 +131,20 @@ reinstall or use editable development mode.
 - **The DMG app is blocked on its first launch:** follow the
   [README's first-launch instructions](../README.md#download-for-mac). This release
   is not notarized. Do not override a malware or damaged-app warning.
-- **Model setup failed or was cancelled:** open **Image Upscaler → Models…** and
+- **Model setup failed or was cancelled:** open **NCF Image Upscaler → Models…** and
   choose **Download Models** to retry. Verified installed models are kept. When all
   models are ready, **Verify Again** checks them without downloading.
 - **`python3` is missing or unsupported:** install Python 3.12–3.14 separately,
-  then select it with `IMAGE_UPSCALER_PYTHON` for a source installation. The DMG
+  then select it with `NCF_IMAGE_UPSCALER_PYTHON` for a source installation. The DMG
   already includes Python.
 - **Swift compiler is missing during a source installation:** install Xcode Command
   Line Tools, or use `--cli-only`. The DMG does not require a compiler.
-- **`upscale` is not found:** open a new terminal and check that `~/.local/bin` is
+- **`ncf-upscale` is not found:** open a new terminal and check that `~/.local/bin` is
   in `PATH`. The installed command can also be run by its full path.
-- **A model is missing or corrupted:** run `upscale models download MODEL_ID`,
-  then `upscale models verify`. Processing does not fall back to a network download.
+- **A model is missing or corrupted:** run `ncf-upscale models download MODEL_ID`,
+  then `ncf-upscale models verify`. Processing does not fall back to a network download.
 - **GPU initialization fails:** use a native arm64 terminal session on an Apple
-  Silicon Mac and run `upscale doctor`. A remote or restricted environment may
+  Silicon Mac and run `ncf-upscale doctor`. A remote or restricted environment may
   not expose the GPU.
 - **Memory pressure:** try a smaller even tile size, such as `--tile 128`.
   Final output assembly still needs memory proportional to output size.
@@ -135,14 +154,14 @@ reinstall or use editable development mode.
 Save any results you want to keep and quit the app. Delete the app from
 `/Applications` for a typical DMG installation, `~/Applications` for a source
 installation, or the folder where you placed it. If you installed the CLI, remove
-`~/.local/bin/upscale` **only if it is this project's symlink**.
+`~/.local/bin/ncf-upscale` **only if it is this project's symlink**.
 
-Delete `~/Library/Application Support/image-upscaler` to remove the
+Delete `~/Library/Application Support/ncf-image-upscaler` to remove the
 runtime, models, and installation caches. For a custom installation, remove its
 selected data directory instead. This data is shared by DMG and source installations;
 keep it if you still use either installation.
 
-For a source installation, remove only the block between `# >>> image-upscaler PATH >>>` and
-`# <<< image-upscaler PATH <<<` from the shell profile if it is no longer wanted.
+For a source installation, remove only the block between `# >>> ncf-image-upscaler PATH >>>` and
+`# <<< ncf-image-upscaler PATH <<<` from the shell profile if it is no longer wanted.
 The source folder is independent and may be kept or deleted. Saved output images
 are not removed by any of these steps.

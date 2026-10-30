@@ -1,6 +1,6 @@
 # Security policy
 
-Image Upscaler is an early-stage local application. Security fixes target the
+NCF Image Upscaler is an early-stage local application. Security fixes target the
 latest published release; older releases do not have a separate support branch.
 
 ## Reporting a vulnerability

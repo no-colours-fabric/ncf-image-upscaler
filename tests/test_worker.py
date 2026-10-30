@@ -5,7 +5,7 @@ import sys
 import pytest
 from PIL import Image
 
-from image_upscaler.models import choose_model, require_model
+from ncf_image_upscaler.models import choose_model, require_model
 
 
 @pytest.mark.integration
@@ -22,7 +22,7 @@ def test_native_worker_emits_progress_and_result(tmp_path, scale):
         [
             sys.executable,
             "-m",
-            "image_upscaler.worker",
+            "ncf_image_upscaler.worker",
             "--input",
             str(source),
             "--output",
@@ -60,13 +60,13 @@ def test_native_worker_missing_model_fails_without_network(tmp_path):
         [
             sys.executable,
             "-m",
-            "image_upscaler.worker",
+            "ncf_image_upscaler.worker",
             "--input",
             str(source),
             "--output",
             str(tmp_path / "output.png"),
         ],
-        env={**os.environ, "IMAGE_UPSCALER_HOME": str(tmp_path / "missing-runtime")},
+        env={**os.environ, "NCF_IMAGE_UPSCALER_HOME": str(tmp_path / "missing-runtime")},
         capture_output=True,
         text=True,
         timeout=30,

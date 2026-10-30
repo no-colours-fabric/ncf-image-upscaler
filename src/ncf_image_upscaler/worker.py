@@ -17,7 +17,7 @@ def emit(event: str, **values) -> None:
 
 
 def run(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Native image-upscaler worker")
+    parser = argparse.ArgumentParser(description="Native ncf-image-upscaler worker")
     parser.add_argument("--input", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--scale", type=int, choices=(1, 2, 4), default=4)

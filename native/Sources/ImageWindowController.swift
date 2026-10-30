@@ -21,7 +21,7 @@ final class ImageWindowController: NSWindowController, NSWindowDelegate, NSToolb
     private var worker: WorkerTask?
     private let imageQueue = OperationQueue()
     private let loadImage: (URL) throws -> ImageAsset
-    private let fileQueue = DispatchQueue(label: "local.image-upscaler.files", qos: .userInitiated)
+    private let fileQueue = DispatchQueue(label: "local.ncf-image-upscaler.files", qos: .userInitiated)
     private var directoryMonitor: DirectoryMonitor?
     private var refreshWork: DispatchWorkItem?
     private var afterFileWork: [() -> Void] = []
@@ -72,7 +72,7 @@ final class ImageWindowController: NSWindowController, NSWindowDelegate, NSToolb
         super.init(window: window)
         imageQueue.maxConcurrentOperationCount = 1
         imageQueue.qualityOfService = .userInitiated
-        window.title = "Image Upscaler"
+        window.title = "NCF Image Upscaler"
         window.minSize = NSSize(width: 1040, height: 540)
         window.isReleasedWhenClosed = false
         window.tabbingMode = .disallowed
@@ -197,7 +197,7 @@ final class ImageWindowController: NSWindowController, NSWindowDelegate, NSToolb
     }
 
     private func setupToolbar() {
-        let toolbar = NSToolbar(identifier: "ImageUpscalerToolbar")
+        let toolbar = NSToolbar(identifier: "NCFImageUpscalerToolbar")
         toolbar.delegate = self
         toolbar.displayMode = .iconOnly
         toolbar.allowsUserCustomization = false
@@ -577,7 +577,7 @@ final class ImageWindowController: NSWindowController, NSWindowDelegate, NSToolb
         guard let window, !closed else { return }
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.messageText = "Image Upscaler"
+        alert.messageText = "NCF Image Upscaler"
         alert.informativeText = text
         alert.addButton(withTitle: "OK")
         alert.beginSheetModal(for: window)

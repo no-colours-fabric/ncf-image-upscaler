@@ -14,7 +14,8 @@ def main() -> None:
     archive = Path(sys.argv[1]).resolve()
     app_home = Path(
         os.environ.get(
-            "IMAGE_UPSCALER_HOME", Path.home() / "Library/Application Support/image-upscaler"
+            "NCF_IMAGE_UPSCALER_HOME",
+            Path.home() / "Library/Application Support/ncf-image-upscaler",
         )
     ).expanduser()
     uv = app_home / "runtime/tooling/bin/uv"
@@ -36,7 +37,7 @@ def main() -> None:
             "UV_CACHE_DIR": str(app_home / "cache/uv"),
             "UV_PROJECT_ENVIRONMENT": str(runtime),
             "UV_PYTHON_DOWNLOADS": "never",
-            "IMAGE_UPSCALER_HOME": str(root / "data"),
+            "NCF_IMAGE_UPSCALER_HOME": str(root / "data"),
             "PYTHONDONTWRITEBYTECODE": "1",
         }
 
@@ -67,14 +68,14 @@ def main() -> None:
             source,
         )
         python = runtime / "bin/python"
-        entry = runtime / "bin/upscale"
+        entry = runtime / "bin/ncf-upscale"
         commands = root / "commands"
         profile = root / "profile"
         run(
             python,
             "-c",
             "from pathlib import Path; import sys; "
-            "from image_upscaler.installation import install_command; "
+            "from ncf_image_upscaler.installation import install_command; "
             "install_command(Path(sys.argv[1]), launcher=Path(sys.argv[2]), "
             "bin_dir=Path(sys.argv[3]), search_path=sys.argv[3], profile=Path(sys.argv[4]))",
             source,
@@ -83,12 +84,14 @@ def main() -> None:
             profile,
         )
         shutil.rmtree(source_root)
-        command = commands / "upscale"
+        command = commands / "ncf-upscale"
         version = run(command, "--version")
-        assert "Image Upscaler" in version.stdout
+        assert "NCF Image Upscaler" in version.stdout
         assert "--overwrite" in run(command, "--help").stdout
         run(command, "models", "list")
-        imported = run(python, "-c", "import image_upscaler; print(image_upscaler.__file__)")
+        imported = run(
+            python, "-c", "import ncf_image_upscaler; print(ncf_image_upscaler.__file__)"
+        )
         assert str(runtime) in imported.stdout and "site-packages" in imported.stdout
         fixture = root / "original.png"
         run(

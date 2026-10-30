@@ -12,7 +12,7 @@ The app carries `runtime.tar`, a complete prepared Python environment, plus
 payload into:
 
 ```text
-~/Library/Application Support/image-upscaler/runtime/portable/PAYLOAD_SHA256/
+~/Library/Application Support/ncf-image-upscaler/runtime/portable/PAYLOAD_SHA256/
 ```
 
 Installation uses a cross-process file lock, a private staging directory, and an
@@ -31,7 +31,7 @@ model automatically. The standalone runtime contains certifi's CA bundle for HTT
 Install the development environment, then run:
 
 ```sh
-APP_HOME="$HOME/Library/Application Support/image-upscaler"
+APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
 "$APP_HOME/runtime/env/bin/python" scripts/build-dmg.py
 "$APP_HOME/runtime/env/bin/python" scripts/check-binary.py "$APP_HOME"/runtime/releases/0.3.0/*.dmg
 ```

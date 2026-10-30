@@ -1,7 +1,9 @@
 # Documentation image
 
-The application preview is an unedited screenshot of Image Upscaler's English
-native interface on macOS, captured during local verification on 2026-10-29.
+The application preview is a screenshot of NCF Image Upscaler 0.4.0's English
+native interface on macOS, captured during local verification on 2026-10-30.
+Pixels are converted to sRGB and saved as JPEG without EXIF or a device-specific
+color profile. The interface and image content are otherwise unchanged.
 The selected synthetic sample contains generated colored shapes, partial alpha,
 and a soft shadow. It uses no external photographs, private user images, or fonts.
 The displayed result was produced by actual local Photo ×4 inference.

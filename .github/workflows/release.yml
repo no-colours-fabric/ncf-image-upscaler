@@ -30,7 +30,7 @@ jobs:
           persist-credentials: false
       - name: Install pinned build tooling
         run: |
-          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
           export UV_CACHE_DIR="$APP_HOME/cache/uv"
           export UV_PROJECT_ENVIRONMENT="$APP_HOME/runtime/env"
           export UV_PYTHON_INSTALL_DIR="$APP_HOME/runtime/python"
@@ -44,20 +44,20 @@ jobs:
         env:
           RELEASE_TAG: ${{ github.ref_name }}
         run: |
-          "$HOME/Library/Application Support/image-upscaler/runtime/env/bin/python" -c 'import os, tomllib; from pathlib import Path; version=tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]; assert os.environ["RELEASE_TAG"] == "v" + version'
+          "$HOME/Library/Application Support/ncf-image-upscaler/runtime/env/bin/python" -c 'import os, tomllib; from pathlib import Path; version=tomllib.loads(Path("pyproject.toml").read_text())["project"]["version"]; assert os.environ["RELEASE_TAG"] == "v" + version'
       - name: Build standalone application and disk image
         run: |
-          "$HOME/Library/Application Support/image-upscaler/runtime/env/bin/python" scripts/build-dmg.py
+          "$HOME/Library/Application Support/ncf-image-upscaler/runtime/env/bin/python" scripts/build-dmg.py
       - name: Check relocated installation without Python or model downloads
         run: |
-          APP_HOME="$HOME/Library/Application Support/image-upscaler"
-          "$APP_HOME/runtime/env/bin/python" scripts/check-binary.py "$APP_HOME"/runtime/releases/*/ImageUpscaler-*-arm64.dmg
+          APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
+          "$APP_HOME/runtime/env/bin/python" scripts/check-binary.py "$APP_HOME"/runtime/releases/*/NCFImageUpscaler-*-arm64.dmg
       - name: Publish verified release assets
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG: ${{ github.ref_name }}
           REPOSITORY: ${{ github.repository }}
         run: |
-          APP_HOME="$HOME/Library/Application Support/image-upscaler"
-          gh release create "$RELEASE_TAG" --repo "$REPOSITORY" --verify-tag --draft --title "Image Upscaler ${RELEASE_TAG#v}" --notes-file packaging/RELEASE_NOTES.md "$APP_HOME"/runtime/releases/*/ImageUpscaler-*-arm64.dmg "$APP_HOME"/runtime/releases/*/SHA256SUMS.txt
+          APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
+          gh release create "$RELEASE_TAG" --repo "$REPOSITORY" --verify-tag --draft --title "NCF Image Upscaler ${RELEASE_TAG#v}" --notes-file packaging/RELEASE_NOTES.md "$APP_HOME"/runtime/releases/*/NCFImageUpscaler-*-arm64.dmg "$APP_HOME"/runtime/releases/*/SHA256SUMS.txt
           gh release edit "$RELEASE_TAG" --repo "$REPOSITORY" --draft=false

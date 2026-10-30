@@ -1,12 +1,12 @@
 # Third-party sources and model provenance
 
-Image Upscaler's original code is BSD-3-Clause. Included third-party code keeps
+NCF Image Upscaler's original code is BSD-3-Clause. Included third-party code keeps
 its own terms. The Python distribution declares `BSD-3-Clause AND Apache-2.0`
 to account for the BasicSR-derived architecture in the MLX port.
 
 ## Real-ESRGAN MLX port
 
-Vendored directory: `src/image_upscaler/_vendor/realesrgan_mlx`.
+Vendored directory: `src/ncf_image_upscaler/_vendor/realesrgan_mlx`.
 
 - Source: <https://github.com/xocialize/realesrgan-mlx>
 - Revision: `52c0fc1044277900b995308095a1f3cc484a3581`.
@@ -55,7 +55,7 @@ addition to the immediate port.
   [component acknowledgments](https://github.com/XPixelGroup/BasicSR/blob/v1.4.2/LICENSE/README.md).
 
 BasicSR itself and its unrelated model architectures are not bundled or installed.
-The MLX source docstrings identify the translation; Image Upscaler retains them.
+The MLX source docstrings identify the translation; NCF Image Upscaler retains them.
 
 ## Original Real-ESRGAN
 
@@ -71,7 +71,7 @@ Real-ESRGAN implementations, as identified in their retained source docstrings.
 ## Downloaded models
 
 Weights are not included in the repository or source/Python distributions.
-`src/image_upscaler/models.json` pins the repository revision, byte size, and
+`src/ncf_image_upscaler/models.json` pins the repository revision, byte size, and
 SHA-256 of each fp16 MLX conversion published by mlx-community.
 
 | Model ID | Model card at the pinned revision |
@@ -83,7 +83,7 @@ SHA-256 of each fp16 MLX conversion published by mlx-community.
 
 All four pinned model cards were checked on 2026-10-29. They declare
 BSD-3-Clause and identify conversions of official Real-ESRGAN checkpoints.
-They retain their upstream authorship; Image Upscaler does not train these models.
+They retain their upstream authorship; NCF Image Upscaler does not train these models.
 The Fast preset uses `model.safetensors` directly, without the upstream optional
 denoise-weight blend.
 

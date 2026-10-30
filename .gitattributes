@@ -3,4 +3,4 @@
 *.jpg binary
 *.icns binary
 *.swift linguist-language=Swift
-src/image_upscaler/_vendor/** linguist-vendored
+src/ncf_image_upscaler/_vendor/** linguist-vendored

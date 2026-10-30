@@ -8,7 +8,7 @@ func expect(_ condition: @autoclosure () -> Bool, _ message: String) {
 }
 
 let manager = FileManager.default
-let root = manager.temporaryDirectory.appendingPathComponent("image-upscaler-tests-\(UUID().uuidString)")
+let root = manager.temporaryDirectory.appendingPathComponent("ncf-image-upscaler-tests-\(UUID().uuidString)")
 try manager.createDirectory(at: root, withIntermediateDirectories: true)
 defer { try? manager.removeItem(at: root) }
 let original = root.appendingPathComponent("изображение с пробелами.png")
@@ -48,7 +48,7 @@ expect(try! Data(contentsOf: explicit) == Data("old output".utf8), "no accidenta
 _ = try ResultExporter.export(temporary, original: original, destination: explicit, replacing: true)
 expect(try! Data(contentsOf: explicit) == Data("result".utf8), "Save As replacement works")
 let remaining = try manager.contentsOfDirectory(atPath: root.path)
-expect(!remaining.contains(where: { $0.hasPrefix(".image-upscaler-") }),
+expect(!remaining.contains(where: { $0.hasPrefix(".ncf-image-upscaler-") }),
        "staging files removed")
 
 var session: TemporarySession? = try TemporarySession()
@@ -272,7 +272,7 @@ let moveImport = FileOperations.perform(FileOperations.imports([importSecond], i
 expect(moveImport.errors.isEmpty && !manager.fileExists(atPath: importSecond.path), "move import removes the source")
 expect(FileOperations.perform(moveImport.inverse).errors.isEmpty && manager.fileExists(atPath: importSecond.path),
        "undo move import restores its original folder")
-let privateBoard = NSPasteboard(name: .init("image-upscaler-test-\(UUID().uuidString)"))
+let privateBoard = NSPasteboard(name: .init("ncf-image-upscaler-test-\(UUID().uuidString)"))
 defer { privateBoard.releaseGlobally() }
 FileClipboard.copyFiles([importFirst, importSecond], to: privateBoard)
 expect(Set(FileClipboard.files(privateBoard)) == [importFirst, importSecond], "file clipboard carries all selected file URLs")
@@ -545,7 +545,21 @@ gallery.filterText = " \n "
 gallery.descending = false
 expect(gallery.visibleDocuments.count == 7, "whitespace filter restores the full list")
 
-let preferencesDomain = "local.image-upscaler.tests.\(UUID().uuidString)"
+let preferencesDomain = "local.ncf-image-upscaler.tests.\(UUID().uuidString)"
+let migrationDomain = "local.ncf-image-upscaler.migration-tests.\(UUID().uuidString)"
+let migrationDefaults = UserDefaults(suiteName: migrationDomain)!
+migrationDefaults.set(320.0, forKey: "sidebar.width")
+LegacyPreferences.migrate(defaults: migrationDefaults, legacy: ["sidebar.width": 500.0,
+                          "sidebar.thumbnailSize": 144.0, "unrelated": "must not migrate"])
+expect(migrationDefaults.double(forKey: "sidebar.width") == 320 &&
+       migrationDefaults.double(forKey: "sidebar.thumbnailSize") == 144 &&
+       migrationDefaults.object(forKey: "unrelated") == nil,
+       "renaming imports only sidebar settings and preserves new preferences")
+migrationDefaults.removeObject(forKey: "sidebar.thumbnailSize")
+LegacyPreferences.migrate(defaults: migrationDefaults, legacy: ["sidebar.thumbnailSize": 200.0])
+expect(migrationDefaults.object(forKey: "sidebar.thumbnailSize") == nil,
+       "legacy preferences are imported only once")
+migrationDefaults.removePersistentDomain(forName: migrationDomain)
 let testDefaults = UserDefaults(suiteName: preferencesDomain)!
 defer { testDefaults.removePersistentDomain(forName: preferencesDomain) }
 let preferences = SidebarPreferences(defaults: testDefaults)
@@ -702,7 +716,7 @@ for (index, size) in adaptiveSizes.prefix(6).enumerated() {
     expect(CGImageDestinationFinalize(writer), "adaptive collection fixture is written")
     layoutURLs.append(url)
 }
-let layoutDomain = "local.image-upscaler.layout-tests.\(UUID().uuidString)"
+let layoutDomain = "local.ncf-image-upscaler.layout-tests.\(UUID().uuidString)"
 let layoutDefaults = UserDefaults(suiteName: layoutDomain)!
 defer { layoutDefaults.removePersistentDomain(forName: layoutDomain) }
 let layoutPreferences = SidebarPreferences(defaults: layoutDefaults)
@@ -945,7 +959,7 @@ func skeletonFrame(_ index: Int) -> NSRect {
     skeletonPanel.collection.collectionViewLayout!.layoutAttributesForItem(at: IndexPath(item: index, section: 0))!.frame
 }
 func saveSkeletonSnapshot(_ name: String) throws {
-    guard let path = ProcessInfo.processInfo.environment["IMAGE_UPSCALER_TEST_SNAPSHOTS"] else { return }
+    guard let path = ProcessInfo.processInfo.environment["NCF_IMAGE_UPSCALER_TEST_SNAPSHOTS"] else { return }
     let directory = URL(fileURLWithPath: path, isDirectory: true)
     try manager.createDirectory(at: directory, withIntermediateDirectories: true)
     skeletonPanel.layoutSubtreeIfNeeded()

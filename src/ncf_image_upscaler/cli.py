@@ -11,7 +11,7 @@ from .paths import app_home
 
 
 def models_command(argv: list[str]) -> int:
-    parser = argparse.ArgumentParser(prog="upscale models", description="Local models")
+    parser = argparse.ArgumentParser(prog="ncf-upscale models", description="Local models")
     sub = parser.add_subparsers(dest="action", required=True)
     sub.add_parser("list", help="list models and their locations")
     download = sub.add_parser("download", help="download models without an account")
@@ -46,7 +46,7 @@ def doctor() -> int:
     mx = mlx_runtime()
 
     available = mx.metal.is_available()
-    print(f"Image Upscaler {__version__}")
+    print(f"NCF Image Upscaler {__version__}")
     print(f"System: {platform.system()} {platform.machine()}")
     print(f"Python: {platform.python_version()}")
     print(f"Apple GPU: {'available' if available else 'unavailable'}")
@@ -61,10 +61,11 @@ def run(argv: list[str]) -> int:
     if argv == ["doctor"]:
         return doctor()
     parser = argparse.ArgumentParser(
-        prog="upscale",
+        prog="ncf-upscale",
         description="Offline AI image enhancement at ×1/×2/×4, preserving transparency.",
         epilog=(
-            "Models: upscale models list | upscale models download all. Diagnostics: upscale doctor"
+            "Models: ncf-upscale models list | ncf-upscale models download all. "
+            "Diagnostics: ncf-upscale doctor"
         ),
     )
     parser.add_argument("input", type=Path, help="path to an image")
@@ -91,7 +92,7 @@ def run(argv: list[str]) -> int:
         "--overwrite", action="store_true", help="allow replacing an existing output file"
     )
     parser.add_argument("--quiet", action="store_true", help="print only the output path")
-    parser.add_argument("--version", action="version", version=f"Image Upscaler {__version__}")
+    parser.add_argument("--version", action="version", version=f"NCF Image Upscaler {__version__}")
     args = parser.parse_args(argv)
     if args.tile < 32 or args.tile % 2:
         parser.error("--tile must be an even number of at least 32")

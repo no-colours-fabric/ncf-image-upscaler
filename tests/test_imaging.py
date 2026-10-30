@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from image_upscaler.imaging import extend_transparent_colors, upscale_image
+from ncf_image_upscaler.imaging import extend_transparent_colors, upscale_image
 
 
 class NearestEngine:

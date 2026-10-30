@@ -4,9 +4,9 @@ import numpy as np
 import pytest
 from PIL import Image, ImageDraw
 
-from image_upscaler.engine import MLXEngine
-from image_upscaler.imaging import upscale_image
-from image_upscaler.models import registry, require_model
+from ncf_image_upscaler.engine import MLXEngine
+from ncf_image_upscaler.imaging import upscale_image
+from ncf_image_upscaler.models import registry, require_model
 
 
 def local_weights(spec):

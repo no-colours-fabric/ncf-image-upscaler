@@ -3,11 +3,11 @@ import io
 import json
 from dataclasses import replace
 
-from image_upscaler import models, setup_models
+from ncf_image_upscaler import models, setup_models
 
 
 def test_status_never_downloads_and_detects_corruption(tmp_path, monkeypatch, capsys):
-    monkeypatch.setenv("IMAGE_UPSCALER_HOME", str(tmp_path))
+    monkeypatch.setenv("NCF_IMAGE_UPSCALER_HOME", str(tmp_path))
     payload = b"verified weights"
     original = next(iter(models.registry().values()))
     spec = replace(original, size=len(payload), sha256=hashlib.sha256(payload).hexdigest())
@@ -30,7 +30,7 @@ def test_status_never_downloads_and_detects_corruption(tmp_path, monkeypatch, ca
 
 
 def test_explicit_download_reports_progress_and_verified_status(tmp_path, monkeypatch, capsys):
-    monkeypatch.setenv("IMAGE_UPSCALER_HOME", str(tmp_path))
+    monkeypatch.setenv("NCF_IMAGE_UPSCALER_HOME", str(tmp_path))
     payload = b"verified weights"
     original = next(iter(models.registry().values()))
     spec = replace(original, size=len(payload), sha256=hashlib.sha256(payload).hexdigest())

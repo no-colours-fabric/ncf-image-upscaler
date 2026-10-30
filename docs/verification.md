@@ -1,5 +1,23 @@
 # Verification notes
 
+## NCF Image Upscaler 0.4.0 — 2026-10-30
+
+- Full pytest suite: **41 passed**, including 11 actual-model integration checks
+  and offline migration checks for valid, invalid, existing, and isolated model files.
+- Native suite: **479 assertions passed**, including preference migration and
+  the renamed Python worker bridge. The native app built and launched successfully.
+- Ruff lint and formatting passed. All third-party dependency pins and hashes
+  are unchanged; vendored source files are byte-for-byte unchanged.
+- The renamed standalone DMG passed relocation, offline extraction, CLI entry
+  point, safe missing-model failure, and all seven real-model/scale cases.
+  RGBA alpha, colored edges on light/dark backgrounds, original preservation,
+  and no network access during processing were checked.
+- The actual interface completed Photo ×4 inference on the synthetic RGBA sample.
+  A fresh screenshot is included in the README.
+
+These are local checks on the same Mac, not verification on a separate physical
+machine. The release is ad-hoc signed and is not notarized by Apple.
+
 ## Standalone DMG 0.3.0 — 2026-10-29
 
 Local environment: Apple M4 Pro, macOS 26.5.2. The packaged interpreter is

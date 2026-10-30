@@ -8,8 +8,8 @@ final class WorkerTask {
     private let process = Process()
     private let output = Pipe()
     private let errors = Pipe()
-    private let queue = DispatchQueue(label: "local.image-upscaler.worker-output")
-    private let errorQueue = DispatchQueue(label: "local.image-upscaler.worker-errors")
+    private let queue = DispatchQueue(label: "local.ncf-image-upscaler.worker-output")
+    private let errorQueue = DispatchQueue(label: "local.ncf-image-upscaler.worker-errors")
     private let errorsFinished = DispatchGroup()
     private var buffer = Data()
     private var diagnostics = Data()
@@ -23,20 +23,20 @@ final class WorkerTask {
     init(session: TemporarySession) { self.session = session }
 
     func start(input: URL, output destination: URL, scale: Int, model: String) throws {
-        try start(arguments: ["-m", "image_upscaler.worker", "--input", input.path,
+        try start(arguments: ["-m", "ncf_image_upscaler.worker", "--input", input.path,
                              "--output", destination.path, "--scale", String(scale), "--model", model])
     }
 
     func start(arguments: [String]) throws {
         guard FileManager.default.isExecutableFile(atPath: AppPaths.python.path) else {
-            throw AppFailure.message("The engine is not installed. Run the Image Upscaler installer.")
+            throw AppFailure.message("The engine is not installed. Run the NCF Image Upscaler installer.")
         }
         process.executableURL = AppPaths.python
         process.arguments = ["-I", "-B"] + arguments
         var environment = ProcessInfo.processInfo.environment
         environment["PYTHONUNBUFFERED"] = "1"
         environment["PYTHONDONTWRITEBYTECODE"] = "1"
-        environment["IMAGE_UPSCALER_HOME"] = AppPaths.data.path
+        environment["NCF_IMAGE_UPSCALER_HOME"] = AppPaths.data.path
         process.environment = environment
         process.standardOutput = output
         process.standardError = errors

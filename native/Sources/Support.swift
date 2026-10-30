@@ -11,14 +11,14 @@ enum AppFailure: LocalizedError {
 
 enum AppPaths {
     static var data: URL {
-        if let path = ProcessInfo.processInfo.environment["IMAGE_UPSCALER_HOME"], !path.isEmpty {
+        if let path = ProcessInfo.processInfo.environment["NCF_IMAGE_UPSCALER_HOME"], !path.isEmpty {
             return URL(fileURLWithPath: path, isDirectory: true).standardizedFileURL
         }
-        if let path = Bundle.main.object(forInfoDictionaryKey: "ImageUpscalerDataDirectory") as? String {
+        if let path = Bundle.main.object(forInfoDictionaryKey: "NCFImageUpscalerDataDirectory") as? String {
             return URL(fileURLWithPath: path, isDirectory: true)
         }
         return FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Library/Application Support/image-upscaler", isDirectory: true)
+            .appendingPathComponent("Library/Application Support/ncf-image-upscaler", isDirectory: true)
     }
     static var python: URL {
         if let installer = try? PortableRuntimeInstaller.bundled(resources: Bundle.main.resourceURL, data: data) {
@@ -28,9 +28,23 @@ enum AppPaths {
     }
     static var sessions: URL {
         FileManager.default.temporaryDirectory
-            .appendingPathComponent("image-upscaler-sessions", isDirectory: true)
+            .appendingPathComponent("ncf-image-upscaler-sessions", isDirectory: true)
     }
     static var imageTypes: [UTType] { [.png, .jpeg, .tiff, .bmp, .webP] }
+}
+
+enum LegacyPreferences {
+    static func migrate(defaults: UserDefaults = .standard,
+                        legacy: [String: Any]? = UserDefaults.standard.persistentDomain(forName: "local.image-upscaler.desktop")) {
+        guard let legacy, !defaults.bool(forKey: "migration.preNCF.completed") else { return }
+        for key in ["sidebar.width", "sidebar.thumbnailSize", "sidebar.descending",
+                    "sidebar.sortKey", "sidebar.gridMode"] {
+            if defaults.object(forKey: key) == nil, let value = legacy[key] {
+                defaults.set(value, forKey: key)
+            }
+        }
+        defaults.set(true, forKey: "migration.preNCF.completed")
+    }
 }
 
 struct ImageAsset {
@@ -139,7 +153,7 @@ enum ResultExporter {
             throw AppFailure.message("The original cannot be replaced. Choose another filename.")
         }
         let staging = destination.deletingLastPathComponent()
-            .appendingPathComponent(".image-upscaler-\(UUID().uuidString).png")
+            .appendingPathComponent(".ncf-image-upscaler-\(UUID().uuidString).png")
         let manager = FileManager.default
         try manager.copyItem(at: temporary, to: staging)
         defer { try? manager.removeItem(at: staging) }

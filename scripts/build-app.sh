@@ -2,10 +2,10 @@
 # No accounts, signing certificates, package downloads, or Xcode project required.
 set -eu
 PROJECT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-APP_HOME="${IMAGE_UPSCALER_HOME:-$HOME/Library/Application Support/image-upscaler}"
+APP_HOME="${NCF_IMAGE_UPSCALER_HOME:-$HOME/Library/Application Support/ncf-image-upscaler}"
 BUILD_DIR="$APP_HOME/runtime/native-build"
-APP="$BUILD_DIR/Image Upscaler.app"
-PYTHON="${IMAGE_UPSCALER_PYTHON:-python3}"
+APP="$BUILD_DIR/NCF Image Upscaler.app"
+PYTHON="${NCF_IMAGE_UPSCALER_PYTHON:-python3}"
 case "${1:-}" in ''|--install) ;; *) printf '%s\n' 'Usage: scripts/build-app.sh [--install]' >&2; exit 2 ;; esac
 if ! xcrun --find swiftc >/dev/null 2>&1; then
     printf '%s\n' 'Xcode Command Line Tools are required to build the app.' >&2
@@ -15,13 +15,13 @@ mkdir -p "$BUILD_DIR/module-cache" "$APP/Contents/MacOS" "$APP/Contents/Resource
 xcrun swiftc -swift-version 5 -O -target arm64-apple-macos14.0 \
     -module-cache-path "$BUILD_DIR/module-cache" \
     "$PROJECT_DIR"/native/Sources/*.swift \
-    -o "$APP/Contents/MacOS/ImageUpscaler"
+    -o "$APP/Contents/MacOS/NCFImageUpscaler"
 "$PYTHON" - "$PROJECT_DIR/native/Info.plist" "$APP/Contents/Info.plist" "$APP_HOME" <<'PY'
 import plistlib, sys
 from pathlib import Path
 source, destination, app_home = sys.argv[1:]
 info = plistlib.loads(Path(source).read_bytes())
-info['ImageUpscalerDataDirectory'] = str(Path(app_home).resolve())
+info['NCFImageUpscalerDataDirectory'] = str(Path(app_home).resolve())
 Path(destination).write_bytes(plistlib.dumps(info))
 PY
 xcrun swift -module-cache-path "$BUILD_DIR/module-cache" \
@@ -47,10 +47,10 @@ if destination.exists():
         old_info = plistlib.loads((destination / 'Contents/Info.plist').read_bytes())
     except (OSError, ValueError):
         raise SystemExit(f'Cannot replace an unrecognized app: {destination}')
-    if old_info.get('CFBundleIdentifier') != 'local.image-upscaler.desktop':
+    if old_info.get('CFBundleIdentifier') != 'local.ncf-image-upscaler.desktop':
         raise SystemExit(f'Existing app preserved: {destination}')
-staging = directory / f'.image-upscaler-install-{uuid.uuid4()}.app'
-backup = directory / f'.image-upscaler-backup-{uuid.uuid4()}.app'
+staging = directory / f'.ncf-image-upscaler-install-{uuid.uuid4()}.app'
+backup = directory / f'.ncf-image-upscaler-backup-{uuid.uuid4()}.app'
 try:
     shutil.copytree(source, staging)
     if destination.exists():
@@ -67,7 +67,7 @@ finally:
 print(f'App installed: {destination}')
 PY
     /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister \
-        -f "$HOME/Applications/Image Upscaler.app"
+        -f "$HOME/Applications/NCF Image Upscaler.app"
 else
     printf '%s\n' "$APP"
 fi

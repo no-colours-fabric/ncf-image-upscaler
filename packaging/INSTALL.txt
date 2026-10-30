@@ -1,6 +1,6 @@
-Image Upscaler — Apple Silicon, macOS 14 or later
+NCF Image Upscaler — Apple Silicon, macOS 14 or later
 
-1. Drag Image Upscaler.app into Applications.
+1. Drag NCF Image Upscaler.app into Applications.
 2. Open it from Applications. The bundled engine is installed locally on first launch.
 3. Choose Download Models in the setup window (approximately 78 MB for all presets).
    Model downloads are explicit. After setup, image processing works offline.
@@ -15,7 +15,7 @@ Do not override a warning that macOS detected malware or a damaged app.
 
 No Python, Xcode, Apple account, subscription, or activation is needed.
 The engine, models, and installation files stay under:
-~/Library/Application Support/image-upscaler/
+~/Library/Application Support/ncf-image-upscaler/
 
 Downloads and source:
-https://github.com/no-colours-fabric/image-upscaler
+https://github.com/no-colours-fabric/ncf-image-upscaler

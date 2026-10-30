@@ -2,8 +2,8 @@
 # Installs runtime artifacts outside the checkout and registers the user command.
 set -eu
 PROJECT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-APP_HOME="${IMAGE_UPSCALER_HOME:-$HOME/Library/Application Support/image-upscaler}"
-PYTHON="${IMAGE_UPSCALER_PYTHON:-python3}"
+APP_HOME="${NCF_IMAGE_UPSCALER_HOME:-$HOME/Library/Application Support/ncf-image-upscaler}"
+PYTHON="${NCF_IMAGE_UPSCALER_PYTHON:-python3}"
 INCLUDE_APP=1
 DEV=0
 for option in "$@"; do
@@ -31,9 +31,9 @@ if [ "$DEV" -eq 1 ]; then
 else
     "$APP_HOME/runtime/tooling/bin/uv" sync --locked --no-dev --no-editable --python "$PYTHON" --project "$PROJECT_DIR"
 fi
-"$APP_HOME/runtime/env/bin/python" -m image_upscaler.installation "$PROJECT_DIR" --installed
+"$APP_HOME/runtime/env/bin/python" -m ncf_image_upscaler.installation "$PROJECT_DIR" --installed
 if [ "$INCLUDE_APP" -eq 1 ]; then
     "$PROJECT_DIR/scripts/build-app.sh" --install
 fi
 printf '\n%s\n' 'Installation complete. Download models explicitly:'
-printf '%s\n' '  upscale models download all'
+printf '%s\n' '  ncf-upscale models download all'

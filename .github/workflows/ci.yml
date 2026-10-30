@@ -35,7 +35,7 @@ jobs:
         env:
           PYTHON_VERSION: ${{ matrix.python }}
         run: |
-          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
           export UV_CACHE_DIR="$APP_HOME/cache/uv"
           export UV_PROJECT_ENVIRONMENT="$APP_HOME/runtime/env"
           export UV_PYTHON_INSTALL_DIR="$APP_HOME/runtime/python"
@@ -47,7 +47,7 @@ jobs:
           "$UV" sync --locked --python "$PYTHON_VERSION"
       - name: Lint, formatting, and unit tests (no model downloads)
         run: |
-          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
           "$APP_HOME/runtime/env/bin/ruff" check .
           "$APP_HOME/runtime/env/bin/ruff" format --check .
           "$APP_HOME/runtime/env/bin/python" -m pytest -m 'not integration' -ra
@@ -56,11 +56,11 @@ jobs:
         run: |
           ./scripts/test-native.sh
           ./scripts/build-app.sh
-          /usr/bin/codesign --verify --deep --strict "$HOME/Library/Application Support/image-upscaler/runtime/native-build/Image Upscaler.app"
+          /usr/bin/codesign --verify --deep --strict "$HOME/Library/Application Support/ncf-image-upscaler/runtime/native-build/NCF Image Upscaler.app"
       - name: Build and inspect source and Python distributions
         if: matrix.python == '3.12'
         run: |
-          APP_HOME="$HOME/Library/Application Support/image-upscaler"
+          APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
           export UV_CACHE_DIR="$APP_HOME/cache/uv"
           "$APP_HOME/runtime/tooling/bin/uv" build --no-sources --out-dir "$APP_HOME/runtime/distributions"
           "$APP_HOME/runtime/env/bin/python" scripts/check-distributions.py "$APP_HOME/runtime/distributions"

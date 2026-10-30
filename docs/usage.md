@@ -4,24 +4,24 @@
 
 ### First launch and model setup
 
-Install the [Apple Silicon DMG](https://github.com/no-colours-fabric/image-upscaler/releases/latest)
+Install the [Apple Silicon DMG](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/latest)
 or use the [source installer](installation.md#install-or-update-from-source).
 The DMG includes its engine; no separate Python or Xcode installation is needed.
 
 On the DMG app's first launch, wait for the bundled engine to be installed locally.
-In **Image Upscaler Setup**, choose **Download Models** to fetch all four models
+In **NCF Image Upscaler Setup**, choose **Download Models** to fetch all four models
 (about 78 MB). This is the step that needs an internet connection.
 Wait for **Ready for offline image processing.** before enhancing images.
 
 Use **Cancel Download** to stop a download. You can reopen setup with
-**Image Upscaler → Models…** and retry; successfully installed models are retained.
+**NCF Image Upscaler → Models…** and retry; successfully installed models are retained.
 When all models are installed, **Verify Again** checks them without network access.
 Processing never downloads a missing model automatically.
 
 ### Open and enhance an image
 
 Open an image or folder with **⌘O**, drag it into the window, or use Finder's
-**Open With → Image Upscaler**. Each folder gets its own window. The sidebar
+**Open With → NCF Image Upscaler**. Each folder gets its own window. The sidebar
 shows supported images in that folder, excluding hidden files and subfolders.
 
 Select **Photo**, **Illustration**, or **Fast**, choose **×1**, **×2**, or **×4**,
@@ -91,9 +91,9 @@ Changing a file being processed is disabled until processing finishes.
 ## CLI
 
 ```sh
-upscale input.png --scale 4 --model photo
-upscale input.png --scale 1 --output enhanced.png
-upscale input.png --model fast --tile 128 --quiet
+ncf-upscale input.png --scale 4 --model photo
+ncf-upscale input.png --scale 1 --output enhanced.png
+ncf-upscale input.png --model fast --tile 128 --quiet
 ```
 
 | Option | Behavior |
@@ -122,13 +122,13 @@ output sizes. RGB is resized with Lanczos to the requested final dimensions.
 Alpha is copied unchanged at ×1, or resized directly to the final size otherwise.
 
 ```sh
-upscale models list
-upscale models download x4plus
-upscale models download x2plus
-upscale models download anime
-upscale models download fast
-upscale models download all
-upscale models verify
+ncf-upscale models list
+ncf-upscale models download x4plus
+ncf-upscale models download x2plus
+ncf-upscale models download anime
+ncf-upscale models download fast
+ncf-upscale models download all
+ncf-upscale models verify
 ```
 
 Downloads are explicit and require no account. Valid installed weights are reused

@@ -19,7 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 APP_HOME = (
     Path(
         os.environ.get(
-            "IMAGE_UPSCALER_HOME", Path.home() / "Library/Application Support/image-upscaler"
+            "NCF_IMAGE_UPSCALER_HOME",
+            Path.home() / "Library/Application Support/ncf-image-upscaler",
         )
     )
     .expanduser()
@@ -71,7 +72,7 @@ def download_python(spec):
         print("Downloading a pinned standalone Python build artifact…", flush=True)
         with (
             urlopen(
-                Request(spec["url"], headers={"User-Agent": "image-upscaler-release-builder"}),
+                Request(spec["url"], headers={"User-Agent": "ncf-image-upscaler-release-builder"}),
                 timeout=60,
             ) as source,
             temporary.open("wb") as target,
@@ -354,13 +355,13 @@ def main():
     run(ROOT / "scripts/build-app.sh", cwd=ROOT)
     staging = BUILD / "dmg"
     staging.mkdir()
-    app = staging / "Image Upscaler.app"
-    shutil.copytree(APP_HOME / "runtime/native-build/Image Upscaler.app", app, symlinks=True)
+    app = staging / "NCF Image Upscaler.app"
+    shutil.copytree(APP_HOME / "runtime/native-build/NCF Image Upscaler.app", app, symlinks=True)
     import plistlib
 
     info_path = app / "Contents/Info.plist"
     info = plistlib.loads(info_path.read_bytes())
-    info.pop("ImageUpscalerDataDirectory", None)
+    info.pop("NCFImageUpscalerDataDirectory", None)
     info_path.write_bytes(plistlib.dumps(info))
     resources = app / "Contents/Resources"
     copy_notices(runtime, resources / "Licenses/Runtime", python_licenses)
@@ -377,18 +378,18 @@ def main():
             )
     manifest = {"archive": "runtime.tar", "sha256": digest(payload), "version": VERSION}
     (resources / "portable-runtime.json").write_text(json.dumps(manifest, indent=2) + "\n")
-    shutil.copy2(ROOT / "src/image_upscaler/models.json", resources / "models.json")
+    shutil.copy2(ROOT / "src/ncf_image_upscaler/models.json", resources / "models.json")
     run("/usr/bin/codesign", "--force", "--sign", "-", app)
     run("/usr/bin/codesign", "--verify", "--deep", "--strict", app)
     (staging / "Applications").symlink_to("/Applications", target_is_directory=True)
     shutil.copy2(ROOT / "packaging/INSTALL.txt", staging / "INSTALL.txt")
-    image = OUTPUT / f"ImageUpscaler-{VERSION}-arm64.dmg"
+    image = OUTPUT / f"NCFImageUpscaler-{VERSION}-arm64.dmg"
     print("Creating the disk image…", flush=True)
     run(
         "/usr/bin/hdiutil",
         "create",
         "-volname",
-        "Image Upscaler",
+        "NCF Image Upscaler",
         "-srcfolder",
         staging,
         "-ov",

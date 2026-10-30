@@ -1,6 +1,6 @@
 [project]
-name = "image-upscaler"
-version = "0.3.0"
+name = "ncf-image-upscaler"
+version = "0.4.0"
 description = "Offline image upscaling for Apple Silicon, with transparency support"
 keywords = ["image", "upscaling", "macos", "apple-silicon", "mlx", "realesrgan"]
 classifiers = [
@@ -25,13 +25,13 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/no-colours-fabric/image-upscaler"
-Repository = "https://github.com/no-colours-fabric/image-upscaler"
-Issues = "https://github.com/no-colours-fabric/image-upscaler/issues"
-Changelog = "https://github.com/no-colours-fabric/image-upscaler/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/no-colours-fabric/ncf-image-upscaler"
+Repository = "https://github.com/no-colours-fabric/ncf-image-upscaler"
+Issues = "https://github.com/no-colours-fabric/ncf-image-upscaler/issues"
+Changelog = "https://github.com/no-colours-fabric/ncf-image-upscaler/blob/main/CHANGELOG.md"
 
 [project.scripts]
-upscale = "image_upscaler.cli:main"
+ncf-upscale = "ncf_image_upscaler.cli:main"
 
 [dependency-groups]
 dev = ["pytest>=8,<10", "ruff>=0.14,<1", "zstandard==0.25.0"]
@@ -41,14 +41,14 @@ requires = ["hatchling==1.33.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/image_upscaler"]
+packages = ["src/ncf_image_upscaler"]
 
 [tool.hatch.build.targets.sdist]
 include = [
     "/src", "/native", "/scripts", "/tests", "/licenses", "/docs", "/.github", "/packaging",
     "/README.md", "/LICENSE", "/THIRD_PARTY.md", "/CHANGELOG.md",
     "/CONTRIBUTING.md", "/SECURITY.md", "/AGENTS.md", "/.gitignore",
-    "/.gitattributes", "/pyproject.toml", "/uv.lock", "/upscale",
+    "/.gitattributes", "/pyproject.toml", "/uv.lock", "/ncf-upscale",
 ]
 
 [tool.pytest.ini_options]
@@ -58,7 +58,7 @@ markers = ["integration: uses downloaded model weights and the Apple GPU"]
 [tool.ruff]
 target-version = "py312"
 line-length = 100
-extend-exclude = ["src/image_upscaler/_vendor"]
+extend-exclude = ["src/ncf_image_upscaler/_vendor"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]

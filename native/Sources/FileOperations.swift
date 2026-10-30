@@ -119,7 +119,7 @@ enum FileOperations {
                 switch mutation {
                 case .copy(let source, let destination):
                     let staging = destination.deletingLastPathComponent()
-                        .appendingPathComponent(".image-upscaler-copy-\(UUID().uuidString)")
+                        .appendingPathComponent(".ncf-image-upscaler-copy-\(UUID().uuidString)")
                     defer { try? manager.removeItem(at: staging) }
                     try manager.copyItem(at: source, to: staging)
                     try manager.moveItem(at: staging, to: destination)

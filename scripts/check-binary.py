@@ -22,7 +22,8 @@ def main():
     home = (
         Path(
             os.environ.get(
-                "IMAGE_UPSCALER_HOME", Path.home() / "Library/Application Support/image-upscaler"
+                "NCF_IMAGE_UPSCALER_HOME",
+                Path.home() / "Library/Application Support/ncf-image-upscaler",
             )
         )
         .expanduser()
@@ -45,9 +46,9 @@ def main():
             check=True,
         )
         try:
-            relocated = root / "Applications with spaces" / "Image Upscaler.app"
+            relocated = root / "Applications with spaces" / "NCF Image Upscaler.app"
             relocated.parent.mkdir()
-            shutil.copytree(mount / "Image Upscaler.app", relocated, symlinks=True)
+            shutil.copytree(mount / "NCF Image Upscaler.app", relocated, symlinks=True)
         finally:
             subprocess.run(["/usr/bin/hdiutil", "detach", str(mount)], check=True)
         resources = relocated / "Contents/Resources"
@@ -55,14 +56,14 @@ def main():
             ["/usr/bin/codesign", "--verify", "--deep", "--strict", str(relocated)], check=True
         )
         info = plistlib.loads((relocated / "Contents/Info.plist").read_bytes())
-        assert "ImageUpscalerDataDirectory" not in info
+        assert "NCFImageUpscalerDataDirectory" not in info
         manifest = json.loads((resources / "portable-runtime.json").read_text())
         with (resources / manifest["archive"]).open("rb") as stream:
             assert hashlib.file_digest(stream, "sha256").hexdigest() == manifest["sha256"]
         notices = resources / "Licenses/Runtime"
         assert (notices / "python-provenance.json").is_file()
         for package in (
-            "image_upscaler",
+            "ncf_image_upscaler",
             "numpy",
             "scipy",
             "pillow",
@@ -77,12 +78,12 @@ def main():
         environment = {
             **os.environ,
             "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
-            "IMAGE_UPSCALER_HOME": str(data),
+            "NCF_IMAGE_UPSCALER_HOME": str(data),
             "PYTHONPATH": "/does/not/exist",
             "PYTHONHOME": "/does/not/exist",
             "DEVELOPER_DIR": "/does/not/exist",
         }
-        executable = relocated / "Contents/MacOS/ImageUpscaler"
+        executable = relocated / "Contents/MacOS/NCFImageUpscaler"
         # GUI bootstrap is native and therefore ignores Python environment variables.
         installed = subprocess.check_output(
             [str(executable), "--prepare-runtime"], env=environment, cwd=root, text=True
@@ -116,8 +117,11 @@ def main():
             "ssl.create_default_context(cafile=certifi.where())",
             str(data),
         )
-        assert info["CFBundleShortVersionString"] in run("-m", "image_upscaler", "--version").stdout
-        status = run("-m", "image_upscaler.setup_models", "--status")
+        assert (
+            info["CFBundleShortVersionString"]
+            in run("-m", "ncf_image_upscaler", "--version").stdout
+        )
+        status = run("-m", "ncf_image_upscaler.setup_models", "--status")
         events = [json.loads(line) for line in status.stdout.splitlines()]
         assert not any(model["installed"] for model in events[0]["models"])
         assert not (data / "models").exists()
@@ -131,7 +135,7 @@ def main():
         original = fixture.read_bytes()
         missing = run(
             "-m",
-            "image_upscaler.worker",
+            "ncf_image_upscaler.worker",
             "--input",
             fixture,
             "--output",
@@ -141,7 +145,7 @@ def main():
         assert missing.returncode == 1 and "is not installed" in missing.stdout
         assert not (root / "missing.png").exists() and not (data / "models").exists()
         assert fixture.read_bytes() == original
-        entry = python.parent / "upscale"
+        entry = python.parent / "ncf-upscale"
         command = subprocess.run(
             [str(entry), "--version"], env=environment, cwd=root, text=True, capture_output=True
         )
@@ -159,9 +163,9 @@ import socket, sys
 from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
-from image_upscaler.models import registry, require_model
-from image_upscaler.engine import MLXEngine
-from image_upscaler.imaging import upscale_image
+from ncf_image_upscaler.models import registry, require_model
+from ncf_image_upscaler.engine import MLXEngine
+from ncf_image_upscaler.imaging import upscale_image
 
 def forbidden(*a, **kw):
     raise AssertionError("Inference attempted network access")

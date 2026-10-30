@@ -2,14 +2,14 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>CFBundleExecutable</key><string>ImageUpscaler</string>
-    <key>CFBundleIdentifier</key><string>local.image-upscaler.desktop</string>
-    <key>CFBundleName</key><string>Image Upscaler</string>
-    <key>CFBundleDisplayName</key><string>Image Upscaler</string>
+    <key>CFBundleExecutable</key><string>NCFImageUpscaler</string>
+    <key>CFBundleIdentifier</key><string>local.ncf-image-upscaler.desktop</string>
+    <key>CFBundleName</key><string>NCF Image Upscaler</string>
+    <key>CFBundleDisplayName</key><string>NCF Image Upscaler</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>0.3.0</string>
+    <key>CFBundleShortVersionString</key><string>0.4.0</string>
     <key>CFBundleVersion</key><string>3</string>
-    <key>NSHumanReadableCopyright</key><string>© 2026 image-upscaler contributors. BSD-3-Clause.</string>
+    <key>NSHumanReadableCopyright</key><string>© 2026 ncf-image-upscaler contributors. BSD-3-Clause.</string>
     <key>CFBundleIconFile</key><string>AppIcon</string>
     <key>LSMinimumSystemVersion</key><string>14.0</string>
     <key>NSHighResolutionCapable</key><true/>

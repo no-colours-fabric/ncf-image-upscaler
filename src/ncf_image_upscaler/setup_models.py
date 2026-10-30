@@ -26,7 +26,7 @@ def status() -> list[dict]:
 
 def run(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Check or explicitly download Image Upscaler models"
+        description="Check or explicitly download NCF Image Upscaler models"
     )
     action = parser.add_mutually_exclusive_group(required=True)
     action.add_argument("--status", action="store_true")

@@ -37,7 +37,7 @@ def check_names(names: set[str], *, wheel: bool) -> None:
     missing = required - {Path(name).name for name in names}
     if missing:
         raise SystemExit(f"Missing license files: {sorted(missing)}")
-    prefix = "image_upscaler/" if wheel else "src/image_upscaler/"
+    prefix = "ncf_image_upscaler/" if wheel else "src/ncf_image_upscaler/"
     if prefix + "models.json" not in names:
         raise SystemExit("Pinned model manifest missing")
     if prefix + "_vendor/realesrgan_mlx/archs/rrdbnet_arch.py" not in names:

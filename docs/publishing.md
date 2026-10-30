@@ -1,6 +1,6 @@
 # Publishing and release checklist
 
-Repository: <https://github.com/no-colours-fabric/image-upscaler>.
+Repository: <https://github.com/no-colours-fabric/ncf-image-upscaler>.
 
 Use this checklist for source releases. Local verification and hosted CI results
 are separate; check the Actions run for the exact commit being released.
@@ -18,8 +18,8 @@ are separate; check the Actions run for the exact commit being released.
    files. The local preparation audit found no credential-like secrets or model
    weights in the reachable tracked history; this is a pattern-based check,
    not a guarantee that all sensitive information can be detected.
-4. Create a public repository named `image-upscaler` with the display name
-   **Image Upscaler**. Suggested description: **Offline AI image enhancement for
+4. Create a public repository named `ncf-image-upscaler` with the display name
+   **NCF Image Upscaler**. Suggested description: **Offline AI image enhancement for
    Apple Silicon. Native macOS app and CLI, with transparency support.**
 5. Keep the actual Homepage/Repository/Issues links in package metadata and
    installation examples consistent with the repository URL above.
@@ -40,13 +40,13 @@ are separate; check the Actions run for the exact commit being released.
 - Build source/Python archives into Application Support and inspect their contents:
 
   ```sh
-  APP_HOME="$HOME/Library/Application Support/image-upscaler"
+  APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
   UV_CACHE_DIR="$APP_HOME/cache/uv" "$APP_HOME/runtime/tooling/bin/uv" build --no-sources --out-dir "$APP_HOME/runtime/distributions"
   "$APP_HOME/runtime/env/bin/python" scripts/check-distributions.py "$APP_HOME/runtime/distributions"
   "$APP_HOME/runtime/env/bin/python" scripts/check-source-install.py "$APP_HOME"/runtime/distributions/*.tar.gz
   ```
 
-- Keep versions consistent across `pyproject.toml`, `src/image_upscaler/__init__.py`,
+- Keep versions consistent across `pyproject.toml`, `src/ncf_image_upscaler/__init__.py`,
   `native/Info.plist`, `uv.lock`, release notes, and the chosen tag. The initial
   source version is `0.2.0`. Release tags use the `v` prefix, such as `v0.2.0`.
 - Review `THIRD_PARTY.md` and include all license texts. Downloaded model weights

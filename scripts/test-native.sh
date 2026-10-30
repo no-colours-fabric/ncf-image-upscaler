@@ -1,7 +1,7 @@
 #!/bin/sh
 set -eu
 PROJECT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-APP_HOME="${IMAGE_UPSCALER_HOME:-$HOME/Library/Application Support/image-upscaler}"
+APP_HOME="${NCF_IMAGE_UPSCALER_HOME:-$HOME/Library/Application Support/ncf-image-upscaler}"
 BUILD_DIR="$APP_HOME/runtime/native-build/tests"
 mkdir -p "$BUILD_DIR/module-cache"
 xcrun swiftc -swift-version 5 -target arm64-apple-macos14.0 \

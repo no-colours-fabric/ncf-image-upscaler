@@ -3,13 +3,13 @@ import subprocess
 
 import pytest
 
-from image_upscaler.installation import PATH_MARKER, install_command
+from ncf_image_upscaler.installation import PATH_MARKER, install_command
 
 
 def launcher_at(tmp_path):
     project = tmp_path / "project with spaces"
     project.mkdir()
-    launcher = project / "upscale"
+    launcher = project / "ncf-upscale"
     launcher.write_text('#!/bin/sh\nprintf "test-upscaler:%s\\n" "$1"\n')
     launcher.chmod(0o755)
     return project
@@ -27,7 +27,7 @@ def test_installed_command_runs_from_another_directory_and_reinstalls_safely(tmp
     assert not profile.exists()
     assert result.command.is_symlink()
     output = subprocess.check_output(
-        ["upscale", "image with spaces.png"],
+        ["ncf-upscale", "image with spaces.png"],
         cwd=tmp_path,
         env={**os.environ, "PATH": str(bin_dir)},
         text=True,
@@ -52,7 +52,7 @@ def test_path_setup_preserves_profile_is_idempotent_and_handles_spaces(tmp_path)
     # Execute the generated profile as a fresh shell would, with no PATH
     # inherited from the installer and from a different working directory.
     output = subprocess.check_output(
-        ["/bin/zsh", "-fc", 'source "$1"; upscale check', "zsh", str(profile)],
+        ["/bin/zsh", "-fc", 'source "$1"; ncf-upscale check', "zsh", str(profile)],
         env={**os.environ, "PATH": "/usr/bin:/bin"},
         cwd=tmp_path,
         text=True,
@@ -65,7 +65,7 @@ def test_unrelated_command_is_never_replaced(tmp_path, kind):
     project = launcher_at(tmp_path)
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
-    command = bin_dir / "upscale"
+    command = bin_dir / "ncf-upscale"
     if kind == "file":
         command.write_text("another application")
     elif kind == "symlink":
@@ -85,16 +85,19 @@ def test_installed_entry_point_survives_removing_source_folder(tmp_path):
     import shutil
 
     project = launcher_at(tmp_path)
-    installed = tmp_path / "Application Support" / "runtime" / "env" / "bin" / "upscale"
+    installed = tmp_path / "Application Support" / "runtime" / "env" / "bin" / "ncf-upscale"
     installed.parent.mkdir(parents=True)
-    installed.write_bytes((project / "upscale").read_bytes())
+    installed.write_bytes((project / "ncf-upscale").read_bytes())
     installed.chmod(0o755)
     runtime_link = tmp_path / "runtime link"
     runtime_link.symlink_to(installed.parent, target_is_directory=True)
     bin_dir = tmp_path / "bin"
     for _ in range(2):
         result = install_command(
-            project, launcher=runtime_link / "upscale", bin_dir=bin_dir, search_path=str(bin_dir)
+            project,
+            launcher=runtime_link / "ncf-upscale",
+            bin_dir=bin_dir,
+            search_path=str(bin_dir),
         )
     shutil.rmtree(project)
     output = subprocess.check_output([str(result.command), "after removal"], text=True)
@@ -106,8 +109,8 @@ def test_source_based_command_upgrades_to_installed_entry_point(tmp_path):
     bin_dir = tmp_path / "bin"
     profile = tmp_path / "profile"
     old = install_command(project, bin_dir=bin_dir, search_path=str(bin_dir), profile=profile)
-    installed = tmp_path / "installed-upscale"
-    installed.write_bytes((project / "upscale").read_bytes())
+    installed = tmp_path / "installed-ncf-upscale"
+    installed.write_bytes((project / "ncf-upscale").read_bytes())
     installed.chmod(0o755)
     result = install_command(
         project, launcher=installed, bin_dir=bin_dir, search_path=str(bin_dir), profile=profile

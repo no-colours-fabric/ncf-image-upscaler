@@ -2,7 +2,7 @@ import AppKit
 
 /// Explicit model installation UI. Inference never invokes a downloader.
 final class ModelSetupController: NSWindowController, NSWindowDelegate {
-    private let message = NSTextField(wrappingLabelWithString: "Preparing Image Upscaler…")
+    private let message = NSTextField(wrappingLabelWithString: "Preparing NCF Image Upscaler…")
     private let detail = NSTextField(wrappingLabelWithString: "")
     private let progress = NSProgressIndicator()
     private let download = NSButton(title: "Download Models", target: nil, action: nil)
@@ -19,7 +19,7 @@ final class ModelSetupController: NSWindowController, NSWindowDelegate {
     init() {
         let window = NSWindow(contentRect: NSRect(x: 0, y: 0, width: 510, height: 240),
                               styleMask: [.titled, .closable], backing: .buffered, defer: false)
-        window.title = "Image Upscaler Setup"
+        window.title = "NCF Image Upscaler Setup"
         window.isReleasedWhenClosed = false
         super.init(window: window)
         window.delegate = self
@@ -172,7 +172,7 @@ final class ModelSetupController: NSWindowController, NSWindowDelegate {
             }
         }
         do {
-            try worker.start(arguments: ["-m", "image_upscaler.setup_models", downloading ? "--download" : "--status"])
+            try worker.start(arguments: ["-m", "ncf_image_upscaler.setup_models", downloading ? "--download" : "--status"])
         } catch {
             task = nil
             throw error

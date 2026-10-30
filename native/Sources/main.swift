@@ -6,6 +6,7 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate {
     private let setup = ModelSetupController()
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        LegacyPreferences.migrate()
         TemporarySession.removeAbandoned()
         installMenu()
         setup.prepare()
@@ -152,12 +153,12 @@ final class ApplicationDelegate: NSObject, NSApplicationDelegate {
     private func installMenu() {
         let bar = NSMenu()
         let application = NSMenu()
-        application.addItem(withTitle: "About Image Upscaler", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
+        application.addItem(withTitle: "About NCF Image Upscaler", action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: "")
         add(application, "Models…", #selector(showModels), "")
         application.addItem(.separator())
-        application.addItem(withTitle: "Hide Image Upscaler", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
+        application.addItem(withTitle: "Hide NCF Image Upscaler", action: #selector(NSApplication.hide(_:)), keyEquivalent: "h")
         application.addItem(.separator())
-        application.addItem(withTitle: "Quit Image Upscaler", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        application.addItem(withTitle: "Quit NCF Image Upscaler", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         let appItem = NSMenuItem()
         appItem.submenu = application
         bar.addItem(appItem)

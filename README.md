@@ -1,4 +1,4 @@
-# Image Upscaler
+# NCF Image Upscaler
 
 **Offline AI image enhancement for Mac, with a native interface and a command-line tool.**
 
@@ -6,7 +6,7 @@ Enhance photos and illustrations on Apple Silicon using [MLX](https://github.com
 and [Real-ESRGAN](https://github.com/xinntao/Real-ESRGAN). Keep transparent edges,
 soft shadows, and partial alpha intact. Your images stay on your Mac.
 
-![Image Upscaler showing an original and enhanced RGBA sample](docs/assets/app-preview.jpg)
+![NCF Image Upscaler showing an original and enhanced RGBA sample](docs/assets/app-preview.jpg)
 
 *Native interface with a synthetic transparency sample, enhanced locally at ×4.*
 
@@ -17,17 +17,17 @@ soft shadows, and partial alpha intact. Your images stay on your Mac.
   illustration, and lightweight model presets.
 - **Transparency support.** Preserve RGBA and partial alpha without adding a background.
 - **Safe outputs.** Processing never replaces the original. Results are saved as separate PNGs.
-- **Scriptable.** Use the same processing engine through the `upscale` command.
+- **Scriptable.** Use the same processing engine through the `ncf-upscale` command.
 
 ## Download for Mac
 
-**[Download Image Upscaler 0.3.0 for Apple Silicon](https://github.com/no-colours-fabric/image-upscaler/releases/download/v0.3.0/ImageUpscaler-0.3.0-arm64.dmg)** · [All releases and checksums](https://github.com/no-colours-fabric/image-upscaler/releases)
+**[Download NCF Image Upscaler 0.4.0 for Apple Silicon](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/v0.4.0/NCFImageUpscaler-0.4.0-arm64.dmg)** · [All releases and checksums](https://github.com/no-colours-fabric/ncf-image-upscaler/releases)
 
 Requires **macOS 14 or later** and **Apple Silicon** (M1 or later).
 No separate Python or Xcode installation is needed. There are no accounts,
 subscriptions, or activation.
 
-1. Open the DMG and drag **Image Upscaler** into **Applications**.
+1. Open the DMG and drag **NCF Image Upscaler** into **Applications**.
 2. Open the app. It installs its bundled engine locally on the first launch.
 3. Choose **Download Models** in the setup window. All presets total about 78 MB;
    this is an explicit download. After setup, processing works offline.
@@ -39,7 +39,7 @@ the downloaded release, use **System Settings → Privacy & Security → Open An
 then confirm **Open**. See [Apple's instructions](https://support.apple.com/en-us/102445).
 The release includes a SHA-256 checksum. Do not override a malware or damaged-app warning.
 
-Open **Image Upscaler → Models…** to check models, finish downloading them, or retry
+Open **NCF Image Upscaler → Models…** to check models, finish downloading them, or retry
 an interrupted download. The app never downloads models when you start inference.
 Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations).
 
@@ -54,7 +54,7 @@ Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations
 | [Verification notes](docs/verification.md) | Recorded checks and their limits |
 | [Changelog](CHANGELOG.md) | Changes by version |
 
-For a reproducible problem, [open a bug report](https://github.com/no-colours-fabric/image-upscaler/issues/new?template=bug_report.yml).
+For a reproducible problem, [open a bug report](https://github.com/no-colours-fabric/ncf-image-upscaler/issues/new?template=bug_report.yml).
 Include the app version, Mac chip, macOS version, installation method, and steps to reproduce.
 Share images only if they are safe to make public. For security vulnerabilities,
 follow [SECURITY.md](SECURITY.md).
@@ -65,27 +65,27 @@ Source installation requires **Python 3.12–3.14** and **Xcode Command Line Too
 (for the native app). Install the latter with `xcode-select --install`.
 
 ```sh
-git clone https://github.com/no-colours-fabric/image-upscaler.git
-cd image-upscaler
+git clone https://github.com/no-colours-fabric/ncf-image-upscaler.git
+cd ncf-image-upscaler
 ./scripts/install.sh
 ```
 
 Alternatively, use **Code → Download ZIP**, extract the archive, and run the installer
-from its folder. The installer creates `~/Applications/Image Upscaler.app` and the
-`upscale` command. It does not download Python or model weights. If it adds
+from its folder. The installer creates `~/Applications/NCF Image Upscaler.app` and the
+`ncf-upscale` command. It does not download Python or model weights. If it adds
 `~/.local/bin` to your shell profile, open a new terminal before using the command.
 
 Download models from the app's **Models…** window or explicitly from the CLI:
 
 ```sh
-upscale models download all
-upscale doctor
+ncf-upscale models download all
+ncf-upscale doctor
 ```
 
 Use `./scripts/install.sh --cli-only` for the command-line tool alone. The DMG does
 not modify your shell profile or install a command into `PATH`.
 Select a source-build interpreter with
-`IMAGE_UPSCALER_PYTHON=/path/to/python3.12 ./scripts/install.sh`.
+`NCF_IMAGE_UPSCALER_PYTHON=/path/to/python3.12 ./scripts/install.sh`.
 
 Normal source installation copies the package into Application Support; the source
 folder can then be moved or deleted. Keep the selected Python installation available.
@@ -94,11 +94,11 @@ The DMG contains a separate standalone engine and does not depend on a source in
 ## Command-line usage
 
 ```sh
-upscale photo.jpg
-upscale photo.jpg --scale 1
-upscale photo.jpg --scale 2
-upscale transparent.png --model anime
-upscale photo.jpg --model fast --output result.png
+ncf-upscale photo.jpg
+ncf-upscale photo.jpg --scale 1
+ncf-upscale photo.jpg --scale 2
+ncf-upscale transparent.png --model anime
+ncf-upscale photo.jpg --model fast --output result.png
 ```
 
 The default is the photo preset at ×4. `photo.jpg` becomes `photo_4x.png` beside the
@@ -106,9 +106,9 @@ original. Existing CLI outputs require `--overwrite`; even that flag cannot repl
 the original. Use `--quiet` to print only the output path to stdout.
 
 ```sh
-upscale --help
-upscale models list
-upscale models verify
+ncf-upscale --help
+ncf-upscale models list
+ncf-upscale models verify
 ```
 
 See the [user guide](docs/usage.md) for models, keyboard shortcuts, file operations,
@@ -124,7 +124,7 @@ The first-launch engine installation uses only the bundled payload, with integri
 and no network access. Model downloads use a bundled CA certificate store for HTTPS.
 
 Models, dependencies, runtime environments, and installation caches live under
-`~/Library/Application Support/image-upscaler/`, outside the repository.
+`~/Library/Application Support/ncf-image-upscaler/`, outside the repository.
 Private temporary sessions hold unsaved enhancements and thumbnail caches.
 See [storage and installation](docs/installation.md) for details and removal instructions.
 
@@ -144,9 +144,9 @@ See [storage and installation](docs/installation.md) for details and removal ins
 
 ```sh
 ./scripts/install.sh --dev
-"$HOME/Library/Application Support/image-upscaler/runtime/env/bin/python" -m pytest -m 'not integration'
-"$HOME/Library/Application Support/image-upscaler/runtime/env/bin/ruff" check .
-"$HOME/Library/Application Support/image-upscaler/runtime/env/bin/ruff" format --check .
+"$HOME/Library/Application Support/ncf-image-upscaler/runtime/env/bin/python" -m pytest -m 'not integration'
+"$HOME/Library/Application Support/ncf-image-upscaler/runtime/env/bin/ruff" check .
+"$HOME/Library/Application Support/ncf-image-upscaler/runtime/env/bin/ruff" format --check .
 ./scripts/test-native.sh
 ```
 
@@ -158,7 +158,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for architecture and testing,
 
 ## License and acknowledgments
 
-Image Upscaler is licensed under [BSD-3-Clause](LICENSE). It uses existing
+NCF Image Upscaler is licensed under [BSD-3-Clause](LICENSE). It uses existing
 Real-ESRGAN models and an MLX port; it does not claim to train a new model.
 Third-party components retain their own licenses, including Apache-2.0 for
 BasicSR-derived code. See [THIRD_PARTY.md](THIRD_PARTY.md) and [licenses/](licenses/).

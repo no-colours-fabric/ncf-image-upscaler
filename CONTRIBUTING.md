@@ -1,4 +1,4 @@
-# Contributing to Image Upscaler
+# Contributing to NCF Image Upscaler
 
 Bug reports, documentation improvements, and focused pull requests are welcome.
 Use English for discussions, documentation, interface text, and diagnostics.
@@ -22,7 +22,7 @@ Keep the checkout in place. Re-run the installer after changing dependencies.
 Use `--cli-only` if you do not need the installed app.
 
 ```sh
-APP_HOME="$HOME/Library/Application Support/image-upscaler"
+APP_HOME="$HOME/Library/Application Support/ncf-image-upscaler"
 "$APP_HOME/runtime/env/bin/python" -m pytest -m 'not integration'
 "$APP_HOME/runtime/env/bin/ruff" check .
 "$APP_HOME/runtime/env/bin/ruff" format --check .
@@ -31,16 +31,16 @@ APP_HOME="$HOME/Library/Application Support/image-upscaler"
 ```
 
 `APP_HOME` above is a shell variable, not a runtime override. Use
-`IMAGE_UPSCALER_HOME` consistently for an isolated installation.
+`NCF_IMAGE_UPSCALER_HOME` consistently for an isolated installation.
 
 ## GPU integration checks
 
 Download models explicitly during setup, then run the integration tests offline:
 
 ```sh
-upscale models download all
-upscale models verify
-"$HOME/Library/Application Support/image-upscaler/runtime/env/bin/python" -m pytest -m integration
+ncf-upscale models download all
+ncf-upscale models verify
+"$HOME/Library/Application Support/ncf-image-upscaler/runtime/env/bin/python" -m pytest -m integration
 ```
 
 Tests never download weights. Missing weights skip the corresponding GPU tests;

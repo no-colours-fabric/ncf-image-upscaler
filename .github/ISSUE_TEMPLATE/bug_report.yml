@@ -1,5 +1,5 @@
 name: Bug report
-description: Report a reproducible problem in Image Upscaler.
+description: Report a reproducible problem in NCF Image Upscaler.
 body:
   - type: markdown
     attributes:

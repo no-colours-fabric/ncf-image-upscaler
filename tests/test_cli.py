@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 from PIL import Image
 
-from image_upscaler.models import choose_model, require_model
+from ncf_image_upscaler.models import choose_model, require_model
 
 
 @pytest.mark.integration
@@ -18,7 +18,7 @@ def test_same_size_cli_preserves_source_and_uses_1x_filename(tmp_path):
     image = Image.new("RGBA", (45, 37), (220, 80, 30, 128))
     image.save(source)
     original = source.read_bytes()
-    command = [sys.executable, "-m", "image_upscaler", str(source), "--scale", "1", "--quiet"]
+    command = [sys.executable, "-m", "ncf_image_upscaler", str(source), "--scale", "1", "--quiet"]
     process = subprocess.run(command, capture_output=True, text=True, timeout=60)
     assert process.returncode == 0, process.stderr
     destination = source.with_name("photo with spaces_1x.png")

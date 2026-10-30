@@ -8,7 +8,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-PATH_MARKER = "# >>> image-upscaler PATH >>>"
+PATH_MARKER = "# >>> ncf-image-upscaler PATH >>>"
 
 
 @dataclass(frozen=True)
@@ -25,13 +25,13 @@ def install_command(
     search_path: str | None = None,
     profile: Path | None = None,
 ) -> CommandInstallation:
-    source_launcher = project_dir.resolve() / "upscale"
+    source_launcher = project_dir.resolve() / "ncf-upscale"
     launcher = launcher.absolute() if launcher is not None else source_launcher
     if not launcher.is_file() or not os.access(launcher, os.X_OK):
         raise FileNotFoundError(f"Executable not found: {launcher}")
     bin_dir = bin_dir if bin_dir is not None else Path.home() / ".local" / "bin"
     search_path = search_path if search_path is not None else os.environ.get("PATH", "")
-    command = bin_dir / "upscale"
+    command = bin_dir / "ncf-upscale"
     # lexists-style check also protects dangling symlinks and other projects.
     if command.is_symlink():
         if command.resolve() != launcher.resolve():
@@ -39,9 +39,9 @@ def install_command(
             # another project's command (including a dangling symlink).
             if command.resolve() == source_launcher and source_launcher.is_file():
                 with tempfile.TemporaryDirectory(
-                    prefix=".upscale-install-", dir=bin_dir
+                    prefix=".ncf-upscale-install-", dir=bin_dir
                 ) as temporary:
-                    replacement = Path(temporary) / "upscale"
+                    replacement = Path(temporary) / "ncf-upscale"
                     replacement.symlink_to(launcher)
                     replacement.replace(command)
             else:
@@ -74,7 +74,7 @@ def install_command(
                 f"    *:{quoted_bin}:*) ;;\n"
                 f'    *) export PATH={quoted_bin}:"$PATH" ;;\n'
                 "esac\n"
-                "# <<< image-upscaler PATH <<<\n"
+                "# <<< ncf-image-upscaler PATH <<<\n"
             )
             profile.parent.mkdir(parents=True, exist_ok=True)
             with profile.open("a") as stream:
@@ -85,21 +85,23 @@ def install_command(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Install the upscale command for the current user")
+    parser = argparse.ArgumentParser(
+        description="Install the ncf-upscale command for the current user"
+    )
     parser.add_argument("project_dir", type=Path)
     parser.add_argument(
         "--installed", action="store_true", help="use the installed Python entry point"
     )
     args = parser.parse_args()
     try:
-        launcher = Path(sys.executable).parent / "upscale" if args.installed else None
+        launcher = Path(sys.executable).parent / "ncf-upscale" if args.installed else None
         result = install_command(args.project_dir, launcher=launcher)
     except OSError as error:
         print(f"Command installation failed: {error}", file=sys.stderr)
         return 1
     print(f"Command installed: {result.command}")
     if result.needs_new_shell:
-        print("Open a new terminal to use upscale from any folder.")
+        print("Open a new terminal to use ncf-upscale from any folder.")
         print(
             "For the current terminal: export "
             f'PATH={shlex.quote(str(result.command.parent))}:"$PATH"'

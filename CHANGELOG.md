@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 — 2026-10-30
+
+- Rename the application and repository to NCF Image Upscaler.
+- Use `ncf-upscale` for the CLI and `ncf_image_upscaler` for the Python package.
+- Use `ncf-image-upscaler` for Application Support data and a new macOS bundle identifier.
+- Reuse verified models from pre-0.4 installations offline, and copy existing sidebar preferences on first launch.
+- Update the installer, release assets, documentation, and GitHub links for the new name.
+
 ## 0.3.0 — 2026-10-29
 
 - Standalone Apple Silicon DMG with a pinned, relocatable Python/MLX engine.
