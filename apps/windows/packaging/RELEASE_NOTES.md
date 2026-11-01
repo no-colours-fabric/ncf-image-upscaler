@@ -11,9 +11,12 @@ system prerequisites may require administrator permission. Use the official
 [Microsoft Visual C++ download](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist),
 not individual DLL downloads. Python is included; no developer tools are needed.
 
-**No weights in the installer or GitHub assets.** Open Models and choose
-Download / Repair Models to explicitly prepare about 150 MiB from Hugging Face.
-Files are pinned and verified before publication; processing never downloads.
+**No weights in the installer or GitHub assets.** Missing/damaged models are
+prepared automatically from Hugging Face (about 150 MiB for all presets), with
+visible progress and Cancel. Valid caches need no network. Models offers repair
+and retry; failed/cancelled setup does not start inference or silently retry.
+Files are pinned and verified before atomic publication; the image worker never
+downloads. A pending enhancement starts only if source/preset/window remain current.
 The ORT platform telemetry API is explicitly disabled before session processing.
 OS-wide telemetry/network isolation is not claimed.
 

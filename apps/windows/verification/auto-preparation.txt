@@ -1,0 +1,19 @@
+PASS Empty cache opens visible automatic preparation from Loaded before any worker
+PASS Automatic preparation requires final real SHA verification (synthetic fixture bytes)
+PASS Repeated startup notification does not reopen or retry preparation
+PASS Verified cache skips preparation and all transfer calls
+PASS Missing required artifact prepares only that model before worker hook
+PASS Preparation and simulated worker cancellation preserve source and previous result
+PASS Same-size corrupt cache is not verified ready
+PASS Corrupt required model is repaired and verified before worker hook
+PASS cancel blocks worker and causes no hidden transfer retry
+PASS cancel keeps current window, original and prior unsaved result
+PASS error blocks worker and causes no hidden transfer retry
+PASS error keeps current window, original and prior unsaved result
+PASS preset blocks worker and causes no hidden transfer retry
+PASS preset keeps current window, original and prior unsaved result
+PASS revision blocks worker and causes no hidden transfer retry
+PASS revision keeps current window, original and prior unsaved result
+PASS close blocks worker and causes no hidden transfer retry
+PASS close keeps current window, original and prior unsaved result
+NOTE controlled WPF visible-modal/source lifecycle checks with synthetic model bytes and controlled transport/worker hook; no network, real ONNX inference or native desktop input. Production downloader integrity/HTTPS has separate evidence.

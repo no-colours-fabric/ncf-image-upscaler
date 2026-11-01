@@ -36,7 +36,9 @@ missing prerequisites may need admin. Python's app-local VCRUNTIME files come
 from the pinned official embedded ZIP; MSVCP140 is a separate system component,
 not a claimed native closure.
 It is not Authenticode-signed. Its application models are separately prepared
-from `apps/windows/models.json` by the installed Models window.
+from `apps/windows/models.json` by visible cancellable setup. Missing/corrupt
+files are prepared automatically on first use or before requested enhancement;
+Models also offers manual repair/retry. Valid caches never require network.
 
 The icon converter reads the existing `native/Tools/MakeIcon.swift` geometry;
 the Mac source is not rewritten. This is shared-source reuse, not evidence of
@@ -59,6 +61,7 @@ $models = Join-Path $build 'model-check\cache'
 & (Join-Path $app 'runtime\python.exe') .\apps\windows\tests\check-tiling.py `
   --bundle $app --model-root $models --output (Join-Path $build 'tiling')
 .\apps\windows\scripts\check-prerequisites.ps1 -TestRoot (Join-Path $build 'prereq-check')
+.\apps\windows\scripts\check-auto-preparation.ps1 -TestRoot (Join-Path $build 'auto-prep-check')
 & (Join-Path $app 'runtime\python.exe') .\apps\windows\tests\check-privacy.py `
   --bundle $app --model-root $models --output (Join-Path $build 'privacy-check')
 python .\apps\windows\scripts\native-imports.py --bundle $app `
@@ -101,3 +104,13 @@ Use the reviewed merged commit as tag target. Publish only
 `NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup.exe` and `SHA256SUMS.txt` in
 a GitHub prerelease, without marking it latest. Verify downloaded asset hashes
 and the release flags before completion. Keep stable macOS downloads prominent.
+
+The separate Windows workflow keeps PR/build permissions read-only. Only a
+trusted `push` of the exact `windows-v` version tag can upload those two allowlisted
+files between jobs and invoke a separate contents-write job. That job checks the
+clean build/source commit and hashes, creates a **draft** prerelease with
+`make_latest=false`, uploads only the setup/checksums, and downloads them again
+to verify hashes. It does not publish. An existing release (draft or published)
+causes a safe failure instead of replacement. Final publication remains a separate
+reviewed operation. Local builds use scratch space inside the chosen build root;
+developer artifacts can stay entirely on D:.

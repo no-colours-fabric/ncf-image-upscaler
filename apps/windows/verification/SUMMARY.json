@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-preview.1",
-  "status": "four release-review findings targeted; independent CI and native manual smoke pending",
+  "status": "automatic missing-model setup implemented; candidate09 review/native startup smoke pending",
   "os": "Windows 10 x64 build 19045",
   "framework": "4.8",
   "python": "3.11.3 embedded",
@@ -28,7 +28,9 @@
     "privacy-policy.json": "actual exact ORT1.17.3 API delegate trace through production worker, one small CPU Fast inference",
     "native-prerequisites.txt": "four controlled policy cases plus actual system version/loader/required-export test; no host changes",
     "prerequisite-installer.json": "actual prerequisite-gated CLI install/import/uninstall on already provisioned host; missing-system paths not physically simulated",
-    "close-reviewfix.txt": "current source: held Save barrier followed by bounded Closed-event wait, same exactly-one-close invariant; independent old CI failure preserved separately"
+    "close-reviewfix.txt": "current source: held Save barrier followed by bounded Closed-event wait, same exactly-one-close invariant; independent old CI failure preserved separately",
+    "auto-preparation.txt": "current production Loaded/preparation orchestration and visible WPF modal; synthetic model bytes with real hashes, controlled transfer and worker hook, no network/inference/native desktop input",
+    "draft-preflight.txt": "offline synthetic file allowlist/hash/tag/source validation; no GitHub token, network, draft creation or publication"
   },
   "encoding_fix": "Compiler codepage65001 plus strict UTF-8 C# validation; compiled-string verification must pass on final candidate",
   "gui_tool_limits": [
@@ -40,5 +42,13 @@
   "ort_policy": "supported disable_telemetry_events called before SessionOptions/InferenceSession",
   "native_prerequisites": "app-local CPython VCRUNTIME; system x64 VC++ required and gated; no complete native closure claimed",
   "native_prerequisite_controlled_cases": 4,
-  "native_prerequisite_actual_ready": true
+  "native_prerequisite_actual_ready": true,
+  "automatic_model_preparation": true,
+  "auto_preparation_component_assertions": 18,
+  "user_manual_smoke": {
+    "build": "candidate06",
+    "user_statement": "Works; requested automatic loading when models are absent",
+    "scope": "previous Models preparation / Fast x1 / Enhance / Save; not candidate09 startup, native RGBA/cancel/close/Esc/full parity"
+  },
+  "draft_release_preflight_cases": 4
 }

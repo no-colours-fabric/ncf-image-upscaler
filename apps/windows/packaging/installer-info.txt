@@ -3,10 +3,11 @@ NCF Image Upscaler for Windows — Experimental Preview
 Local CPU image enhancement. No accounts, subscriptions, telemetry or cloud processing.
 
 This installer includes the application and Python runtime, but NO model weights.
-After installation, open Models and choose Download / Repair Models. This explicit
-step downloads about 150 MiB from Hugging Face. The app verifies every model;
-after preparation, normal processing works offline. No manual file downloads or
-Python commands are needed.
+After launch, missing or damaged models are prepared automatically from Hugging
+Face (about 150 MiB for all presets). Setup shows progress and Cancel. Verified
+files are reused without network. Models remains available for repair/retry.
+Image inference starts only after preparation and stays local; cancel/error does
+not start it. No manual model downloads or Python commands are needed.
 
 Tested on Windows 10 x64 build 19045 with .NET Framework 4.8. Windows 11 and GPU
 execution have not been validated. This preview is unsigned. Full macOS feature

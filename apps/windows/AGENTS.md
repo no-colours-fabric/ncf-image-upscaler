@@ -9,9 +9,11 @@
   Models are separate under `%LOCALAPPDATA%\NCF Image Upscaler\models`;
   sessions and preferences use that same application data root. Uninstall keeps
   models and user images. Never ship weights inside an installer or GitHub asset.
-- Network access is restricted to explicit model preparation and developer
-  dependency preparation. Enhance must never initiate downloads. Pin every
-  download by revision, size and SHA-256; verify before atomic publication.
+- Network access is restricted to model/developer dependency preparation.
+  Missing/corrupt models are automatically prepared in visible cancellable setup
+  at first use or before a requested Enhance. The inference worker never
+  downloads; valid hash caches need no network. Cancel/error must not start a
+  worker or trigger hidden retries. Pin revision/size/SHA and publish atomically.
 - `models.json` and the Windows dependency lock describe Windows artifacts only.
   Never mechanically replace macOS pins or claim numerical MLX parity.
 - Keep environments, caches, downloaded tools, models and binary builds outside

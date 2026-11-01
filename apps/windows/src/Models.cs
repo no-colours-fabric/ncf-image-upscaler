@@ -27,8 +27,8 @@ public static class ModelStore {
  public static ModelSpec[] Read(){return new JavaScriptSerializer().Deserialize<ModelSpec[]>(File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"resources","models.json")));}
  public static ModelSpec Select(string preset,int scale){return Read().Single(x=>x.id==(preset=="photo"?(scale==4?"photo4":"photo2"):preset));}
  public static bool Present(ModelSpec model){var path=Path.Combine(Root,model.LocalName);return File.Exists(path)&&new FileInfo(path).Length==model.bytes;}
- public static bool Verified(ModelSpec model){var path=Path.Combine(Root,model.LocalName);if(!Present(model))return false;using(var hash=SHA256.Create())using(var file=File.OpenRead(path))return BitConverter.ToString(hash.ComputeHash(file)).Replace("-","").ToLowerInvariant()==model.sha256;}
- // Only the explicit Models window calls this method. Inference never does.
+ public static bool Verified(ModelSpec model){try{var path=Path.Combine(Root,model.LocalName);if(!Present(model))return false;using(var hash=SHA256.Create())using(var file=File.OpenRead(path))return BitConverter.ToString(hash.ComputeHash(file)).Replace("-","").ToLowerInvariant()==model.sha256;}catch(IOException){return false;}catch(UnauthorizedAccessException){return false;}}
+ // Only the visible preparation window calls this method. Inference never does.
  public static void Download(ModelSpec model,CancellationToken stop,Action<long> progress){
   Directory.CreateDirectory(Root);
   using(var lease=new FileStream(Path.Combine(Root,"download.lock"),FileMode.OpenOrCreate,FileAccess.ReadWrite,FileShare.None)){
@@ -50,26 +50,45 @@ public static class ModelStore {
  }
 }
 public sealed class ModelsWindow : Window {
- readonly ModelSpec[] models=ModelStore.Read();readonly TextBlock text=new TextBlock{TextWrapping=TextWrapping.Wrap};readonly ProgressBar progress=new ProgressBar{Height=8,Margin=new Thickness(0,14,0,14)};
+ readonly ModelSpec[] models;readonly bool automatic;readonly TextBlock text=new TextBlock{TextWrapping=TextWrapping.Wrap};readonly ProgressBar progress=new ProgressBar{Height=8,Margin=new Thickness(0,14,0,14)};
  readonly Button download=new Button{Content="Download / Repair Models",Padding=new Thickness(12,6,12,6)},cancel=new Button{Content="Cancel Download",Padding=new Thickness(12,6,12,6),Margin=new Thickness(10,0,0,0),IsEnabled=false};
- CancellationTokenSource stop;bool running,closeAfter;
- public ModelsWindow(Window owner){Owner=owner;Title="Models — NCF Image Upscaler";Width=580;Height=440;ResizeMode=ResizeMode.NoResize;WindowStartupLocation=WindowStartupLocation.CenterOwner;
+ CancellationTokenSource stop;bool running,closeAfter,automaticStarted;
+ public bool Ready {get;private set;}
+ public string FailureMessage {get;private set;}
+#if AUTO_PREPARATION_REGRESSION
+ public Action<ModelSpec,CancellationToken,Action<long>> DownloadOverride;
+ public Action<ModelsWindow> PreparationFinishedOverride;
+#endif
+ public ModelsWindow(Window owner,bool autoStart=false,ModelSpec[] required=null){models=required??ModelStore.Read();automatic=autoStart;Owner=owner;Title="Models — NCF Image Upscaler";Width=580;Height=440;ResizeMode=ResizeMode.NoResize;WindowStartupLocation=WindowStartupLocation.CenterOwner;
   var panel=new StackPanel{Margin=new Thickness(24)};Content=panel;
   panel.Children.Add(new TextBlock{Text="Prepare offline image enhancement",FontSize=20,Margin=new Thickness(0,0,0,12)});
-  panel.Children.Add(new TextBlock{Text="Models download from Hugging Face only when you choose Download. No account is required. Processing is local after preparation.",TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
+  panel.Children.Add(new TextBlock{Text="Missing or damaged models are prepared automatically from Hugging Face before processing. You can cancel this preparation. No account is required; image inference stays local.",TextWrapping=TextWrapping.Wrap,Margin=new Thickness(0,0,0,12)});
   panel.Children.Add(text);panel.Children.Add(progress);var buttons=new StackPanel{Orientation=Orientation.Horizontal};buttons.Children.Add(download);buttons.Children.Add(cancel);panel.Children.Add(buttons);
   panel.Children.Add(new TextBlock{Text="Model folder: "+ModelStore.Root,TextWrapping=TextWrapping.Wrap,FontSize=11,Margin=new Thickness(0,16,0,0)});
-  download.Click+=async delegate{await Prepare();};cancel.Click+=delegate{if(stop!=null){cancel.IsEnabled=false;text.Text="Cancelling — waiting for download to stop…";stop.Cancel();}};
+  download.Click+=async delegate{await Prepare();};cancel.Click+=delegate{RequestCancel(automatic);};
+  PreviewKeyDown+=delegate(object sender,System.Windows.Input.KeyEventArgs e){if(e.Key==System.Windows.Input.Key.Escape){e.Handled=true;CancelAndClose();}};
   Closing+=delegate(object sender,System.ComponentModel.CancelEventArgs e){if(running){e.Cancel=true;closeAfter=true;if(stop!=null)stop.Cancel();}};
   text.Text=String.Join("\n",models.Select(x=>x.name+" · "+(x.bytes/1048576.0).ToString("0.0")+" MiB"))+"\n\nTotal: "+(models.Sum(x=>x.bytes)/1048576.0).ToString("0.0")+" MiB. Existing verified files are reused.";
+  if(automatic)Loaded+=async delegate{if(automaticStarted)return;automaticStarted=true;await Prepare();};
  }
- async Task Prepare(){if(running)return;running=true;download.IsEnabled=false;cancel.IsEnabled=true;stop=new CancellationTokenSource();var token=stop.Token;
+ void RequestCancel(bool close){Ready=false;if(close)closeAfter=true;if(stop!=null){cancel.IsEnabled=false;text.Text="Cancelling — waiting for preparation to stop…";stop.Cancel();}}
+ public void CancelAndClose(){if(running)RequestCancel(true);else Close();}
+ async Task Prepare(){if(running)return;running=true;Ready=false;FailureMessage=null;download.IsEnabled=false;cancel.IsEnabled=true;stop=new CancellationTokenSource();var token=stop.Token;
   try{foreach(var model in models){text.Text="Checking / downloading "+model.name+"…";progress.Value=0;progress.IsIndeterminate=true;
-    await Task.Factory.StartNew(()=>ModelStore.Download(model,token,received=>Dispatcher.BeginInvoke(new Action(delegate{if(token.IsCancellationRequested)return;progress.IsIndeterminate=false;progress.Value=100.0*received/model.bytes;text.Text=model.name+" · "+(received/1048576.0).ToString("0.0")+" / "+(model.bytes/1048576.0).ToString("0.0")+" MiB";}))));}
+    Action<ModelSpec,CancellationToken,Action<long>> transfer=ModelStore.Download;
+#if AUTO_PREPARATION_REGRESSION
+    if(DownloadOverride!=null)transfer=DownloadOverride;
+#endif
+    await Task.Factory.StartNew(()=>transfer(model,token,received=>Dispatcher.BeginInvoke(new Action(delegate{if(token.IsCancellationRequested)return;progress.IsIndeterminate=false;progress.Value=100.0*received/model.bytes;text.Text=model.name+" · "+(received/1048576.0).ToString("0.0")+" / "+(model.bytes/1048576.0).ToString("0.0")+" MiB";}))));}
+   token.ThrowIfCancellationRequested();bool verified=await Task.Factory.StartNew(()=>models.All(ModelStore.Verified));token.ThrowIfCancellationRequested();if(!verified)throw new IOException("Prepared models did not pass the final integrity check.");Ready=true;
    progress.Value=100;text.Text="All models are verified and ready. You can close this window and enhance images offline.";
-  }catch(OperationCanceledException){text.Text="Download cancelled. Completed models are kept; incomplete files are not used. Choose Download to retry.";}
-   catch(Exception error){text.Text="Models are not ready: "+error.Message+"\nCheck your connection, or close another Models window, then retry.";}
-   finally{running=false;progress.IsIndeterminate=false;download.IsEnabled=true;cancel.IsEnabled=false;stop.Dispose();stop=null;if(closeAfter)Close();}
+  }catch(OperationCanceledException){FailureMessage="Model preparation cancelled. Completed files are kept.";text.Text=FailureMessage+" Choose Download to retry.";}
+   catch(Exception error){FailureMessage="Models are not ready: "+error.Message;text.Text=FailureMessage+"\nCheck your connection, or close another Models window, then retry.";}
+   finally{running=false;progress.IsIndeterminate=false;download.IsEnabled=true;cancel.IsEnabled=false;stop.Dispose();stop=null;
+#if AUTO_PREPARATION_REGRESSION
+    if(PreparationFinishedOverride!=null)PreparationFinishedOverride(this);
+#endif
+    if((closeAfter||automatic&&Ready)&&IsVisible)Close();}
  }
 }
 }

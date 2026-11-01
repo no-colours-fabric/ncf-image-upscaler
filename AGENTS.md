@@ -6,8 +6,10 @@
 - Use English for the interface, documentation, diagnostics, and contributions.
   Keep Unicode filenames and keyboard-layout cases in tests.
 - Keep it free, without accounts, subscriptions, trial limits, activation,
-  telemetry, or hosted inference. Network access belongs only in explicit
-  installation/download commands. Normal image processing must work offline.
+  telemetry, or hosted inference. Network access belongs to installation/model
+  preparation. Windows automatically prepares missing models in visible,
+  cancellable setup before inference; macOS keeps its explicit download action.
+  Normal image inference must work offline and must never initiate downloads.
 - On macOS, store models, dependencies and caches under
   `~/Library/Application Support/ncf-image-upscaler`, outside Git. Windows
   storage and packaging rules are in `apps/windows/AGENTS.md`.

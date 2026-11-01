@@ -8,6 +8,14 @@ param(
 $ErrorActionPreference='Stop'
 $app=Split-Path -Parent $PSScriptRoot
 $repo=Split-Path -Parent (Split-Path -Parent $app)
+New-Item -ItemType Directory -Path $BuildRoot -Force | Out-Null
+$buildScratch=Join-Path (Resolve-Path -LiteralPath $BuildRoot).ProviderPath 'scratch'
+New-Item -ItemType Directory -Path $buildScratch -Force | Out-Null
+$previousBuildTemp=$env:TEMP
+$previousBuildTmp=$env:TMP
+try {
+$env:TEMP=$buildScratch
+$env:TMP=$buildScratch
 $stage=Join-Path $BuildRoot 'app'
 $artifact=Join-Path $BuildRoot 'installer'
 New-Item -ItemType Directory -Path $BuildRoot -Force | Out-Null
@@ -54,3 +62,7 @@ if($LASTEXITCODE -ne 0){throw 'Installer compilation failed'}
 $setup=Join-Path $artifact 'NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup.exe'
 ((Get-FileHash -LiteralPath $setup).Hash.ToLowerInvariant()+'  '+(Split-Path -Leaf $setup)) | Set-Content -Encoding ascii -LiteralPath (Join-Path $artifact 'SHA256SUMS.txt')
 Write-Output $setup
+} finally {
+    $env:TEMP=$previousBuildTemp
+    $env:TMP=$previousBuildTmp
+}

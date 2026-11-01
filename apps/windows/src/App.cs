@@ -70,7 +70,7 @@ public sealed partial class MainWindow : Window {
         var toolbar=new Grid{Margin=new Thickness(12,8,12,8)};DockPanel.SetDock(toolbar,Dock.Top);root.Children.Add(toolbar);
         for(int i=0;i<10;i++)toolbar.ColumnDefinitions.Add(new ColumnDefinition{Width=i==1||i==5?new GridLength(1,GridUnitType.Star):GridLength.Auto});
         Configure(open,"Open",async delegate{await OpenDialog();});SvgIcons.Button(open,"folder-open","Open",18);toolbar.Children.Add(open);
-        var modelsButton=new Button();Configure(modelsButton,"Models…",delegate{new ModelsWindow(this).ShowDialog();});Grid.SetColumn(modelsButton,1);modelsButton.HorizontalAlignment=HorizontalAlignment.Left;toolbar.Children.Add(modelsButton);
+        var modelsButton=new Button();Configure(modelsButton,"Models…",async delegate{await OpenModels();});Grid.SetColumn(modelsButton,1);modelsButton.HorizontalAlignment=HorizontalAlignment.Left;toolbar.Children.Add(modelsButton);
         model.ItemsSource=new[]{"Photo","Illustration","Fast"};model.SelectedIndex=0;model.Width=138;model.Height=30;model.Margin=new Thickness(0,0,8,0);model.VerticalContentAlignment=VerticalAlignment.Center;Grid.SetColumn(model,2);toolbar.Children.Add(model);
         scale.ItemsSource=new[]{"×1","×2","×4"};scale.SelectedIndex=2;
         var segments=new UniformGrid{Rows=1,Columns=3,Width=118,Height=30,Margin=new Thickness(0,0,8,0)};Grid.SetColumn(segments,3);toolbar.Children.Add(segments);
@@ -101,11 +101,11 @@ public sealed partial class MainWindow : Window {
             else if(Keyboard.Modifiers==ModifierKeys.Control&&(e.Key==Key.OemMinus||e.Key==Key.Subtract)){canvas.ZoomBy(.8);e.Handled=true;}
             else if(!NativeControlFocus())HandleNavigation(e);
         };
-        Closing+=OnClosing;Closed+=delegate{loadGeneration++;sidebar.Dispose();if(browser!=null){windows.Remove(browser.Folder);browser.Dispose();}ownedSession.Dispose();};
-        InstallFileActions();Loaded+=async delegate{Refresh();if(!String.IsNullOrEmpty(initial))await OpenPath(initial);};Refresh();
+        Closing+=OnClosing;Closed+=delegate{windowClosed=true;CancelModelPreparation();loadGeneration++;sidebar.Dispose();if(browser!=null){windows.Remove(browser.Folder);browser.Dispose();}ownedSession.Dispose();};
+        InstallFileActions();Loaded+=async delegate{Refresh();if(!String.IsNullOrEmpty(initial))await OpenPath(initial);if(PrepareModelsWhenLoaded)await PrepareAtStartup();};Refresh();
     }
     void StoreDocument(){if(document==null)return;document.Preset=Convert.ToString(model.SelectedItem);document.Scale=new[]{1,2,4}[scale.SelectedIndex];if(canvas.Original!=null)document.Position=canvas.Position;}
-    void UpdateStatus(){if(browser==null){status.Text="Open an image or drag it into the window";return;}if(busy){status.Text=(cancelRequested?"Cancelling":processing.Stage)+" · "+(cancelRequested?"Waiting for worker exit":processing.Detail)+" · "+ProcessingProgress.Elapsed(watch.Elapsed)+" elapsed · "+Path.GetFileName(jobDocument==null?sourcePath:jobDocument.Path);return;}var list=browser.Visible();int index=list.IndexOf(document);status.Text=(index<0?"Outside filter · Matches: "+list.Count:(index+1)+" of "+list.Count)+(canvas.Original==null?"":" · "+canvas.Original.PixelWidth+" × "+canvas.Original.PixelHeight)+(sidebar.Selected.Count>1?" · "+sidebar.Selected.Count+" selected":"")+(document!=null&&document.Missing?" · Original unavailable":"")+(canvas.HasAlpha?" · Transparency":"")+(dirty?" · Unsaved ×"+resultScale:savedPath!=null?" · "+Path.GetFileName(savedPath):"")+(document==jobDocument&&lastJobNote.Length>0?" · "+lastJobNote:"");sidebar.Surface.InvalidateVisual();}
+    void UpdateStatus(){if(preparingModels){status.Text="Preparing models before local image processing";return;}if(browser==null){status.Text="Open an image or drag it into the window";return;}if(busy){status.Text=(cancelRequested?"Cancelling":processing.Stage)+" · "+(cancelRequested?"Waiting for worker exit":processing.Detail)+" · "+ProcessingProgress.Elapsed(watch.Elapsed)+" elapsed · "+Path.GetFileName(jobDocument==null?sourcePath:jobDocument.Path);return;}var list=browser.Visible();int index=list.IndexOf(document);status.Text=(index<0?"Outside filter · Matches: "+list.Count:(index+1)+" of "+list.Count)+(canvas.Original==null?"":" · "+canvas.Original.PixelWidth+" × "+canvas.Original.PixelHeight)+(sidebar.Selected.Count>1?" · "+sidebar.Selected.Count+" selected":"")+(document!=null&&document.Missing?" · Original unavailable":"")+(canvas.HasAlpha?" · Transparency":"")+(dirty?" · Unsaved ×"+resultScale:savedPath!=null?" · "+Path.GetFileName(savedPath):"")+(document==jobDocument&&lastJobNote.Length>0?" · "+lastJobNote:"");sidebar.Surface.InvalidateVisual();}
     void HandleNavigation(KeyEventArgs e){
         if(e.Handled)return;bool endpoint=Keyboard.Modifiers==ModifierKeys.Control&&(e.Key==Key.Home||e.Key==Key.End);if(!endpoint&&Keyboard.Modifiers!=ModifierKeys.None&&Keyboard.Modifiers!=ModifierKeys.Shift)return;
         if(e.Key==Key.Escape){e.Handled=true;Close();return;}
@@ -116,10 +116,10 @@ public sealed partial class MainWindow : Window {
         e.Handled=true;sidebar.Select(items[next],shift?ModifierKeys.Shift:ModifierKeys.None,false);sidebar.LocateForNavigation(items[next]);
     }
     readonly Stopwatch cancelSince=new Stopwatch();
-    async void QuitAll(){if(quitting)return;quitting=true;var all=Application.Current.Windows.OfType<MainWindow>().ToArray();try{foreach(var window in all){window.closeWhenDone=true;if(window.busy)window.CancelWorker();}while(all.Any(w=>w.busy||w.loading||w.fileWork))await Task.Delay(50);foreach(var window in all){await window.FinishClose();if(!window.commitCloseScheduled){foreach(var w in all)w.closeWhenDone=false;break;}await Task.Delay(1);}}finally{quitting=false;}}
+    async void QuitAll(){if(quitting)return;quitting=true;var all=Application.Current.Windows.OfType<MainWindow>().ToArray();try{foreach(var window in all){window.closeWhenDone=true;if(window.busy)window.CancelWorker();if(window.preparingModels)window.CancelModelPreparation();}while(all.Any(w=>w.busy||w.loading||w.fileWork||w.preparingModels))await Task.Delay(50);foreach(var window in all){await window.FinishClose();if(!window.commitCloseScheduled){foreach(var w in all)w.closeWhenDone=false;break;}await Task.Delay(1);}}finally{quitting=false;}}
     static TextBlock Label(string text) {return new TextBlock {Text=text,VerticalAlignment=VerticalAlignment.Center,Margin=new Thickness(7,0,1,0),Foreground=new SolidColorBrush(Color.FromRgb(77,89,106))};}
     static void Configure(Button b,string text,RoutedEventHandler action) {b.Content=text;b.Padding=new Thickness(14,6,14,6);b.Margin=new Thickness(0,0,7,0);b.MinHeight=31;b.Click+=action;}
-    void Refresh(){open.IsEnabled=!loading;enhance.IsEnabled=sourcePath!=null&&canvas.Original!=null&&File.Exists(sourcePath)&&!busy&&!loading&&!canvas.IsLoading&&!closingFlow&&!closeWhenDone;model.IsEnabled=scale.IsEnabled=!loading;foreach(var b in scales)if(b!=null)b.IsEnabled=!loading;cancel.IsEnabled=busy&&!cancelRequested;cancel.Visibility=busy?Visibility.Visible:Visibility.Collapsed;save.IsEnabled=saveAs.IsEnabled=resultPath!=null&&!loading&&!canvas.IsLoading&&!closingFlow&&!(busy&&document==jobDocument);Title="NCF Image Upscaler"+(sourcePath==null?"":" — "+Path.GetFileName(sourcePath))+(dirty?" • Unsaved":"");UpdateStatus();}
+    void Refresh(){open.IsEnabled=!loading&&!preparingModels;enhance.IsEnabled=sourcePath!=null&&canvas.Original!=null&&File.Exists(sourcePath)&&!busy&&!loading&&!canvas.IsLoading&&!closingFlow&&!closeWhenDone&&!preparingModels;model.IsEnabled=scale.IsEnabled=!loading&&!preparingModels;foreach(var b in scales)if(b!=null)b.IsEnabled=!loading&&!preparingModels;cancel.IsEnabled=busy&&!cancelRequested;cancel.Visibility=busy?Visibility.Visible:Visibility.Collapsed;save.IsEnabled=saveAs.IsEnabled=resultPath!=null&&!loading&&!canvas.IsLoading&&!closingFlow&&!(busy&&document==jobDocument);Title="NCF Image Upscaler"+(sourcePath==null?"":" — "+Path.GetFileName(sourcePath))+(dirty?" • Unsaved":"");UpdateStatus();}
     public static BitmapSource LoadBitmap(string path) {
         BitmapSource image;using(var input=new FileStream(Path.GetFullPath(path),FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))image=BitmapFrame.Create(input,BitmapCreateOptions.PreservePixelFormat,BitmapCacheOption.OnLoad);
         var frame=image as BitmapFrame;int orientation=1;
@@ -135,7 +135,7 @@ public sealed partial class MainWindow : Window {
         if(transforms.Children.Count>0)image=new TransformedBitmap(image,transforms);
         image.Freeze();return image;
     }
-    async Task OpenDialog(){if(loading)return;var dialog=new OpenFileDialog{Title="Open images",Filter="Images|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.webp|All files|*.*",CheckFileExists=true,Multiselect=true};if(dialog.ShowDialog(this)==true)foreach(var path in dialog.FileNames)await OpenPath(path);}
+    async Task OpenDialog(){if(loading||preparingModels)return;var dialog=new OpenFileDialog{Title="Open images",Filter="Images|*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.webp|All files|*.*",CheckFileExists=true,Multiselect=true};if(dialog.ShowDialog(this)==true)foreach(var path in dialog.FileNames)await OpenPath(path);}
     BitmapSource LoadAsset(string path){if(!String.Equals(Path.GetExtension(path),".webp",StringComparison.OrdinalIgnoreCase))return LoadBitmap(path);string output=Path.Combine(session,"preview-"+Guid.NewGuid().ToString("N")+".png");var info=new ProcessStartInfo(Path.Combine(bundle,"runtime","python.exe"),Quote(Path.Combine(bundle,"engine","asset.py"))+" "+Quote(path)+" "+Quote(output)){UseShellExecute=false,CreateNoWindow=true,RedirectStandardError=true,WorkingDirectory=bundle};using(var p=Process.Start(info)){string error=p.StandardError.ReadToEnd();p.WaitForExit();if(p.ExitCode!=0)throw new IOException("Could not decode WebP: "+error);}try{return LoadBitmap(output);}finally{File.Delete(output);}}
     async Task OpenPath(string path){if(loading||closingFlow||closeWhenDone||allowClose)return;
         path=Path.GetFullPath(path);string folder=Directory.Exists(path)?path:Path.GetDirectoryName(path);MainWindow existing;
@@ -162,8 +162,12 @@ public sealed partial class MainWindow : Window {
         if(choice==0)return await SaveResult(false);if(choice==1){string old=resultPath;resultPath=savedPath=null;dirty=false;if(document!=null){document.Result=document.Saved=null;}try{if(old!=null)File.Delete(old);}catch{}return true;}return false;
     }
     async Task Enhance() {
-        if(busy||loading||canvas.IsLoading||closingFlow||closeWhenDone||sourcePath==null||canvas.Original==null||!File.Exists(sourcePath))return;
-        string chosenPreset=Convert.ToString(model.SelectedItem).ToLowerInvariant();int chosenScale=new int[]{1,2,4}[scale.SelectedIndex];if(!ModelStore.Present(ModelStore.Select(chosenPreset,chosenScale))){ShowError("This model is not prepared. Open Models, choose Download / Repair Models, then try Enhance again. Processing never downloads models.");return;}
+        if(preparingModels||windowClosed||busy||loading||canvas.IsLoading||closingFlow||closeWhenDone||sourcePath==null||canvas.Original==null||!File.Exists(sourcePath))return;
+        string chosenPreset=Convert.ToString(model.SelectedItem).ToLowerInvariant();int chosenScale=new int[]{1,2,4}[scale.SelectedIndex];
+        var plannedDocument=document;string plannedSource=sourcePath;string plannedStamp=PreparationSourceStamp(plannedSource);int plannedGeneration=loadGeneration;
+        Func<bool> stillCurrent=()=>!windowClosed&&!closeWhenDone&&!closingFlow&&!busy&&!loading&&!canvas.IsLoading&&document==plannedDocument&&sourcePath==plannedSource&&loadGeneration==plannedGeneration&&plannedStamp!=null&&PreparationSourceStamp(plannedSource)==plannedStamp&&Convert.ToString(model.SelectedItem).ToLowerInvariant()==chosenPreset&&scale.SelectedIndex>=0&&new int[]{1,2,4}[scale.SelectedIndex]==chosenScale;
+        if(!await PrepareModels(new[]{ModelStore.Select(chosenPreset,chosenScale)},true,stillCurrent))return;
+        if(!stillCurrent())return;
         if(dirty && Choice("Enhance again?","The current result will remain available if the new enhancement fails.",new string[]{"Enhance Again","Cancel"})!=0)return;
         StoreDocument();jobDocument=document;string input=sourcePath;
         string requested=Path.Combine(session,"result-"+Guid.NewGuid().ToString("N")+".png");
@@ -187,6 +191,10 @@ public sealed partial class MainWindow : Window {
     }
     sealed class Outcome {public Dictionary<string,object> Completed;public bool Cancelled;public string Error;}
     Outcome RunWorker(string[] arguments) {
+
+#if AUTO_PREPARATION_REGRESSION
+        if(WorkerArgumentsOverride!=null){WorkerArgumentsOverride(arguments);return new Outcome{Cancelled=true};}
+#endif
         int generation=jobGeneration;var info=new ProcessStartInfo(Path.Combine(bundle,"runtime","python.exe"));
         info.Arguments=String.Join(" ",new string[]{Path.Combine(bundle,"engine","launcher.py")}.Concat(arguments).Select(Quote));
         info.WorkingDirectory=bundle;info.UseShellExecute=false;info.CreateNoWindow=true;info.RedirectStandardOutput=true;info.RedirectStandardError=true;info.RedirectStandardInput=true;
@@ -275,11 +283,11 @@ public sealed partial class MainWindow : Window {
         // run on later Dispatcher turns, after this initial request is cancelled.
         Later(new Action(async delegate {
             closeScheduled=false;
-            if(busy||loading||fileWork) {
+            if(busy||loading||fileWork||preparingModels) {
                 closingFlow=true;
                 try {
-                    closeWhenDone=true;if(busy)CancelWorker();
-                    while(busy||loading||fileWork)await Task.Delay(50);
+                    closeWhenDone=true;if(busy)CancelWorker();if(preparingModels)CancelModelPreparation();
+                    while(busy||loading||fileWork||preparingModels)await Task.Delay(50);
                 }finally{closingFlow=false;}
             }
             await FinishClose();
@@ -299,6 +307,6 @@ public sealed partial class MainWindow : Window {
     }
 }
 public static class Program {
-    [STAThread] public static void Main(string[] args) {var prerequisite=NativePrerequisites.Check();if(prerequisite.Code!=0){MessageBox.Show(NativePrerequisites.Guidance(prerequisite),"NCF Image Upscaler — prerequisite required",MessageBoxButton.OK,MessageBoxImage.Warning);return;}var app=new Application();app.DispatcherUnhandledException+=delegate(object sender,DispatcherUnhandledExceptionEventArgs e){MessageBox.Show(e.Exception.Message,"NCF Image Upscaler",MessageBoxButton.OK,MessageBoxImage.Error);e.Handled=true;};app.Run(new MainWindow(args.Length>0?args[0]:null));}
+    [STAThread] public static void Main(string[] args) {var prerequisite=NativePrerequisites.Check();if(prerequisite.Code!=0){MessageBox.Show(NativePrerequisites.Guidance(prerequisite),"NCF Image Upscaler — prerequisite required",MessageBoxButton.OK,MessageBoxImage.Warning);return;}var app=new Application();app.DispatcherUnhandledException+=delegate(object sender,DispatcherUnhandledExceptionEventArgs e){MessageBox.Show(e.Exception.Message,"NCF Image Upscaler",MessageBoxButton.OK,MessageBoxImage.Error);e.Handled=true;};var window=new MainWindow(args.Length>0?args[0]:null);window.PrepareModelsWhenLoaded=true;app.Run(window);}
 }
 }

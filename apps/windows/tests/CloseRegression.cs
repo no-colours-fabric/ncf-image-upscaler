@@ -14,7 +14,7 @@ public static class CloseRegression {
     [STAThread] public static int Main(string[] args) {try{return Run(args);}catch(Exception e){Console.WriteLine(e.ToString());return 1;}}
     static int Run(string[] args) {
         var app=new Application {ShutdownMode=ShutdownMode.OnExplicitShutdown};app.DispatcherUnhandledException+=delegate(object sender,DispatcherUnhandledExceptionEventArgs e){errors.Add(e.Exception);e.Handled=true;};
-        string root=args[0];Directory.CreateDirectory(root);var results=new List<string>();
+        string root=args[0];Directory.CreateDirectory(root);TemporarySession.RegressionRoot=Path.Combine(root,"sessions");var results=new List<string>();
         foreach(string kind in new string[]{"discard","cancel","save","save-cancelled","save-failed","repeat-close","busy-then-cancel"}) {
             MainWindow window=null;
             try {

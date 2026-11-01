@@ -32,8 +32,10 @@ the repository are also retained. The ONNX publishers retain their authorship;
 NCF does not claim to have trained or authored these conversions.
 
 Models are never in source Git, Windows installers or GitHub release assets.
-An explicit user action prepares the cache, checks both length/hash and publishes
-atomically. Bad downloads cannot become ready. Missing/corrupted models show an
-actionable message; Enhance does not make network requests. Downloaded caches are
-kept on uninstall to avoid forcing another download, and may be removed manually
-after closing all application windows.
+Visible cancellable preparation automatically fills missing/corrupt cache entries
+at first use or before a requested Enhance. It verifies length/hash and publishes
+atomically; bad downloads cannot become ready. Valid caches require no network.
+Cancelled/failed preparation never launches inference or silently retries; Models
+offers an explicit retry/repair action. The image worker itself never downloads.
+Downloaded caches are kept on uninstall to avoid forcing another download, and
+may be removed manually after closing all application windows.

@@ -16,18 +16,21 @@ missing system prerequisite may require administrator permission. Get the
 [VC++ Runtime from Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
 Python is included. The preview is unsigned.
 
-1. Open the application, then **Models…**.
-2. Review the model sizes and choose **Download / Repair Models**. This explicit
-   preparation downloads four pinned files from public Hugging Face repositories,
-   verifies SHA-256 and publishes each complete file atomically. Cancel or retry
-   is supported; incomplete files are never used.
+1. Open the application. If models are missing or damaged, visible setup starts
+   automatically and prepares the required files from public Hugging Face.
+2. Progress, model sizes and Cancel are shown. Every file is verified with SHA-256
+   before atomic publication; incomplete files are never used. Ready files are
+   reused without network. **Models…** offers an explicit repair/retry action.
 3. Open an image or folder, choose Photo / Illustration / Fast and ×1 / ×2 / ×4,
    then Enhance. After preparation, processing requires no network or account.
 4. Compare the original/result and choose Save or Save As to export a separate
    PNG. The input is protected, including filesystem aliases.
 
 The installer contains no model weights. Models are not distributed through
-GitHub. Models… can repair a damaged cache. Enhancement never downloads a model.
+GitHub. If Enhance needs an absent or corrupt artifact, it completes visible
+preparation first, then starts the local worker only if the same image/preset
+is still current. Cancel/error preserves prior results and does not start a
+worker or silently retry. The image inference engine never downloads models.
 
 ## Storage and removal
 

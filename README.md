@@ -52,9 +52,11 @@ and the [Windows build guide](docs/windows-build.md). This does not replace the
 available macOS download above or announce a stable Windows release.
 
 The installer contains the application and Python runtime, **no model weights**.
-Choose **Models → Download / Repair Models** to explicitly prepare pinned models
-from Hugging Face; no manual model downloads or Python commands are needed.
-Processing then runs locally. Windows 10 x64 build 19045 is the tested environment;
+Missing models are prepared automatically from Hugging Face in a visible,
+cancellable setup before image inference. Verified caches need no network;
+**Models → Download / Repair Models** remains available for repair/retry.
+No manual model downloads or Python commands are needed. Windows 10 x64 build
+19045 is the tested environment;
 Windows 11, GPU support and full native macOS parity remain unverified.
 The app installs per-user; system .NET Framework 4.8 and Microsoft Visual C++ x64
 Runtime prerequisites must be present. Installing missing prerequisites may need
@@ -136,7 +138,9 @@ transparency handling, and troubleshooting.
 ## Privacy and storage
 
 Inference runs on the local Apple GPU. The native app starts a local Python worker;
-it does not run a web server. Processing never downloads a missing model automatically.
+it does not run a web server. The macOS worker/CLI never download missing models.
+Windows may prepare missing models automatically in a separate visible,
+cancellable setup before inference; its image worker never downloads files.
 Downloads use public model URLs without tokens, pinned to revisions and verified by SHA-256.
 
 The first-launch engine installation uses only the bundled payload, with integrity checks

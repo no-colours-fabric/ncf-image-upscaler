@@ -10,7 +10,14 @@ public sealed class TemporarySession : IDisposable {
  readonly FileStream sessionLock;
  readonly object sync=new object();
  int users=1;bool closed;
- public static string DefaultRoot {get{return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"NCF Image Upscaler","sessions");}}
+#if CLOSE_REGRESSION
+ public static string RegressionRoot;
+#endif
+ public static string DefaultRoot {get{
+#if CLOSE_REGRESSION
+  if(!String.IsNullOrEmpty(RegressionRoot))return Path.GetFullPath(RegressionRoot);
+#endif
+  return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"NCF Image Upscaler","sessions");}}
  public TemporarySession(string parent){root=Path.GetFullPath(parent);Directory.CreateDirectory(root);VerifyChain(root);DirectoryPath=Path.Combine(root,Guid.NewGuid().ToString("N"));if(Directory.Exists(DirectoryPath))throw new IOException("Temporary session name is occupied.");Directory.CreateDirectory(DirectoryPath);try{sessionLock=new FileStream(Path.Combine(DirectoryPath,".lock"),FileMode.CreateNew,FileAccess.ReadWrite,FileShare.Delete);sessionLock.WriteByte(1);sessionLock.Flush(true);}catch{try{Directory.Delete(DirectoryPath,false);}catch{}throw;}}
  public IDisposable Acquire(){lock(sync){if(closed)throw new ObjectDisposedException("Temporary image session");users++;return new Lease(this);}}
  sealed class Lease : IDisposable {TemporarySession owner;public Lease(TemporarySession value){owner=value;}public void Dispose(){var value=System.Threading.Interlocked.Exchange(ref owner,null);if(value!=null)value.Release();}}

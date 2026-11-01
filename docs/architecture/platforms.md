@@ -34,7 +34,9 @@ event; event, exit code/signal and user cancellation are distinct facts.
 ## Shared behavior
 
 English interfaces; no accounts, payment, telemetry or hosted image processing.
-Downloads occur only during explicit preparation. Preserve partial RGBA, ICC and
+Downloads occur during preparation: Windows automatically shows cancellable
+setup for missing models before inference; macOS keeps its explicit action.
+Preserve partial RGBA, ICC and
 declared EXIF orientation behavior; never flatten the image or replace an input.
 Processing produces a private result; Save exports a separate PNG with a free
 name or explicit overwrite confirmation and alias protection.
@@ -64,11 +66,15 @@ use `%LOCALAPPDATA%\NCF Image Upscaler`. These are separately implemented polici
 Windows uninstall removes installed program files, retaining model caches and
 user images/results. Existing research/preview folders are not installation input.
 
-Windows installers and GitHub assets contain **no model weights**. An explicit
-Models action downloads separately pinned public Hugging Face ONNX files, checks
-size and SHA-256, and atomically publishes each complete cache entry. Processing
-never initiates a download. First preparation requires internet; subsequent
-processing is local. OS-level network-block verification remains outstanding.
+Windows installers and GitHub assets contain **no model weights**. Visible,
+cancellable setup automatically prepares missing/damaged pinned public Hugging
+Face ONNX files at first use or before requested enhancement. It checks size and
+SHA-256 and atomically publishes each complete cache entry. Verified caches do
+not cause network requests. Models remains available for repair/retry; cancelled
+or failed preparation never starts a worker or causes hidden retries. A pending
+enhancement checks source/preset/window state again before starting. The image
+worker never downloads. First preparation requires internet; subsequent inference
+is local. OS-level network-block verification remains outstanding.
 
 ## Verification and releases
 
