@@ -45,6 +45,11 @@ Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations
 
 ## Documentation
 
+Platform status: **macOS available** (Apple Silicon); **Windows experimental
+research** (no application or download yet). See the
+[platform architecture](docs/architecture/platforms.md) for the proposed boundaries
+and validation steps. Windows hardware requirements and performance are unverified.
+
 | Guide | What it covers |
 | --- | --- |
 | [Installation and storage](docs/installation.md) | Verify a download, install or update, find local files, troubleshoot, and uninstall |
@@ -52,6 +57,7 @@ Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations
 | [Contributing](CONTRIBUTING.md) | Architecture, development setup, and checks |
 | [Binary release guide](docs/binary-release.md) | Build and verify a standalone macOS DMG |
 | [Verification notes](docs/verification.md) | Recorded checks and their limits |
+| [Platform architecture](docs/architecture/platforms.md) | Available macOS product and proposed Windows research |
 | [Changelog](CHANGELOG.md) | Changes by version |
 
 For a reproducible problem, [open a bug report](https://github.com/no-colours-fabric/ncf-image-upscaler/issues/new?template=bug_report.yml).
