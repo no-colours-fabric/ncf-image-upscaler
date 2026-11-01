@@ -1,0 +1,13 @@
+TRACE located=1307,29 requested=1732 before=1732 after=1732 viewport=552,71 extent=3996 selectedTop=1604
+PASS Locate then manual scroll is not undone by unchanged layout callback
+PASS Repeated thumbnail/layout callbacks do not pin manual scroll
+PASS Explicit repeat Locate still reveals current thumbnail
+TRACE resize firstVisible=10 oldRelative=169,29 selectedRelative=-96,71 newSelectedRelative=-42,71 expected=1237,29 actual=1237,29
+PASS Manual scroll preserves first-visible-card anchor through geometry resize
+PASS Post-resize thumbnail callback does not reveal selected card
+PASS Locate/free scroll retain current selection
+PASS Esc Close Cancel retains addressed window and result
+PASS Esc does not cancel another window or its simulated pending job
+PASS Esc Discard closes only addressed window
+PASS Originals and other window result remain unchanged
+NOTE controlled WPF routed-wheel/scroll/keyboard component checks, not native desktop input; second job is simulated, no inference. Desired Esc=current window is the new common user requirement, distinct from old Mac quit-all source.

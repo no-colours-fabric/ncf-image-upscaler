@@ -1,0 +1,7 @@
+discard: PASS
+cancel: PASS
+save: PASS
+save-cancelled: PASS
+save-failed: PASS
+repeat-close: PASS
+busy-then-cancel: PASS

@@ -1,0 +1,9 @@
+PASS Cancel does not publish an incomplete model
+PASS Cancel removes its staging file
+PASS Retry downloads and verifies pinned Fast
+PASS Verified cache is reused without requesting the invalid URL
+PASS Corrupt cache is repaired atomically after verification
+PASS Hash mismatch cannot become ready
+PASS Hash mismatch removes staging file
+PASS HTTP error remains actionable and does not publish
+PASS Failed other download preserves completed Fast

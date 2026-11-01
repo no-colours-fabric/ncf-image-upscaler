@@ -41,7 +41,23 @@ The release includes a SHA-256 checksum. Do not override a malware or damaged-ap
 
 Open **NCF Image Upscaler → Models…** to check models, finish downloading them, or retry
 an interrupted download. The app never downloads models when you start inference.
-Intel Macs, Windows, and Linux are not supported. See [limitations](#limitations).
+Intel Macs and Linux are not supported. Windows is a separate experimental
+preview described below. See [limitations](#limitations).
+
+## Windows preview
+
+A separately versioned **experimental Windows CPU installer** is being prepared.
+Windows source and build instructions are in [apps/windows](apps/windows/README.md)
+and the [Windows build guide](docs/windows-build.md). This does not replace the
+available macOS download above or announce a stable Windows release.
+
+The installer contains the application and Python runtime, **no model weights**.
+Choose **Models → Download / Repair Models** to explicitly prepare pinned models
+from Hugging Face; no manual model downloads or Python commands are needed.
+Processing then runs locally. Windows 10 x64 build 19045 is the tested environment;
+Windows 11, GPU support and full native macOS parity remain unverified.
+See [platform boundaries](docs/architecture/platforms.md) and
+[Windows model provenance](docs/windows-models.md).
 
 ## Documentation
 

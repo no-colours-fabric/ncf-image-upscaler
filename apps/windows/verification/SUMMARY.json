@@ -1,0 +1,36 @@
+{
+  "version": "0.1.0-preview.1",
+  "status": "local candidate; source review and native installed-flow smoke pending",
+  "os": "Windows 10 x64 build 19045",
+  "framework": "4.8",
+  "python": "3.11.3 embedded",
+  "ort": "1.17.3 CPUExecutionProvider",
+  "model_origin": "New pinned SkillSafe HF ONNX; not former MLX-derived local artifacts",
+  "model_graphs": 4,
+  "external_data_references": 0,
+  "functional_rows": 18,
+  "tiling_rows": 6,
+  "downloader_assertions": 9,
+  "close_component_cases": 7,
+  "locate_escape_assertions": 10,
+  "imaging_pytest_passed": 15,
+  "model_weights_in_payload": 0,
+  "native_gui_full_flow_verified": false,
+  "os_level_offline_block_verified": false,
+  "full_macos_parity": false,
+  "report_origins": {
+    "hf-functional-matrix.json": "clean staged embedded runtime, actual guarded worker; source test driver; before formatting-only changes",
+    "hf-tiling.json": "clean staged runtime, same production OnnxEngine; same-artifact untiled comparison, bounded synthetic RGB/RGBA",
+    "downloader.txt": "current C# ModelStore with test-only cache root, real HTTPS and integrity/cancel/error checks",
+    "close-component.txt": "current source WPF scripted decisions; synthetic result, not native input",
+    "locate-escape-component.txt": "current source controlled wheel/keyboard handler and simulated other busy window; not native input",
+    "install-lifecycle.json": "actual setup/reinstall/uninstall via CLI in isolated Unicode/spaces path; outside prepared cache retained"
+  },
+  "encoding_fix": "Compiler codepage65001 plus strict UTF-8 C# validation; compiled-string verification must pass on final candidate",
+  "gui_tool_limits": [
+    "AX observation of installed window succeeded",
+    "Models click failed: coordinate input geometry is unavailable",
+    "Key close failed: failed to activate captured window",
+    "Own empty test process stopped by exact executable path; user previews preserved"
+  ]
+}

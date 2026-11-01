@@ -1,5 +1,11 @@
 # Third-party sources and model provenance
 
+Windows preview dependencies and ONNX models are independently pinned under
+`apps/windows`; see [Windows provenance](docs/windows-models.md). The Windows
+installer contains no weights. Its SVG actions retain Lucide/Feather notices,
+and its embedded dependency distributions retain their original licenses.
+These additions do not change the macOS sources or model pins described below.
+
 NCF Image Upscaler's original code is BSD-3-Clause. Included third-party code keeps
 its own terms. The Python distribution declares `BSD-3-Clause AND Apache-2.0`
 to account for the BasicSR-derived architecture in the MLX port.

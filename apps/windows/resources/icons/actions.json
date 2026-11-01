@@ -1,0 +1,23 @@
+{
+  "source": "manifest.json",
+  "scope": "Windows local research bundle; proposed portable shared SVG source. macOS currently uses its native SF Symbols and is unchanged.",
+  "actions": {
+    "Open image": "folder-open.svg",
+    "Folder header": "folder.svg",
+    "Collapse panel": "chevron-up.svg",
+    "Expand panel": "chevron-down.svg",
+    "Locate current image": "crosshair.svg",
+    "Regular grid": "grid-2x2.svg",
+    "Adaptive grid": "panels-top-left.svg",
+    "Thumbnail size / unavailable preview / empty viewer": "image.svg",
+    "Filter": "search.svg",
+    "Enhance / unsaved enhancement": "sparkles.svg",
+    "Fit": "maximize-2.svg",
+    "Save": "download.svg",
+    "Save As": "folder-down.svg",
+    "Cancel enhancement": "x.svg"
+  },
+  "project_owned_app_artwork": "../PROVENANCE.json (native/Tools/MakeIcon.swift); not replaced by Lucide",
+  "licenses": ["LICENSE.txt", "Feather-MIT-LICENSE.txt"],
+  "rendering": "Unmodified SVG sources embedded in EXE; 24x24 viewport, round caps/joins, source stroke 2. Typical controls 16-18 DIPs. No icon font or independently copied geometry."
+}
