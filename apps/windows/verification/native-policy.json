@@ -1,0 +1,200 @@
+{
+  "local_vcruntime": [
+    {
+      "file": "runtime/vcruntime140.dll",
+      "sha256": "a8f950b4357ec12cfccddc9094cca56a3d5244b95e09ea6e9a746489f2d58736",
+      "origin": "pinned official CPython embedded archive; not System32"
+    },
+    {
+      "file": "runtime/vcruntime140_1.dll",
+      "sha256": "e4b533a94e02c574780e4b333fcf0889f65ed00d39e32c0fbbda2116f185873f",
+      "origin": "pinned official CPython embedded archive; not System32"
+    }
+  ],
+  "required_msvcp_exports": 159,
+  "native_closure_claimed": false,
+  "dependency_classes": {
+    "ws2_32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 8
+    },
+    "advapi32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 4
+    },
+    "user32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 4
+    },
+    "bcrypt.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 2
+    },
+    "kernel32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 180
+    },
+    "vcruntime140.dll": {
+      "classification": "packaged native file",
+      "importers": 57
+    },
+    "api-ms-win-crt-stdio-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 148
+    },
+    "api-ms-win-crt-convert-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 107
+    },
+    "api-ms-win-crt-string-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 150
+    },
+    "api-ms-win-crt-time-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 129
+    },
+    "api-ms-win-crt-utility-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 63
+    },
+    "api-ms-win-crt-runtime-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 180
+    },
+    "api-ms-win-crt-filesystem-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 46
+    },
+    "api-ms-win-crt-heap-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 153
+    },
+    "api-ms-win-crt-environment-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 131
+    },
+    "libcrypto-1_1.dll": {
+      "classification": "packaged native file",
+      "importers": 3
+    },
+    "python311.dll": {
+      "classification": "packaged native file",
+      "importers": 169
+    },
+    "api-ms-win-crt-math-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 94
+    },
+    "api-ms-win-crt-locale-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 92
+    },
+    "version.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "api-ms-win-core-path-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 2
+    },
+    "api-ms-win-crt-process-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 1
+    },
+    "api-ms-win-crt-conio-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 3
+    },
+    "winmm.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "libffi-8.dll": {
+      "classification": "packaged native file",
+      "importers": 1
+    },
+    "ole32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "oleaut32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "cabinet.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "msi.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "rpcrt4.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 2
+    },
+    "iphlpapi.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 2
+    },
+    "sqlite3.dll": {
+      "classification": "packaged native file",
+      "importers": 1
+    },
+    "crypt32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "libssl-1_1.dll": {
+      "classification": "packaged native file",
+      "importers": 1
+    },
+    "libopenblas64__v0.3.23-293-gc2f4bdbb-gcc_10_3_0-2bde3a66a51006b2b53eb373ff767a3f.dll": {
+      "classification": "packaged native file",
+      "importers": 3
+    },
+    "api-ms-win-crt-private-l1-1-0.dll": {
+      "classification": "Windows API set",
+      "importers": 119
+    },
+    "msvcp140.dll": {
+      "classification": "required system VC++ runtime; installer/startup gate",
+      "importers": 1
+    },
+    "vcruntime140_1.dll": {
+      "classification": "packaged native file",
+      "importers": 1
+    },
+    "gdi32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 2
+    },
+    "psapi.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 2
+    },
+    "shell32.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "powrprof.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "pdh.dll": {
+      "classification": "Windows system dependency (not copied)",
+      "importers": 1
+    },
+    "python3.dll": {
+      "classification": "packaged native file",
+      "importers": 1
+    },
+    "libopenblas_v0.3.26-382-gb1e8ba50--72a863714eca5a50b38260dedc0c2f3a.dll": {
+      "classification": "packaged native file",
+      "importers": 21
+    }
+  },
+  "system_prerequisite": "Microsoft Visual C++ x64; version/loader/pinned exports checked",
+  "probe": "version >=14.29, actual system x64 LoadLibraryEx and 159 named exports; missing/version/load tests controlled"
+}

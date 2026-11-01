@@ -299,6 +299,6 @@ public sealed partial class MainWindow : Window {
     }
 }
 public static class Program {
-    [STAThread] public static void Main(string[] args) {var app=new Application();app.DispatcherUnhandledException+=delegate(object sender,DispatcherUnhandledExceptionEventArgs e){MessageBox.Show(e.Exception.Message,"NCF Image Upscaler",MessageBoxButton.OK,MessageBoxImage.Error);e.Handled=true;};app.Run(new MainWindow(args.Length>0?args[0]:null));}
+    [STAThread] public static void Main(string[] args) {var prerequisite=NativePrerequisites.Check();if(prerequisite.Code!=0){MessageBox.Show(NativePrerequisites.Guidance(prerequisite),"NCF Image Upscaler — prerequisite required",MessageBoxButton.OK,MessageBoxImage.Warning);return;}var app=new Application();app.DispatcherUnhandledException+=delegate(object sender,DispatcherUnhandledExceptionEventArgs e){MessageBox.Show(e.Exception.Message,"NCF Image Upscaler",MessageBoxButton.OK,MessageBoxImage.Error);e.Handled=true;};app.Run(new MainWindow(args.Length>0?args[0]:null));}
 }
 }

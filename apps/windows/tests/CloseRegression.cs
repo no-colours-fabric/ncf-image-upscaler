@@ -10,6 +10,7 @@ public static class CloseRegression {
     static int failures;static readonly List<Exception> errors=new List<Exception>();
     static void Pump(int milliseconds) {var frame=new DispatcherFrame();var timer=new DispatcherTimer {Interval=TimeSpan.FromMilliseconds(milliseconds)};timer.Tick+=delegate {timer.Stop();frame.Continue=false;};timer.Start();Dispatcher.PushFrame(frame);}
     static void Assert(bool condition,string message){if(!condition)throw new Exception(message);}
+    static void Until(Func<bool> condition,string message){var deadline=System.Diagnostics.Stopwatch.StartNew();while(!condition()&&deadline.ElapsedMilliseconds<5000)Pump(10);Assert(condition(),message);}
     [STAThread] public static int Main(string[] args) {try{return Run(args);}catch(Exception e){Console.WriteLine(e.ToString());return 1;}}
     static int Run(string[] args) {
         var app=new Application {ShutdownMode=ShutdownMode.OnExplicitShutdown};app.DispatcherUnhandledException+=delegate(object sender,DispatcherUnhandledExceptionEventArgs e){errors.Add(e.Exception);e.Handled=true;};
@@ -19,13 +20,14 @@ public static class CloseRegression {
             try {
                 string original=Path.Combine(root,kind+"-source.png"),result=Path.Combine(root,kind+"-result.png"),saved=Path.Combine(root,kind+"-saved.png");
                 File.WriteAllBytes(original,new byte[]{1,2,3});File.WriteAllBytes(result,new byte[]{4,5,6});
-                window=new MainWindow(null);int choices=0,closed=0;
+                window=new MainWindow(null);int choices=0,closed=0;bool saveStarted=false;var saveGate=new TaskCompletionSource<bool>();
                 window.DecisionOverride=delegate(string title,string text,string[] labels){choices++;if(title=="Close while processing?")return 0;if(kind=="cancel"||kind=="busy-then-cancel")return 2;if(kind.StartsWith("save"))return 0;return 1;};
-                window.SaveOverride=async delegate(bool saveAs) {await Task.Delay(10);if(kind=="save"){MainWindow.Publish(original,result,saved,false);return true;}return false;};
-                window.Closed+=delegate {closed++;};window.Show();Pump(15);window.SetTestState(original,result,kind=="busy-then-cancel");
+                window.SaveOverride=async delegate(bool saveAs) {if(kind=="save"){saveStarted=true;await saveGate.Task;MainWindow.Publish(original,result,saved,false);return true;}await Task.Delay(10);return false;};
+                window.Closed+=delegate {closed++;if(kind=="save"&&!File.Exists(saved))errors.Add(new Exception("Closed before save completed"));};window.Show();Pump(15);window.SetTestState(original,result,kind=="busy-then-cancel");
                 window.Close();
                 if(kind=="repeat-close"){window.Close();window.Close();}
-                Pump(80);
+                if(kind=="save"){Until(()=>saveStarted,"Save did not start");Pump(100);Assert(closed==0&&!File.Exists(saved),"Closed before controlled save completion");saveGate.SetResult(true);}
+                if(kind=="save"||kind=="discard"||kind=="repeat-close")Until(()=>closed>0,"Close did not finish within bounded wait");else Pump(80);
                 Assert(errors.Count==0,"Dispatcher exception during "+kind);
                 Assert(File.ReadAllBytes(original)[0]==1,"Original changed");
                 if(kind=="cancel"||kind=="save-cancelled"||kind=="save-failed")Assert(closed==0&&window.IsVisible&&window.TestDirty,"Window/result lost on cancelled/failed close");

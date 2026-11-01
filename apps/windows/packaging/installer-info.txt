@@ -13,5 +13,11 @@ execution have not been validated. This preview is unsigned. Full macOS feature
 and native interaction parity is still in development. Large CPU jobs may be
 slow or stop safely at the memory guard.
 
-Installation is for the current user. Uninstall removes the program and its
+Installation is for the current user. .NET Framework 4.8 and Microsoft Visual C++
+2015-2022 Redistributable (x64, 14.29 or newer) must already be available; installing
+missing system prerequisites may require administrator permission. Setup checks
+the runtime before copying the program and does not install system components.
+Official VC++ download: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
+
+Uninstall removes the program and its
 shortcuts, but keeps downloaded models, preferences and your images/results.

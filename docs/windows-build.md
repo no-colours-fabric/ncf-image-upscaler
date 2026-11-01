@@ -28,7 +28,13 @@ Dependency licenses remain in their package distributions.
 The payload audit rejects weights, sample ONNX datasets, virtual-environment
 references and `.pth` injection. No model cache is copied. The Inno installer
 uses only this audited payload, installs for the current user, checks .NET 4.8,
-offers a shortcut and uninstall entry, and does not require administrator rights.
+offers a shortcut and uninstall entry without administrator rights when .NET 4.8
+and a suitable Microsoft Visual C++ x64 Runtime are already installed. A small
+x64 helper checks the actual system MSVCP140 version/loader and all required ORT
+exports before setup copies app files; startup repeats this check. Installing
+missing prerequisites may need admin. Python's app-local VCRUNTIME files come
+from the pinned official embedded ZIP; MSVCP140 is a separate system component,
+not a claimed native closure.
 It is not Authenticode-signed. Its application models are separately prepared
 from `apps/windows/models.json` by the installed Models window.
 
@@ -45,7 +51,40 @@ Explicit network downloader checks use small Fast downloads and test-only caches
 ```powershell
 .\apps\windows\scripts\check-models.ps1 -TestRoot (Join-Path $build 'download-check')
 .\apps\windows\scripts\prepare-test-models.ps1 -TestRoot (Join-Path $build 'model-check')
+# Existing prepared cache; the following processing checks NEVER download:
+$app = Join-Path $build 'app'
+$models = Join-Path $build 'model-check\cache'
+& (Join-Path $app 'runtime\python.exe') .\apps\windows\tests\check-worker.py `
+  --bundle $app --model-root $models --output (Join-Path $build 'matrix')
+& (Join-Path $app 'runtime\python.exe') .\apps\windows\tests\check-tiling.py `
+  --bundle $app --model-root $models --output (Join-Path $build 'tiling')
+.\apps\windows\scripts\check-prerequisites.ps1 -TestRoot (Join-Path $build 'prereq-check')
+& (Join-Path $app 'runtime\python.exe') .\apps\windows\tests\check-privacy.py `
+  --bundle $app --model-root $models --output (Join-Path $build 'privacy-check')
+python .\apps\windows\scripts\native-imports.py --bundle $app `
+  --output (Join-Path $build 'native-dependencies.json')
 ```
+
+Graph-closure validation is developer-only. Use a separate environment with
+`onnx==1.16.0` (never add it to the installed user runtime), then run:
+
+```powershell
+& $developerPython .\apps\windows\scripts\check-graph-closure.py `
+  --model-root $models --output (Join-Path $build 'graph-closure.json')
+```
+
+The checker verifies every pinned file hash, parses nested/sparse tensors without
+loading external data, rejects dependencies absent from the manifest, and invokes
+the ONNX checker. `engine/runtime_policy.py` invokes the supported 1.17.3
+`disable_telemetry_events()` API before creating options or sessions. This is an
+ORT process policy, not a claim to control Windows-wide telemetry or prove a
+network block. `tests/check-privacy.py` delegates to the actual API while tracing
+the production worker's order, with one small prepared Fast inference.
+The native-import checker reads normal and delayed PE imports, classifies bundled
+libraries versus Windows/API-set dependencies, and verifies that the pinned ORT
+MSVCP140 named-import list matches the installer/startup export gate. It never
+copies System32 files. This separates package isolation from the explicit system
+VC++ prerequisite; it does not claim a clean-machine native closure.
 
 Inference checks must use already prepared files. Do not run the old macOS
 Python package installation on Windows or use macOS test success as Windows

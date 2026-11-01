@@ -7,9 +7,14 @@ not yet verified.
 
 ## Install and use
 
-Run the Windows setup executable. Installation is per-user and does not need
-administrator privileges. Windows .NET Framework 4.8 is required; Python is
-included. The preview is unsigned.
+Run the Windows setup executable. The application installs per-user without
+administrator privileges **when system prerequisites are already installed**:
+.NET Framework 4.8 and a suitable Microsoft Visual C++ 2015–2022 Redistributable
+(x64, version 14.29 or newer with the required ORT exports). Setup checks them
+before copying the app; startup also checks the native runtime. Installing a
+missing system prerequisite may require administrator permission. Get the
+[VC++ Runtime from Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
+Python is included. The preview is unsigned.
 
 1. Open the application, then **Models…**.
 2. Review the model sizes and choose **Download / Repair Models**. This explicit

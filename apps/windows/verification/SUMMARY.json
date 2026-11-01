@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-preview.1",
-  "status": "local candidate; source review and native installed-flow smoke pending",
+  "status": "four release-review findings targeted; independent CI and native manual smoke pending",
   "os": "Windows 10 x64 build 19045",
   "framework": "4.8",
   "python": "3.11.3 embedded",
@@ -24,7 +24,11 @@
     "downloader.txt": "current C# ModelStore with test-only cache root, real HTTPS and integrity/cancel/error checks",
     "close-component.txt": "current source WPF scripted decisions; synthetic result, not native input",
     "locate-escape-component.txt": "current source controlled wheel/keyboard handler and simulated other busy window; not native input",
-    "install-lifecycle.json": "actual setup/reinstall/uninstall via CLI in isolated Unicode/spaces path; outside prepared cache retained"
+    "install-lifecycle.json": "actual setup/reinstall/uninstall via CLI in isolated Unicode/spaces path; outside prepared cache retained",
+    "privacy-policy.json": "actual exact ORT1.17.3 API delegate trace through production worker, one small CPU Fast inference",
+    "native-prerequisites.txt": "four controlled policy cases plus actual system version/loader/required-export test; no host changes",
+    "prerequisite-installer.json": "actual prerequisite-gated CLI install/import/uninstall on already provisioned host; missing-system paths not physically simulated",
+    "close-reviewfix.txt": "current source: held Save barrier followed by bounded Closed-event wait, same exactly-one-close invariant; independent old CI failure preserved separately"
   },
   "encoding_fix": "Compiler codepage65001 plus strict UTF-8 C# validation; compiled-string verification must pass on final candidate",
   "gui_tool_limits": [
@@ -32,5 +36,9 @@
     "Models click failed: coordinate input geometry is unavailable",
     "Key close failed: failed to activate captured window",
     "Own empty test process stopped by exact executable path; user previews preserved"
-  ]
+  ],
+  "ort_policy": "supported disable_telemetry_events called before SessionOptions/InferenceSession",
+  "native_prerequisites": "app-local CPython VCRUNTIME; system x64 VC++ required and gated; no complete native closure claimed",
+  "native_prerequisite_controlled_cases": 4,
+  "native_prerequisite_actual_ready": true
 }

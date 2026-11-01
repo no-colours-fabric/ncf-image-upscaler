@@ -26,8 +26,10 @@ def main():
     parser.add_argument("--model", choices=["photo", "illustration", "fast"], required=True)
     parser.add_argument("--scale", type=int, choices=[1, 2, 4], required=True)
     args = parser.parse_args()
-    import onnxruntime as ort
     from ncf_image_upscaler.imaging import open_image, upscale_image, validate_paths
+    from runtime_policy import configure_runtime
+
+    ort = configure_runtime()
 
     validate_paths(args.input, args.output, False)
     bundle = Path(__file__).resolve().parents[1]

@@ -13,6 +13,8 @@ $artifact=Join-Path $BuildRoot 'installer'
 New-Item -ItemType Directory -Path $BuildRoot -Force | Out-Null
 & $Python (Join-Path $PSScriptRoot 'stage.py') --cache $Cache --stage $stage
 if($LASTEXITCODE -ne 0){throw 'Payload staging failed'}
+& $Python (Join-Path $PSScriptRoot 'native-imports.py') --bundle $stage --output (Join-Path $BuildRoot 'native-dependencies.json')
+if($LASTEXITCODE -ne 0){throw 'Pinned native import/prerequisite manifest check failed'}
 $framework=Join-Path $env:WINDIR 'Microsoft.NET/Framework64/v4.0.30319'
 $references=@('System.dll','System.Core.dll','System.Xaml.dll','System.Web.Extensions.dll','Microsoft.VisualBasic.dll','System.Xml.dll') | ForEach-Object {Join-Path $framework $_}
 $references+=@('WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll') | ForEach-Object {Join-Path $framework ('WPF/'+$_)}
@@ -35,6 +37,10 @@ $arguments+=Get-ChildItem -LiteralPath (Join-Path $app 'src') -Filter '*.cs' | F
 Get-ChildItem -LiteralPath (Join-Path $app 'resources/icons') -Filter '*.svg' | ForEach-Object {$arguments+=('/resource:'+$_.FullName+',NCF.Icons.'+$_.Name)}
 & $compiler @arguments
 if($LASTEXITCODE -ne 0){throw 'Windows application compilation failed'}
+$probeArgs=@('/nologo','/codepage:65001','/target:exe','/platform:x64','/langversion:5','/main:NCF.PrerequisiteProbe',('/out:'+(Join-Path $stage 'resources/NativePrerequisiteCheck.exe')),('/reference:'+(Join-Path $framework 'System.dll')))
+$probeArgs+=@('src/NativePrerequisites.cs','src/RequiredMsvcExports.cs','packaging/PrerequisiteProbe.cs') | ForEach-Object {Join-Path $app $_}
+& $compiler @probeArgs
+if($LASTEXITCODE -ne 0){throw 'Native prerequisite helper compilation failed'}
 @'
 <?xml version="1.0" encoding="utf-8" ?>
 <configuration><startup><supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.8" /></startup></configuration>

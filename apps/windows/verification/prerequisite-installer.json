@@ -1,0 +1,8 @@
+{
+  "actual_prerequisite_gated_install_exit": 0,
+  "actual_helper_exit": 0,
+  "installed_runtime_policy_import": true,
+  "uninstall_exit": 0,
+  "missing_scenarios": "controlled policy tests; host not modified",
+  "native_gui_flow_verified": false
+}

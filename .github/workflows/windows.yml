@@ -32,17 +32,28 @@ jobs:
           $compiler="$env:RUNNER_TEMP/ncf-cache/inno"
           $p=Start-Process "$env:RUNNER_TEMP/ncf-cache/innosetup-6.7.4.exe" -Wait -PassThru -WindowStyle Hidden -ArgumentList @('/VERYSILENT','/CURRENTUSER','/NORESTART',('/DIR="'+$compiler+'"'))
           if($p.ExitCode -ne 0){throw 'Compiler preparation failed'}
+      - name: Scoped Windows Ruff (pinned, no host package installation)
+        run: |
+          python -c "import zipfile,os; zipfile.ZipFile(os.environ['RUNNER_TEMP']+'/ncf-cache/ruff-0.14.2-py3-none-win_amd64.whl').extractall(os.environ['RUNNER_TEMP']+'/ncf-ruff')"
+          $ruff="$env:RUNNER_TEMP/ncf-ruff/ruff-0.14.2.data/scripts/ruff.exe"
+          & $ruff check --no-cache --config apps/windows/ruff.toml apps/windows
+          if($LASTEXITCODE -ne 0){throw 'Scoped Windows lint failed'}
+          & $ruff format --check --config apps/windows/ruff.toml apps/windows
+          if($LASTEXITCODE -ne 0){throw 'Scoped Windows format failed'}
       - name: Offline payload and installer build
         run: |
           ./apps/windows/scripts/build.ps1 -Cache "$env:RUNNER_TEMP/ncf-cache" -BuildRoot "$env:RUNNER_TEMP/ncf-build" -ISCC "$env:RUNNER_TEMP/ncf-cache/inno/ISCC.exe"
       - name: Embedded runtime isolation and no-weights audit
         run: |
           $runtime="$env:RUNNER_TEMP/ncf-build/app/runtime/python.exe"
-          & $runtime -c "import sys,numpy,onnxruntime,PIL,scipy; from pathlib import Path; root=Path(sys.executable).resolve().parent.parent; assert all(Path(p).resolve().is_relative_to(root) for p in sys.path); print('Embedded imports isolated')"
+          & $runtime -c "import sys,numpy,PIL,scipy; from runtime_policy import configure_runtime; ort=configure_runtime(); from pathlib import Path; root=Path(sys.executable).resolve().parent.parent; assert all(Path(p).resolve().is_relative_to(root) for p in sys.path); print('Embedded imports isolated; ORT telemetry disabled')"
           if($LASTEXITCODE -ne 0){throw 'Runtime import check failed'}
           python apps/windows/scripts/audit-payload.py "$env:RUNNER_TEMP/ncf-build/app"
           if($LASTEXITCODE -ne 0){throw 'Payload audit failed'}
       - name: Controlled WPF lifecycle and Locate/Escape checks (no inference)
         run: |
           ./apps/windows/scripts/check-components.ps1 -TestRoot "$env:RUNNER_TEMP/ncf-components"
+      - name: Native prerequisite policy and actual runtime readiness
+        run: |
+          ./apps/windows/scripts/check-prerequisites.ps1 -TestRoot "$env:RUNNER_TEMP/ncf-prerequisites"
       # Publication is separate, after reviewed merge and installer verification.

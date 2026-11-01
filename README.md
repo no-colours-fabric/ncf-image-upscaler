@@ -56,6 +56,9 @@ Choose **Models → Download / Repair Models** to explicitly prepare pinned mode
 from Hugging Face; no manual model downloads or Python commands are needed.
 Processing then runs locally. Windows 10 x64 build 19045 is the tested environment;
 Windows 11, GPU support and full native macOS parity remain unverified.
+The app installs per-user; system .NET Framework 4.8 and Microsoft Visual C++ x64
+Runtime prerequisites must be present. Installing missing prerequisites may need
+administrator permission; see the Windows guide.
 See [platform boundaries](docs/architecture/platforms.md) and
 [Windows model provenance](docs/windows-models.md).
 

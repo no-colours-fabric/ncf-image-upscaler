@@ -18,6 +18,12 @@ worker. macOS uses Swift/AppKit and Python/MLX. The shared Python
 Windows payload; it has no UI or MLX dependency. Do not infer that the entire
 Python package (which declares MLX and Python >=3.12) is installed on Windows.
 
+Windows installation is per-user without elevation only when system .NET 4.8
+and the suitable Microsoft Visual C++ x64 Runtime prerequisite are available.
+Missing system prerequisites may require administrator permission to install;
+the program does not install them automatically or copy system DLLs. ORT's
+supported telemetry opt-out is applied before session processing.
+
 The worker protocol is process arguments plus JSON Lines events on stdout,
 with diagnostics on stderr, not a long-lived server. Events report started,
 progress, completed and errors; Windows also reports preparation/inference/

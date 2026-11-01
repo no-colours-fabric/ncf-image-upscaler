@@ -7,10 +7,13 @@ import sys
 from pathlib import Path
 
 import numpy as np
-import onnxruntime as ort
+from PIL import Image
+
 from ncf_image_upscaler.imaging import extend_transparent_colors
 from onnx_engine import OnnxEngine
-from PIL import Image
+from runtime_policy import configure_runtime
+
+ort = configure_runtime()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--bundle", required=True, type=Path)

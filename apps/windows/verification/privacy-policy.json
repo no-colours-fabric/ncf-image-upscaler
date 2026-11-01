@@ -1,0 +1,14 @@
+{
+  "ort": "1.17.3",
+  "trace": [
+    "actual disable_telemetry_events returned",
+    "SessionOptions",
+    "InferenceSession"
+  ],
+  "actual_api_delegated": true,
+  "test_bootstrap_policy_applied": true,
+  "production_worker_path": true,
+  "real_cpu_inference": true,
+  "output_decode": true,
+  "scope": "ORT per-process policy before session processing; not OS-wide telemetry or network isolation"
+}

@@ -14,6 +14,7 @@ function Get-Pinned($Url,$Name,$Hash) {
 $tools=Get-Content (Join-Path $app 'toolchain.json') -Raw | ConvertFrom-Json
 Get-Pinned $tools.python.url $tools.python.file $tools.python.sha256
 Get-Pinned $tools.inno.url $tools.inno.file $tools.inno.sha256
+Get-Pinned $tools.ruff.url $tools.ruff.file $tools.ruff.sha256
 foreach($wheel in (Get-Content (Join-Path $app 'wheels.json') -Raw | ConvertFrom-Json)) {
     Get-Pinned $wheel.url $wheel.filename $wheel.sha256
 }

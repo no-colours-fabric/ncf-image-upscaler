@@ -1,0 +1,6 @@
+PASS Missing runtime rejected (controlled)
+PASS Insufficient version rejected (controlled)
+PASS Loader/export failure rejected (controlled)
+PASS Suitable loaded runtime accepted (controlled)
+PASS Actual system x64 runtime loads and exports every pinned ORT symbol
+Actual version: 14.40.33816.0; required named exports: 159
