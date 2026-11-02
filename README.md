@@ -46,7 +46,9 @@ preview described below. See [limitations](#limitations).
 
 ## Windows preview
 
-A separately versioned **experimental Windows CPU installer** is being prepared.
+**[Windows 0.1.0 Preview 1 — Experimental CPU installer](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0-preview.1/NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup.exe)** · [Windows checksums](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0-preview.1/SHA256SUMS.txt)
+
+This separately versioned preview is **unsigned** and experimental.
 Windows source and build instructions are in [apps/windows](apps/windows/README.md)
 and the [Windows build guide](docs/windows-build.md). This does not replace the
 available macOS download above or announce a stable Windows release.

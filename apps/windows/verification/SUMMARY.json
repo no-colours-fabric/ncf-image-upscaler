@@ -1,6 +1,6 @@
 {
   "version": "0.1.0-preview.1",
-  "status": "automatic missing-model setup implemented; candidate09 review/native startup smoke pending",
+  "status": "candidate09 native launch/enhance reported by user; reviewed source/CI; final merged-tag distribution publication pending",
   "os": "Windows 10 x64 build 19045",
   "framework": "4.8",
   "python": "3.11.3 embedded",
@@ -30,7 +30,8 @@
     "prerequisite-installer.json": "actual prerequisite-gated CLI install/import/uninstall on already provisioned host; missing-system paths not physically simulated",
     "close-reviewfix.txt": "current source: held Save barrier followed by bounded Closed-event wait, same exactly-one-close invariant; independent old CI failure preserved separately",
     "auto-preparation.txt": "current production Loaded/preparation orchestration and visible WPF modal; synthetic model bytes with real hashes, controlled transfer and worker hook, no network/inference/native desktop input",
-    "draft-preflight.txt": "offline synthetic file allowlist/hash/tag/source validation; no GitHub token, network, draft creation or publication"
+    "draft-preflight.txt": "offline synthetic file allowlist/hash/tag/source validation; no GitHub token, network, draft creation or publication",
+    "user-smoke09.json": "literal scope of user response for candidate09; not an automated/native full-flow pass"
   },
   "encoding_fix": "Compiler codepage65001 plus strict UTF-8 C# validation; compiled-string verification must pass on final candidate",
   "gui_tool_limits": [
@@ -50,5 +51,15 @@
     "user_statement": "Works; requested automatic loading when models are absent",
     "scope": "previous Models preparation / Fast x1 / Enhance / Save; not candidate09 startup, native RGBA/cancel/close/Esc/full parity"
   },
-  "draft_release_preflight_cases": 4
+  "draft_release_preflight_cases": 4,
+  "user_manual_smoke09": {
+    "candidate": "09",
+    "source_commit": "a43ff1243f3828b220de6f31f1d6e176868759f1",
+    "installer_sha256": "a1731d41ecc8dbdd1dba29ac0d1feaa24a624998d2c6c62f53d9b3bbfb79d650",
+    "kind": "manual user report",
+    "user_answer_english": "Launches and enhances",
+    "native_launch_enhance_confirmed": true,
+    "prompt_context": "candidate09 update, startup, small image, Fast x1, Enhance, Save",
+    "limits": "The answer confirms launch/enhance only. Save, fresh empty-cache download, RGBA, cancel, close, Escape and full parity were not separately confirmed."
+  }
 }
