@@ -1,0 +1,5 @@
+PASS current version 0.1.0 and Windows tag/installer/download naming
+PASS current labels omit experimental/preview; historical evidence names retained
+PASS draft=true, prerelease=false, make_latest=false; exact tag/source/hash/allowlist retained
+PASS current text files strict UTF-8
+NOTE source/metadata assertions only; no installer execution or native GUI input

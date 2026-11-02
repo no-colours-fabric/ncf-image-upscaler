@@ -1,0 +1,10 @@
+{
+  "install_exit": 0,
+  "reinstall_exit": 0,
+  "uninstall_exit": 0,
+  "program_removed": true,
+  "user_original_preserved": true,
+  "user_saved_result_preserved": true,
+  "isolated_prepared_models_preserved": 4,
+  "native_gui_flow_verified": false
+}

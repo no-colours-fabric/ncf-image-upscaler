@@ -1,0 +1,24 @@
+NCF Image Upscaler for Windows 0.1.0
+
+Local CPU image enhancement. No accounts, subscriptions, telemetry or cloud processing.
+
+This installer includes the application and Python runtime, but NO model weights.
+After launch, missing or damaged models are prepared automatically from Hugging
+Face (about 150 MiB for all presets). Setup shows progress and Cancel. Verified
+files are reused without network. Models remains available for repair/retry.
+Image inference starts only after preparation and stays local; cancel/error does
+not start it. No manual model downloads or Python commands are needed.
+
+Tested on Windows 10 x64 build 19045 with .NET Framework 4.8. Windows 11 and GPU
+execution have not been validated. This application is unsigned. Full macOS feature
+and native interaction parity is still in development. Large CPU jobs may be
+slow or stop safely at the memory guard.
+
+Installation is for the current user. .NET Framework 4.8 and Microsoft Visual C++
+2015-2022 Redistributable (x64, 14.29 or newer) must already be available; installing
+missing system prerequisites may require administrator permission. Setup checks
+the runtime before copying the program and does not install system components.
+Official VC++ download: https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist
+
+Uninstall removes the program and its
+shortcuts, but keeps downloaded models, preferences and your images/results.

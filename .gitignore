@@ -25,3 +25,7 @@ models/
 *.pt
 *.dmg
 *.app/
+*.onnx
+*.exe
+*.dll
+*.whl

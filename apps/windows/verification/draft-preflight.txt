@@ -1,0 +1,5 @@
+PASS exact tag/source/allowlist/checksum offline preflight
+PASS extra asset rejected
+PASS checksum mismatch rejected
+PASS PR event rejected
+NOTE synthetic file bytes and ValidateOnly; no GitHub network or release mutation

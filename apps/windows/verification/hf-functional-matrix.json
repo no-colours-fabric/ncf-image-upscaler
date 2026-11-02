@@ -1,0 +1,506 @@
+[
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "photo",
+    "scale": 1,
+    "artifact": "photo2",
+    "artifact_sha256": "7eb5e9eb507df603c0c04b49b23c86a362e0a01575bfbbac891d970f9c331888",
+    "output": "RGB Unicode образец-photo-1.png",
+    "dimensions": [
+      19,
+      27
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.03,
+    "wall_seconds": 2.408,
+    "output_sha256": "8a554466e4d5c879c6256b3591f7ea90e30a3ebc85dd5185c0a61a5b85b2a510"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "photo",
+    "scale": 2,
+    "artifact": "photo2",
+    "artifact_sha256": "7eb5e9eb507df603c0c04b49b23c86a362e0a01575bfbbac891d970f9c331888",
+    "output": "RGB Unicode образец-photo-2.png",
+    "dimensions": [
+      38,
+      54
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.026,
+    "wall_seconds": 1.636,
+    "output_sha256": "0893f1406c2b8550c1e85cb4f003bfc44caf3f35b46d10f380cc7acdc546be59"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "photo",
+    "scale": 4,
+    "artifact": "photo4",
+    "artifact_sha256": "4851ec156207d271f5328605d0582eeb851e656227da8aca093ced9e60789291",
+    "output": "RGB Unicode образец-photo-4.png",
+    "dimensions": [
+      76,
+      108
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.068,
+    "wall_seconds": 1.56,
+    "output_sha256": "5396e9aa6f287e9be2bdd6f5e75ef91abd815c2c29385f2ccf52e8ab553ef3b5"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "illustration",
+    "scale": 1,
+    "artifact": "illustration",
+    "artifact_sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "output": "RGB Unicode образец-illustration-1.png",
+    "dimensions": [
+      19,
+      27
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.03,
+    "wall_seconds": 0.759,
+    "output_sha256": "95e24e55bd8fe669f38957170bf634a5028b6f6ad16d48e30e763902a08119ae"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "illustration",
+    "scale": 2,
+    "artifact": "illustration",
+    "artifact_sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "output": "RGB Unicode образец-illustration-2.png",
+    "dimensions": [
+      38,
+      54
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.028,
+    "wall_seconds": 0.738,
+    "output_sha256": "6bdbdddca99f0dbf65ad780a7d627597eeebf4f8b57a1347ae9037ecea53144c"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "illustration",
+    "scale": 4,
+    "artifact": "illustration",
+    "artifact_sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "output": "RGB Unicode образец-illustration-4.png",
+    "dimensions": [
+      76,
+      108
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.035,
+    "wall_seconds": 0.736,
+    "output_sha256": "af8ddca67587a356b5a189deef36f6560d2cb781f73b9f5592237aec8dfda55c"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "fast",
+    "scale": 1,
+    "artifact": "fast",
+    "artifact_sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "output": "RGB Unicode образец-fast-1.png",
+    "dimensions": [
+      19,
+      27
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.019,
+    "wall_seconds": 0.652,
+    "output_sha256": "ae80ae368f569a879ca8d4a78e7263dfcc55f6825749ad649981b0823d45ac25"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "fast",
+    "scale": 2,
+    "artifact": "fast",
+    "artifact_sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "output": "RGB Unicode образец-fast-2.png",
+    "dimensions": [
+      38,
+      54
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.008,
+    "wall_seconds": 0.561,
+    "output_sha256": "5b44af21f4977bed3605111b0fdc945832c59db5c50fe62e69aa0ad12c30844e"
+  },
+  {
+    "input": "RGB Unicode образец.png",
+    "mode": "RGB",
+    "normalized": [
+      19,
+      27
+    ],
+    "preset": "fast",
+    "scale": 4,
+    "artifact": "fast",
+    "artifact_sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "output": "RGB Unicode образец-fast-4.png",
+    "dimensions": [
+      76,
+      108
+    ],
+    "decode": true,
+    "alpha_exact": false,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.011,
+    "wall_seconds": 0.552,
+    "output_sha256": "ed56a4533f8deb3344f063baf955b4e5246140ec6d5a95c8fbb3d22ea88eaed8"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "photo",
+    "scale": 1,
+    "artifact": "photo2",
+    "artifact_sha256": "7eb5e9eb507df603c0c04b49b23c86a362e0a01575bfbbac891d970f9c331888",
+    "output": "RGBA Unicode образец-photo-1.png",
+    "dimensions": [
+      33,
+      25
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.078,
+    "wall_seconds": 2.34,
+    "output_sha256": "d9ab1b98e562eed317b84c576b99c95ce17160b5485ae1b287022767c004213a"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "photo",
+    "scale": 2,
+    "artifact": "photo2",
+    "artifact_sha256": "7eb5e9eb507df603c0c04b49b23c86a362e0a01575bfbbac891d970f9c331888",
+    "output": "RGBA Unicode образец-photo-2.png",
+    "dimensions": [
+      66,
+      50
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.034,
+    "wall_seconds": 1.674,
+    "output_sha256": "e278830691eb0851fb56fcc40cec551802f4b048a52eab751252f95948bc6f03"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "photo",
+    "scale": 4,
+    "artifact": "photo4",
+    "artifact_sha256": "4851ec156207d271f5328605d0582eeb851e656227da8aca093ced9e60789291",
+    "output": "RGBA Unicode образец-photo-4.png",
+    "dimensions": [
+      132,
+      100
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.104,
+    "wall_seconds": 1.647,
+    "output_sha256": "aa789150e9f81163c5feb6e4fb3885b3401f3b4d7f4573b93c3c5950b0ea953f"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "illustration",
+    "scale": 1,
+    "artifact": "illustration",
+    "artifact_sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "output": "RGBA Unicode образец-illustration-1.png",
+    "dimensions": [
+      33,
+      25
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.039,
+    "wall_seconds": 0.739,
+    "output_sha256": "6547f7135a2484f7153f4c1e601e5da49cc456aff7512f7757fb8cdda2566387"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "illustration",
+    "scale": 2,
+    "artifact": "illustration",
+    "artifact_sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "output": "RGBA Unicode образец-illustration-2.png",
+    "dimensions": [
+      66,
+      50
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.051,
+    "wall_seconds": 0.825,
+    "output_sha256": "6eeee8df0aa32ffa21da30a86d43a7bd387ffb58fb582a33f956e1a78c058114"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "illustration",
+    "scale": 4,
+    "artifact": "illustration",
+    "artifact_sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "output": "RGBA Unicode образец-illustration-4.png",
+    "dimensions": [
+      132,
+      100
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.036,
+    "wall_seconds": 0.74,
+    "output_sha256": "78770e91568eaf80219365c6196d298f3713c05e0207541a83fece1dd1302baf"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "fast",
+    "scale": 1,
+    "artifact": "fast",
+    "artifact_sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "output": "RGBA Unicode образец-fast-1.png",
+    "dimensions": [
+      33,
+      25
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.015,
+    "wall_seconds": 0.56,
+    "output_sha256": "eaa6d933da5711020916bba5e677a93da14f872e30493975019bfb8dbdc95ae2"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "fast",
+    "scale": 2,
+    "artifact": "fast",
+    "artifact_sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "output": "RGBA Unicode образец-fast-2.png",
+    "dimensions": [
+      66,
+      50
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.011,
+    "wall_seconds": 0.561,
+    "output_sha256": "d55dc208402f6f55782feac2b0b733bb8064ee1e3e3bbd68c871fddee100ac24"
+  },
+  {
+    "input": "RGBA Unicode образец.png",
+    "mode": "RGBA",
+    "normalized": [
+      33,
+      25
+    ],
+    "preset": "fast",
+    "scale": 4,
+    "artifact": "fast",
+    "artifact_sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "output": "RGBA Unicode образец-fast-4.png",
+    "dimensions": [
+      132,
+      100
+    ],
+    "decode": true,
+    "alpha_exact": true,
+    "icc": true,
+    "orientation": true,
+    "source_unchanged": true,
+    "existing_output_protected": true,
+    "neural_call": true,
+    "exit": 0,
+    "processing_seconds": 0.018,
+    "wall_seconds": 0.551,
+    "output_sha256": "a6deb08604e2ebf721eff108b91745c7db79410cdbcbbe00c8ba43e56ed48bd0"
+  }
+]

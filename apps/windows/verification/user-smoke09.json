@@ -1,0 +1,10 @@
+{
+  "candidate": "09",
+  "source_commit": "a43ff1243f3828b220de6f31f1d6e176868759f1",
+  "installer_sha256": "a1731d41ecc8dbdd1dba29ac0d1feaa24a624998d2c6c62f53d9b3bbfb79d650",
+  "kind": "manual user report",
+  "user_answer_english": "Launches and enhances",
+  "native_launch_enhance_confirmed": true,
+  "prompt_context": "candidate09 update, startup, small image, Fast x1, Enhance, Save",
+  "limits": "The answer confirms launch/enhance only. Save, fresh empty-cache download, RGBA, cancel, close, Escape and full parity were not separately confirmed."
+}

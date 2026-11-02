@@ -1,0 +1,5 @@
+extend = "../../pyproject.toml"
+target-version = "py311"
+
+[lint.isort]
+known-first-party = ["ncf_image_upscaler", "onnx_engine", "runtime_policy", "win_api", "job_guard"]

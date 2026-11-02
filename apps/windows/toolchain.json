@@ -1,0 +1,22 @@
+{
+  "python": {
+    "version": "3.11.3",
+    "file": "python-3.11.3-embed-amd64.zip",
+    "url": "https://www.python.org/ftp/python/3.11.3/python-3.11.3-embed-amd64.zip",
+    "sha256": "7419b2e98516fbd0b66a1237b80187ffb21d32e47b4a4235c2d9d6379597070f"
+  },
+  "inno": {
+    "version": "6.7.4",
+    "file": "innosetup-6.7.4.exe",
+    "url": "https://github.com/jrsoftware/issrc/releases/download/is-6_7_4/innosetup-6.7.4.exe",
+    "sha256": "a549929319f9120716677c685535ca4671e4b937b5fdc87e2585f32d8eb30e8c"
+  },
+  "ruff": {
+    "version": "0.14.2",
+    "file": "ruff-0.14.2-py3-none-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/71/30/3758bcf9e0b6a4193a6f51abf84254aba00887dfa8c20aba18aa366c5f57/ruff-0.14.2-py3-none-win_amd64.whl",
+    "sha256": "0df3424aa5c3c08b34ed8ce099df1021e3adaca6e90229273496b839e5a7e1af"
+  },
+  "compiler": "Windows .NET Framework 4.x csc.exe, x64, C# 5",
+  "framework_required": "4.8"
+}

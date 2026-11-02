@@ -1,0 +1,98 @@
+[
+  {
+    "artifact": "photo4",
+    "sha256": "4851ec156207d271f5328605d0582eeb851e656227da8aca093ced9e60789291",
+    "mode": "RGB",
+    "input": [
+      257,
+      273
+    ],
+    "tile": 256,
+    "context": 64,
+    "edge": "context clipped to global image; native convolution zero padding",
+    "max_uint8": 1,
+    "mean_uint8": 0.0003970035584821577,
+    "tolerance": "max<=2 and mean<=0.02 uint8 levels",
+    "passed": true
+  },
+  {
+    "artifact": "photo4",
+    "sha256": "4851ec156207d271f5328605d0582eeb851e656227da8aca093ced9e60789291",
+    "mode": "RGBA",
+    "input": [
+      257,
+      273
+    ],
+    "tile": 256,
+    "context": 64,
+    "edge": "context clipped to global image; native convolution zero padding",
+    "max_uint8": 1,
+    "mean_uint8": 0.00038482917860349766,
+    "tolerance": "max<=2 and mean<=0.02 uint8 levels",
+    "passed": true
+  },
+  {
+    "artifact": "illustration",
+    "sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "mode": "RGB",
+    "input": [
+      257,
+      273
+    ],
+    "tile": 256,
+    "context": 64,
+    "edge": "context clipped to global image; native convolution zero padding",
+    "max_uint8": 1,
+    "mean_uint8": 8.908082838043928e-07,
+    "tolerance": "max<=2 and mean<=0.02 uint8 levels",
+    "passed": true
+  },
+  {
+    "artifact": "illustration",
+    "sha256": "9a029dae374b2cd4c3eb2dbbed857e22e6d785687c767aa12828e7356b9fb378",
+    "mode": "RGBA",
+    "input": [
+      257,
+      273
+    ],
+    "tile": 256,
+    "context": 64,
+    "edge": "context clipped to global image; native convolution zero padding",
+    "max_uint8": 1,
+    "mean_uint8": 2.0785526622102496e-06,
+    "tolerance": "max<=2 and mean<=0.02 uint8 levels",
+    "passed": true
+  },
+  {
+    "artifact": "fast",
+    "sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "mode": "RGB",
+    "input": [
+      257,
+      273
+    ],
+    "tile": 256,
+    "context": 64,
+    "edge": "context clipped to global image; native convolution zero padding",
+    "max_uint8": 0,
+    "mean_uint8": 0.0,
+    "tolerance": "max<=2 and mean<=0.02 uint8 levels",
+    "passed": true
+  },
+  {
+    "artifact": "fast",
+    "sha256": "a946f7a9397021b9b6b7e71df3d2821b04cc09ff244423b7ca79cb191ce4a00e",
+    "mode": "RGBA",
+    "input": [
+      257,
+      273
+    ],
+    "tile": 256,
+    "context": 64,
+    "edge": "context clipped to global image; native convolution zero padding",
+    "max_uint8": 0,
+    "mean_uint8": 0.0,
+    "tolerance": "max<=2 and mean<=0.02 uint8 levels",
+    "passed": true
+  }
+]

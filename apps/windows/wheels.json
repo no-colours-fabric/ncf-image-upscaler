@@ -1,0 +1,80 @@
+[
+  {
+    "sha256": "cd25bcecc4974d09257ffcd1f098ee778f7834c3ad767fe5db785be9a4aa9cb2",
+    "filename": "numpy-1.26.4-cp311-cp311-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/3f/6b/5610004206cf7f8e7ad91c5a85a8c71b2f2f8051a0c0c4d5916b76d6cbb2/numpy-1.26.4-cp311-cp311-win_amd64.whl",
+    "requirement": "numpy==1.26.4"
+  },
+  {
+    "sha256": "8eb0908e954d093b02a543dc963984d6e99ad2b5e36503d8a0aaf040505f747d",
+    "filename": "pillow-10.3.0-cp311-cp311-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/0a/16/c83877524c47976f16703d2e05c363244bc1e60ab439e078b3cd046d07db/pillow-10.3.0-cp311-cp311-win_amd64.whl",
+    "requirement": "Pillow==10.3.0"
+  },
+  {
+    "sha256": "a2f471de4d01200718b2b8927f7d76b5d9bde18047ea0fa8bd15c5ba3f26a1d6",
+    "filename": "scipy-1.13.0-cp311-cp311-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/d4/a1/d4adf25b6d2bef8d0ad1682829dcfcba97f3f96bb5b6f137bc3e41003cc7/scipy-1.13.0-cp311-cp311-win_amd64.whl",
+    "requirement": "scipy==1.13.0"
+  },
+  {
+    "sha256": "570760ca53a74cdd751ee49f13de70d1384dcf73d9888b8deac0917023ccda6d",
+    "filename": "onnxruntime-1.17.3-cp311-cp311-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/ea/ef/202d3fb284c5936f8aa6d87021963e8e8f776834aa18e8f440c268827639/onnxruntime-1.17.3-cp311-cp311-win_amd64.whl",
+    "requirement": "onnxruntime==1.17.3"
+  },
+  {
+    "sha256": "8db4c1b57507eef143a15a6884ca10f7c73876cdf5d51e713151c1236a0e68cf",
+    "filename": "psutil-5.9.8-cp37-abi3-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/93/52/3e39d26feae7df0aa0fd510b14012c3678b36ed068f7d78b8d8784d61f0e/psutil-5.9.8-cp37-abi3-win_amd64.whl",
+    "requirement": "psutil==5.9.8"
+  },
+  {
+    "sha256": "612ee75c546f53e92e70049c9dbfcc18c935a2b9a53b66085ce9ef6a6e5c0934",
+    "filename": "coloredlogs-15.0.1-py2.py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/a7/06/3d6badcf13db419e25b07041d9c7b4a2c331d3f4e7134445ec5df57714cd/coloredlogs-15.0.1-py2.py3-none-any.whl",
+    "requirement": "coloredlogs==15.0.1"
+  },
+  {
+    "sha256": "8dbdec58f935f3765e4f7f3cf635ac3a77f83568138d6a2311f524ec96364812",
+    "filename": "flatbuffers-24.3.25-py2.py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/41/f0/7e988a019bc54b2dbd0ad4182ef2d53488bb02e58694cd79d61369e85900/flatbuffers-24.3.25-py2.py3-none-any.whl",
+    "requirement": "flatbuffers==24.3.25"
+  },
+  {
+    "sha256": "2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5",
+    "filename": "packaging-24.0-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/49/df/1fceb2f8900f8639e278b056416d49134fb8d84c5942ffaa01ad34782422/packaging-24.0-py3-none-any.whl",
+    "requirement": "packaging==24.0"
+  },
+  {
+    "sha256": "da612f2720c0183417194eeaa2523215c4fcc1a1949772dc65f05047e08d5932",
+    "filename": "protobuf-5.26.1-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/d8/ba/1c8528299fe9082f9400e6f4eb021cb3311943b2bff9267d5e24e4b4a4d8/protobuf-5.26.1-py3-none-any.whl",
+    "requirement": "protobuf==5.26.1"
+  },
+  {
+    "sha256": "c3588cd4295d0c0f603d0f2ae780587e64e2efeedb3521e46b9bb1d08d184fa5",
+    "filename": "sympy-1.12-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/d2/05/e6600db80270777c4a64238a98d442f0fd07cc8915be2a1c16da7f2b9e74/sympy-1.12-py3-none-any.whl",
+    "requirement": "sympy==1.12"
+  },
+  {
+    "sha256": "1697e1a8a8f550fd43c2865cd84542fc175a61dcb779b6fee18cf6b6ccba1477",
+    "filename": "humanfriendly-10.0-py2.py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/f0/0f/310fb31e39e2d734ccaa2c0fb981ee41f7bd5056ce9bc29b2248bd569169/humanfriendly-10.0-py2.py3-none-any.whl",
+    "requirement": "humanfriendly==10.0"
+  },
+  {
+    "sha256": "a0b2b9fe80bbcd81a6647ff13108738cfb482d481d826cc0e02f5b35e5c88d2c",
+    "filename": "mpmath-1.3.0-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/43/e3/7d92a15f894aa0c9c4b49b8ee9ac9850d6e63b03c9c32c0367a13ae62209/mpmath-1.3.0-py3-none-any.whl",
+    "requirement": "mpmath==1.3.0"
+  },
+  {
+    "sha256": "b0efb6516fd4fb07b45949053826a62fa4cb353db5be2bbb4a7aa1fdd1e345fb",
+    "filename": "pyreadline3-3.4.1-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/56/fc/a3c13ded7b3057680c8ae95a9b6cc83e63657c38e0005c400a5d018a33a7/pyreadline3-3.4.1-py3-none-any.whl",
+    "requirement": "pyreadline3==3.4.1"
+  }
+]

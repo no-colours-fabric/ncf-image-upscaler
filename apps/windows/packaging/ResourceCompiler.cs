@@ -1,0 +1,24 @@
+// Windows packaging of the EXISTING project artwork, not a second icon design.
+// All geometry, colors, paths and stroke sizes are read from MakeIcon.swift.
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+public static class ResourceCompiler {
+ static string source;static double Number(string value){return Double.Parse(value,CultureInfo.InvariantCulture);}
+ static Match Need(string pattern){var m=Regex.Match(source,pattern,RegexOptions.Singleline);if(!m.Success)throw new Exception("Shared icon source changed; unsupported syntax: "+pattern);return m;}
+ static Rect Rect(string pattern){var m=Need(pattern+@"\s*NSRect\(x: ([\d.]+), y: ([\d.]+), width: ([\d.]+), height: ([\d.]+)\)");return new Rect(Number(m.Groups[1].Value),Number(m.Groups[2].Value),Number(m.Groups[3].Value),Number(m.Groups[4].Value));}
+ static Color Color(string pattern){var m=Need(pattern+@"\s*NSColor\(red: ([\d.]+), green: ([\d.]+), blue: ([\d.]+), alpha: ([\d.]+)\)");return System.Windows.Media.Color.FromArgb((byte)Math.Round(255*Number(m.Groups[4].Value)),(byte)Math.Round(255*Number(m.Groups[1].Value)),(byte)Math.Round(255*Number(m.Groups[2].Value)),(byte)Math.Round(255*Number(m.Groups[3].Value)));}
+ static StreamGeometry Path(string name){var geometry=new StreamGeometry();using(var context=geometry.Open()){bool started=false;foreach(Match m in Regex.Matches(source,name+@"\.(move|line)\(to: NSPoint\(x: ([\d.]+), y: ([\d.]+)\)\)")){var p=new Point(Number(m.Groups[2].Value),Number(m.Groups[3].Value));if(!started){context.BeginFigure(p,name=="spark",name=="spark");started=true;}else context.LineTo(p,true,false);}if(!started)throw new Exception("Missing shared icon path");}return geometry;}
+ static byte[] Render(int size){var visual=new DrawingVisual();using(var dc=visual.RenderOpen()){dc.PushTransform(new TranslateTransform(0,size));dc.PushTransform(new ScaleTransform(size/1024.0,-size/1024.0));var frame=Rect(@"let frame =");double radius=Number(Need(@"let shape = NSBezierPath\(roundedRect: frame, xRadius: ([\d.]+)").Groups[1].Value);var shape=new RectangleGeometry(frame,radius,radius);double angle=Number(Need(@"gradient.draw\(in: shape, angle: ([\d.]+)\)").Groups[1].Value)*Math.PI/180;double length=Math.Abs(frame.Width*Math.Cos(angle))+Math.Abs(frame.Height*Math.Sin(angle));var gradient=new LinearGradientBrush(Color("starting:"),Color("ending:"),new Point(frame.X+frame.Width/2-Math.Cos(angle)*length/2,frame.Y+frame.Height/2-Math.Sin(angle)*length/2),new Point(frame.X+frame.Width/2+Math.Cos(angle)*length/2,frame.Y+frame.Height/2+Math.Sin(angle)*length/2)){MappingMode=BrushMappingMode.Absolute};dc.DrawGeometry(gradient,null,shape);
+  var white=new SolidColorBrush(System.Windows.Media.Color.FromArgb((byte)Math.Round(255*Number(Need(@"NSColor.white.withAlphaComponent\(([\d.]+)\)").Groups[1].Value)),255,255,255));var photo=Rect(@"let photo = NSBezierPath\(roundedRect:");radius=Number(Need(@"let photo =.*?xRadius: ([\d.]+)").Groups[1].Value);double stroke=Number(Need(@"photo.lineWidth = ([\d.]+)").Groups[1].Value);dc.DrawRoundedRectangle(null,new Pen(white,stroke),photo,radius,radius);
+  var sun=Rect(@"NSBezierPath\(ovalIn:");dc.DrawEllipse(white,null,new Point(sun.X+sun.Width/2,sun.Y+sun.Height/2),sun.Width/2,sun.Height/2);var pen=new Pen(white,Number(Need(@"mountains.lineWidth = ([\d.]+)").Groups[1].Value)){LineJoin=PenLineJoin.Round};dc.DrawGeometry(null,pen,Path("mountains"));dc.DrawGeometry(white,null,Path("spark"));dc.Pop();dc.Pop();}
+  var bitmap=new RenderTargetBitmap(size,size,96,96,PixelFormats.Pbgra32);bitmap.Render(visual);var png=new PngBitmapEncoder();png.Frames.Add(BitmapFrame.Create(bitmap));using(var output=new MemoryStream()){png.Save(output);return output.ToArray();}
+ }
+ [STAThread]public static int Main(string[] args){try{source=File.ReadAllText(args[0]);string folder=args[1];Directory.CreateDirectory(folder);var sizes=new[]{16,32,48,128,256};var images=sizes.Select(Render).ToArray();using(var writer=new BinaryWriter(File.Create(System.IO.Path.Combine(folder,"App.ico")))){writer.Write((ushort)0);writer.Write((ushort)1);writer.Write((ushort)sizes.Length);int offset=6+16*sizes.Length;for(int i=0;i<sizes.Length;i++){writer.Write((byte)(sizes[i]==256?0:sizes[i]));writer.Write((byte)(sizes[i]==256?0:sizes[i]));writer.Write((byte)0);writer.Write((byte)0);writer.Write((ushort)1);writer.Write((ushort)32);writer.Write(images[i].Length);writer.Write(offset);offset+=images[i].Length;}foreach(var data in images)writer.Write(data);}File.WriteAllBytes(System.IO.Path.Combine(folder,"App.png"),Render(1024));return 0;}catch(Exception e){Console.WriteLine(e);return 1;}}
+}
