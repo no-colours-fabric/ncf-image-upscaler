@@ -36,7 +36,7 @@ public static class ModelStore {
    string temporary=Path.Combine(Root,"download-"+Guid.NewGuid().ToString("N")+".partial");
    try{
     ServicePointManager.SecurityProtocol|=SecurityProtocolType.Tls12;
-    var request=(HttpWebRequest)WebRequest.Create(model.Url);request.Timeout=30000;request.ReadWriteTimeout=30000;request.UserAgent="NCF-Image-Upscaler-Windows/0.1.0-preview.1";
+    var request=(HttpWebRequest)WebRequest.Create(model.Url);request.Timeout=30000;request.ReadWriteTimeout=30000;request.UserAgent="NCF-Image-Upscaler-Windows/0.1.0";
     using(stop.Register(request.Abort))using(var response=(HttpWebResponse)request.GetResponse())using(var input=response.GetResponseStream())using(var output=new FileStream(temporary,FileMode.CreateNew,FileAccess.Write,FileShare.None))using(var hash=SHA256.Create()){
      if(response.ResponseUri.Scheme!="https")throw new IOException("An insecure download redirect was refused.");
      long received=0;var buffer=new byte[131072];int count;

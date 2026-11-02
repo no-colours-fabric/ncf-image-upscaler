@@ -1,6 +1,6 @@
 # Windows application
 
-- This is an experimental Windows CPU application, independently versioned from
+- This is a Windows CPU application, independently versioned from
   macOS. Do not change the macOS source, dependency pins or `v*` release workflow
   as part of Windows changes.
 - English interface and diagnostics. Preserve Unicode paths, input/alias safety,

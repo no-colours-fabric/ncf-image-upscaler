@@ -61,5 +61,7 @@
     "native_launch_enhance_confirmed": true,
     "prompt_context": "candidate09 update, startup, small image, Fast x1, Enhance, Save",
     "limits": "The answer confirms launch/enhance only. Save, fresh empty-cache download, RGBA, cancel, close, Escape and full parity were not separately confirmed."
-  }
+  },
+  "current_release_version": "0.1.0",
+  "release_naming": "Windows 0.1.0 / windows-v0.1.0; ordinary non-latest release. Existing version and candidate09 reports describe historical binaries, not a renamed 0.1.0 installer."
 }

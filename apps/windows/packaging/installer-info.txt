@@ -1,4 +1,4 @@
-NCF Image Upscaler for Windows — Experimental Preview
+NCF Image Upscaler for Windows 0.1.0
 
 Local CPU image enhancement. No accounts, subscriptions, telemetry or cloud processing.
 
@@ -10,7 +10,7 @@ Image inference starts only after preparation and stays local; cancel/error does
 not start it. No manual model downloads or Python commands are needed.
 
 Tested on Windows 10 x64 build 19045 with .NET Framework 4.8. Windows 11 and GPU
-execution have not been validated. This preview is unsigned. Full macOS feature
+execution have not been validated. This application is unsigned. Full macOS feature
 and native interaction parity is still in development. Large CPU jobs may be
 slow or stop safely at the memory guard.
 

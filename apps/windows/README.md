@@ -1,6 +1,6 @@
 # NCF Image Upscaler for Windows
 
-Experimental CPU preview. Windows 10 x64 build 19045 is the tested environment;
+Local CPU image enhancement. Windows 10 x64 build 19045 is the tested environment;
 Windows 11 and GPU execution have not been validated. This is independently
 versioned from the macOS application. Full native interaction/visual parity is
 not yet verified.
@@ -14,7 +14,7 @@ administrator privileges **when system prerequisites are already installed**:
 before copying the app; startup also checks the native runtime. Installing a
 missing system prerequisite may require administrator permission. Get the
 [VC++ Runtime from Microsoft](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist).
-Python is included. The preview is unsigned.
+Python is included. The application is unsigned.
 
 1. Open the application. If models are missing or damaged, visible setup starts
    automatically and prepares the required files from public Hugging Face.
@@ -48,7 +48,7 @@ Close the app before manually removing its retained application data.
 
 CPU only, four inference threads. The worker has an 8 GiB committed-memory guard
 and checks system memory reserves; large images may fail safely. Photo ×1/×2
-uses the untiled native ×2 model; its former experimental tiled path is disabled.
+uses the untiled native ×2 model; its former tiled path is disabled.
 The other presets use tiled native ×4 inference. Processing may be slow; progress
 is based on completed tiles, with stage/elapsed time for full-frame processing.
 

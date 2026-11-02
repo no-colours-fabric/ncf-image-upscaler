@@ -1,4 +1,4 @@
-# Build the experimental Windows installer
+# Build the Windows installer
 
 Run on Windows x64 with .NET Framework 4.8 and a developer Python 3.11+.
 The installed application needs no developer Python. Build tools/dependencies
@@ -6,7 +6,7 @@ and output directories must remain outside Git. No model export stack is needed.
 
 ```powershell
 $cache = Join-Path $env:LOCALAPPDATA 'NCF Image Upscaler\build-cache'
-$build = Join-Path $env:LOCALAPPDATA 'NCF Image Upscaler\builds\preview1'
+$build = Join-Path $env:LOCALAPPDATA 'NCF Image Upscaler\builds\windows-0.1.0'
 # Explicit HTTPS preparation; system certificate validation stays enabled.
 .\apps\windows\scripts\prepare-dependencies.ps1 -Cache $cache
 # Install the pinned compiler locally (not in Program Files).
@@ -99,17 +99,17 @@ before publishing. Retain relative public reports; keep local paths private.
 
 Windows versions are independent: `apps/windows/VERSION`, assembly information,
 installer metadata and release notes must agree. First tag:
-`windows-v0.1.0-preview.1`. It must not trigger the macOS `v*` workflow.
+`windows-v0.1.0`. It must not trigger the macOS `v*` workflow.
 Use the reviewed merged commit as tag target. Publish only
-`NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup.exe` and `SHA256SUMS.txt` in
-a GitHub prerelease, without marking it latest. Verify downloaded asset hashes
+`NCFImageUpscaler-0.1.0-windows-x64-setup.exe` and `SHA256SUMS.txt` in
+a GitHub release, without marking it latest. Verify downloaded asset hashes
 and the release flags before completion. Keep stable macOS downloads prominent.
 
 The separate Windows workflow keeps PR/build permissions read-only. Only a
 trusted `push` of the exact `windows-v` version tag can upload those two allowlisted
 files between jobs and invoke a separate contents-write job. That job checks the
-clean build/source commit and hashes, creates a **draft** prerelease with
-`make_latest=false`, uploads only the setup/checksums, and downloads them again
+clean build/source commit and hashes, creates a **draft** release with
+`prerelease=false` and `make_latest=false`, uploads only the setup/checksums, and downloads them again
 to verify hashes. It does not publish. An existing release (draft or published)
 causes a safe failure instead of replacement. Final publication remains a separate
 reviewed operation. Local builds use scratch space inside the chosen build root;

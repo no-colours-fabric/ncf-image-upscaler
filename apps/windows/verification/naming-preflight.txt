@@ -1,0 +1,6 @@
+Tag/source/two-file allowlist/checksums validated; no network or release mutation
+PASS numeric 0.1.0 tag/source/two-assets/checksum preflight
+PASS extra asset rejected
+PASS checksum mismatch rejected
+PASS PR event rejected
+NOTE synthetic bytes; offline ValidateOnly; no network or release mutation

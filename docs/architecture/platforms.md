@@ -1,8 +1,8 @@
 # Platform architecture
 
 One repository, two independently delivered applications. macOS remains the
-available Apple Silicon application and CLI. Windows is an experimental CPU
-preview with separate source, dependencies, model format, installer and version.
+available Apple Silicon application and CLI. Windows is a CPU application with
+separate source, dependencies, model format, installer and version.
 Neither Windows 11 nor GPU support is validated by the recorded Windows 10 tests.
 
 ## Platform boundaries
@@ -64,7 +64,7 @@ macOS keeps its existing Application Support data root. Windows installs per-use
 under `%LOCALAPPDATA%\Programs\NCF Image Upscaler`; models, sessions and preferences
 use `%LOCALAPPDATA%\NCF Image Upscaler`. These are separately implemented policies.
 Windows uninstall removes installed program files, retaining model caches and
-user images/results. Existing research/preview folders are not installation input.
+user images/results. Existing research/build folders are not installation input.
 
 Windows installers and GitHub assets contain **no model weights**. Visible,
 cancellable setup automatically prepares missing/damaged pinned public Hugging
@@ -83,8 +83,8 @@ real native input from scripted WPF components and actual worker execution from
 synthetic injected results. Small functional timings do not establish typical
 FullHD speed or hardware minimums. Full native parity is not claimed.
 
-Windows 0.1.0-preview.1 uses `windows-v0.1.0-preview.1` and a non-latest GitHub
-prerelease, independently of macOS. Review source/privacy/licenses, the pinned
+Windows 0.1.0 uses `windows-v0.1.0` and a non-latest GitHub
+release, independently of macOS. Review source/privacy/licenses, the pinned
 downloads, installer contents and install/preparation/processing/removal results
 before merge/publication. Keep binaries, environments, caches and weights out of
 Git, and personal paths/identifiers/private photos out of public reports.

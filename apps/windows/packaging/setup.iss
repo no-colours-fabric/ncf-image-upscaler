@@ -7,8 +7,8 @@
 [Setup]
 AppId={{9E930EC1-F26D-4D70-A5F3-18F7C2D22360}
 AppName=NCF Image Upscaler
-AppVersion=0.1.0-preview.1
-AppVerName=NCF Image Upscaler for Windows 0.1.0 Preview 1
+AppVersion=0.1.0
+AppVerName=NCF Image Upscaler for Windows 0.1.0
 AppPublisher=no-colours-fabric
 AppPublisherURL=https://github.com/no-colours-fabric/ncf-image-upscaler
 DefaultDirName={localappdata}\Programs\NCF Image Upscaler
@@ -21,7 +21,7 @@ WizardStyle=modern
 Compression=lzma2
 SolidCompression=yes
 OutputDir={#ArtifactRoot}
-OutputBaseFilename=NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup
+OutputBaseFilename=NCFImageUpscaler-0.1.0-windows-x64-setup
 SetupIconFile={#Payload}\resources\App.ico
 UninstallDisplayIcon={app}\NCF Image Upscaler.exe
 CloseApplications=yes
@@ -53,7 +53,7 @@ var Release: Cardinal;
 begin
   Result := False;
   if not (RegQueryDWordValue(HKLM64, 'SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full', 'Release', Release) and (Release >= 528040)) then begin
-    SuppressibleMsgBox('This preview requires Microsoft .NET Framework 4.8. Install it from Microsoft, then run this installer again. Installing a missing system prerequisite may require administrator permission. No Python installation is needed.', mbError, MB_OK, IDOK);
+    SuppressibleMsgBox('This application requires Microsoft .NET Framework 4.8. Install it from Microsoft, then run this installer again. Installing a missing system prerequisite may require administrator permission. No Python installation is needed.', mbError, MB_OK, IDOK);
     exit;
   end;
   ExtractTemporaryFile('NativePrerequisiteCheck.exe');

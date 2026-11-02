@@ -1,7 +1,7 @@
 # NCF Image Upscaler
 
 - This repository contains the native macOS app/CLI for Apple Silicon and an
-  independently versioned experimental Windows CPU app in `apps/windows`.
+  independently versioned Windows CPU app in `apps/windows`.
   Follow `docs/architecture/platforms.md` and platform-scoped instructions.
 - Use English for the interface, documentation, diagnostics, and contributions.
   Keep Unicode filenames and keyboard-layout cases in tests.

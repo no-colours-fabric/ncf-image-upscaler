@@ -3,6 +3,7 @@ param([Parameter(Mandatory=$true)][string]$Assets,[switch]$ValidateOnly)
 $ErrorActionPreference='Stop'
 $app=Split-Path -Parent $PSScriptRoot
 $version=(Get-Content (Join-Path $app 'VERSION') -Raw).Trim()
+if($version -notmatch '^\d+\.\d+\.\d+$'){throw 'Expected a numeric Windows release version'}
 $tag='windows-v'+$version
 $setup='NCFImageUpscaler-'+$version+'-windows-x64-setup.exe'
 if($env:GITHUB_EVENT_NAME -ne 'push' -or $env:GITHUB_REF -ne ('refs/tags/'+$tag) -or $env:GITHUB_REPOSITORY -ne 'no-colours-fabric/ncf-image-upscaler'){throw 'Draft creation is restricted to this repository and an exact Windows version tag push'}
@@ -25,11 +26,10 @@ try{$existing=Invoke-RestMethod -Uri ($api+'/releases/tags/'+$tag) -Headers $hea
 catch{if([int]$_.Exception.Response.StatusCode -ne 404){throw}}
 if($existing){throw 'A release already exists for this tag. Nothing was changed; inspect it manually. Published assets are never replaced and existing drafts are not silently overwritten.'}
 $notes=Get-Content (Join-Path $app 'packaging/RELEASE_NOTES.md') -Raw
-if($version -notmatch '^(\d+\.\d+\.\d+)-preview\.(\d+)$'){throw 'This workflow publishes only versioned Windows previews'}
-$title='NCF Image Upscaler for Windows '+$Matches[1]+' Preview '+$Matches[2]
-$body=@{tag_name=$tag;target_commitish=$head;name=$title;body=$notes;draft=$true;prerelease=$true;make_latest='false'} | ConvertTo-Json
+$title='NCF Image Upscaler for Windows '+$version
+$body=@{tag_name=$tag;target_commitish=$head;name=$title;body=$notes;draft=$true;prerelease=$false;make_latest='false'} | ConvertTo-Json
 $release=Invoke-RestMethod -Method Post -Uri ($api+'/releases') -Headers $headers -ContentType 'application/json' -Body $body
-if(-not $release.draft -or -not $release.prerelease -or $release.tag_name -ne $tag){throw 'Unexpected release flags; leave draft for inspection'}
+if(-not $release.draft -or $release.prerelease -ne $false -or $release.tag_name -ne $tag){throw 'Unexpected release flags; leave draft for inspection'}
 $uploadBase=$release.upload_url -replace '\{.*$',''
 if(([Uri]$uploadBase).Scheme -ne 'https' -or ([Uri]$uploadBase).Host -ne 'uploads.github.com'){throw 'Unexpected asset upload endpoint'}
 foreach($name in @($setup,'SHA256SUMS.txt')){
@@ -46,8 +46,8 @@ foreach($name in @($setup,'SHA256SUMS.txt')){
     }finally{if(Test-Path -LiteralPath $copy){Remove-Item -LiteralPath $copy}}
 }
 $checked=Invoke-RestMethod -Uri ($api+'/releases/'+$release.id) -Headers $headers
-if(-not $checked.draft -or -not $checked.prerelease -or (Compare-Object $allowed ($checked.assets.name | Sort-Object))){throw 'Final draft flags/assets mismatch'}
+if(-not $checked.draft -or $checked.prerelease -ne $false -or (Compare-Object $allowed ($checked.assets.name | Sort-Object))){throw 'Final draft flags/assets mismatch'}
 $latest=Invoke-RestMethod -Uri ($api+'/releases/latest') -Headers $headers
-if($latest.tag_name -eq $tag){throw 'Windows preview must not replace latest stable release'}
+if($latest.tag_name -eq $tag){throw 'Windows release must not replace latest macOS release'}
 Write-Output ('Verified DRAFT only: '+$checked.html_url)
 Write-Output ('Windows installer SHA256: '+$hash)

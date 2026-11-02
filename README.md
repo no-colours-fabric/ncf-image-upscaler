@@ -41,17 +41,17 @@ The release includes a SHA-256 checksum. Do not override a malware or damaged-ap
 
 Open **NCF Image Upscaler → Models…** to check models, finish downloading them, or retry
 an interrupted download. The app never downloads models when you start inference.
-Intel Macs and Linux are not supported. Windows is a separate experimental
-preview described below. See [limitations](#limitations).
+Intel Macs and Linux are not supported. Windows is a separate CPU application
+described below. See [limitations](#limitations).
 
-## Windows preview
+## Windows
 
-**[Windows 0.1.0 Preview 1 — Experimental CPU installer](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0-preview.1/NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup.exe)** · [Windows checksums](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0-preview.1/SHA256SUMS.txt)
+**[NCF Image Upscaler for Windows 0.1.0 — CPU installer](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0/NCFImageUpscaler-0.1.0-windows-x64-setup.exe)** · [Windows checksums](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0/SHA256SUMS.txt)
 
-This separately versioned preview is **unsigned** and experimental.
+This independently versioned Windows application is **unsigned**.
 Windows source and build instructions are in [apps/windows](apps/windows/README.md)
 and the [Windows build guide](docs/windows-build.md). This does not replace the
-available macOS download above or announce a stable Windows release.
+available macOS download above.
 
 The installer contains the application and Python runtime, **no model weights**.
 Missing models are prepared automatically from Hugging Face in a visible,

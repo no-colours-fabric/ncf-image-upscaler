@@ -1,6 +1,6 @@
-# NCF Image Upscaler for Windows 0.1.0 Preview 1
+# NCF Image Upscaler for Windows 0.1.0
 
-Experimental local CPU image enhancement. No accounts or hosted processing.
+Local CPU image enhancement. No accounts or hosted processing.
 Unsigned Windows x64 installer; tested on Windows 10 x64 build 19045.
 Windows 11, GPU execution and full native macOS parity are not validated.
 
@@ -27,4 +27,4 @@ untiled. Uninstall removes program files and shortcuts, retaining downloaded
 models, preferences and user originals/results.
 
 Verify `SHA256SUMS.txt`. Keep the macOS stable download separate; this release is
-a Windows prerelease and must not be marked latest.
+an independent Windows release and must not be marked latest.

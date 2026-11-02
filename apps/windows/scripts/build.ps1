@@ -59,7 +59,7 @@ if($LASTEXITCODE -ne 0){throw 'Build provenance generation failed'}
 if($LASTEXITCODE -ne 0){throw 'Payload audit failed'}
 & $ISCC /Qp ('/DPayload='+$stage) ('/DArtifactRoot='+$artifact) (Join-Path $app 'packaging/setup.iss')
 if($LASTEXITCODE -ne 0){throw 'Installer compilation failed'}
-$setup=Join-Path $artifact 'NCFImageUpscaler-0.1.0-preview.1-windows-x64-setup.exe'
+$setup=Join-Path $artifact 'NCFImageUpscaler-0.1.0-windows-x64-setup.exe'
 ((Get-FileHash -LiteralPath $setup).Hash.ToLowerInvariant()+'  '+(Split-Path -Leaf $setup)) | Set-Content -Encoding ascii -LiteralPath (Join-Path $artifact 'SHA256SUMS.txt')
 Write-Output $setup
 } finally {
