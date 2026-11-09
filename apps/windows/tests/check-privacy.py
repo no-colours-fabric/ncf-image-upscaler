@@ -59,6 +59,8 @@ sys.argv = [
     "fast",
     "--scale",
     "1",
+    "--backend",
+    "cpu",
     "--model-root",
     str(args.model_root),
 ]

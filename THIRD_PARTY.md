@@ -142,3 +142,14 @@ are checked before packaging. No downloaded model weights are included.
 Release-only tooling (including zstandard) is pinned in the development group of
 `uv.lock` and is not added to the runtime payload. The full Python build is used
 only for license metadata; the shipped interpreter comes from the stripped archive.
+
+## Windows DirectML native runtime
+
+Windows 0.2.0 uses the Microsoft `onnxruntime-directml` 1.17.3 wheel, retaining
+its MIT license and full third-party notices. Its bundled DirectML 1.13.1 DLL is
+covered by separate Microsoft DirectML software license terms, retained byte for
+byte in `apps/windows/resources/notices/Microsoft-DirectML-LICENSE.txt` and copied
+to installed licenses. `apps/windows/native-components.json` records the exact
+wheel DLL hash, official license-source package and hashes; the NuGet package DLL
+is not claimed byte-identical to the official ORT wheel DLL. No vendored model
+architecture or macOS resource is changed by this addition.

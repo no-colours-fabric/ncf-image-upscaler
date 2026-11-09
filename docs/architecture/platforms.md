@@ -1,9 +1,10 @@
 # Platform architecture
 
 One repository, two independently delivered applications. macOS remains the
-available Apple Silicon application and CLI. Windows is a CPU application with
+available Apple Silicon application and CLI. Windows is a GPU/CPU application with
 separate source, dependencies, model format, installer and version.
-Neither Windows 11 nor GPU support is validated by the recorded Windows 10 tests.
+Windows 10 tests include DirectML on Intel UHD Graphics and CPU fallback.
+Windows 11 and other GPU vendors are not validated.
 
 ## Platform boundaries
 
@@ -12,8 +13,8 @@ workflow in place. Windows lives in `apps/windows`; there is no mechanical move
 of working macOS code. Windows `windows-v*` tags do not match the macOS `v*`
 release trigger. Existing `v0.4.0` and historical releases stay intact.
 
-Windows uses WPF on .NET Framework 4.8 and a bundled CPython/ONNX Runtime CPU
-worker. macOS uses Swift/AppKit and Python/MLX. The shared Python
+Windows uses WPF on .NET Framework 4.8 and a bundled CPython/ONNX Runtime DirectML
+worker with CPU fallback. macOS uses Swift/AppKit and Python/MLX. The shared Python
 `imaging.upscale_image()` pipeline is copied at build time into the standalone
 Windows payload; it has no UI or MLX dependency. Do not infer that the entire
 Python package (which declares MLX and Python >=3.12) is installed on Windows.
@@ -83,8 +84,13 @@ real native input from scripted WPF components and actual worker execution from
 synthetic injected results. Small functional timings do not establish typical
 FullHD speed or hardware minimums. Full native parity is not claimed.
 
-Windows 0.1.0 uses `windows-v0.1.0` and a non-latest GitHub
+Windows 0.2.0 uses `windows-v0.2.0` and a non-latest GitHub
 release, independently of macOS. Review source/privacy/licenses, the pinned
 downloads, installer contents and install/preparation/processing/removal results
 before merge/publication. Keep binaries, environments, caches and weights out of
 Git, and personal paths/identifiers/private photos out of public reports.
+
+Windows 0.2.0 adds capability-gated GPU On/Off, profiled provider diagnostics,
+three saved appearances and compact taskbar-aware window chrome. No model or
+macOS runtime change is implied. GPU performance is workload-specific; the first
+compiled forward can be slower than CPU.

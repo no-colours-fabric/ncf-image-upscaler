@@ -1,9 +1,9 @@
 # NCF Image Upscaler for Windows
 
-Local CPU image enhancement. Windows 10 x64 build 19045 is the tested environment;
-Windows 11 and GPU execution have not been validated. This is independently
-versioned from the macOS application. Full native interaction/visual parity is
-not yet verified.
+Local image enhancement with DirectML GPU acceleration and CPU fallback.
+Windows 10 x64 build 19045 with Intel UHD Graphics is tested; Windows 11 and
+other GPU vendors have not been validated. Windows is versioned independently
+from macOS. Full native interaction/visual parity is not yet verified.
 
 ## Install and use
 
@@ -32,6 +32,26 @@ preparation first, then starts the local worker only if the same image/preset
 is still current. Cancel/error preserves prior results and does not start a
 worker or silently retry. The image inference engine never downloads models.
 
+## GPU and appearance
+
+**GPU On / GPU Off** sits immediately left of Photo / Illustration / Fast.
+The button is hidden unless a small, local, weight-free DirectML execution probe
+succeeds. GPU On requests DirectML; CPU fallback is explicit if device/session
+execution fails. GPU Off forces CPU. The status distinguishes a selected provider
+from profiled execution, and labels mixed GPU/CPU nodes. Profiles describe the
+first successful forward per session, not every tile or GPU utilization.
+
+GPU performance depends on hardware, model and size. First compilation can take
+minutes; a tiny image can be much faster on CPU. No universal speedup is promised.
+The 8 GiB process commit guard does not cap device VRAM; GPU failures may fall
+back to CPU or produce a readable error while preserving the previous result.
+
+After **Models**, choose **Soft**, **Fluent** or **Studio**. The choice is saved
+immediately; new windows and future launches use the latest saved choice.
+Existing windows keep their appearance. Small toolbar controls, themed dialogs
+and a compact caption preserve room for the image. Maximization uses the current
+monitor's work area, respecting the taskbar.
+
 ## Storage and removal
 
 - Program: `%LOCALAPPDATA%\Programs\NCF Image Upscaler` by default.
@@ -46,7 +66,7 @@ Close the app before manually removing its retained application data.
 
 ## Limits
 
-CPU only, four inference threads. The worker has an 8 GiB committed-memory guard
+DirectML GPU or CPU, with four CPU inference threads. The worker has an 8 GiB committed-memory guard
 and checks system memory reserves; large images may fail safely. Photo ×1/×2
 uses the untiled native ×2 model; its former tiled path is disabled.
 The other presets use tiled native ×4 inference. Processing may be slow; progress

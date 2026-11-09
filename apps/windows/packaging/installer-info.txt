@@ -1,6 +1,6 @@
-NCF Image Upscaler for Windows 0.1.0
+NCF Image Upscaler for Windows 0.2.0
 
-Local CPU image enhancement. No accounts, subscriptions, telemetry or cloud processing.
+Local GPU/CPU image enhancement. No accounts, subscriptions, telemetry or cloud processing.
 
 This installer includes the application and Python runtime, but NO model weights.
 After launch, missing or damaged models are prepared automatically from Hugging
@@ -9,8 +9,8 @@ files are reused without network. Models remains available for repair/retry.
 Image inference starts only after preparation and stays local; cancel/error does
 not start it. No manual model downloads or Python commands are needed.
 
-Tested on Windows 10 x64 build 19045 with .NET Framework 4.8. Windows 11 and GPU
-execution have not been validated. This application is unsigned. Full macOS feature
+Tested on Windows 10 x64 build 19045 with .NET Framework 4.8. DirectML was tested on Intel UHD Graphics; Windows 11 and other GPUs
+have not been validated. This application is unsigned. Full macOS feature
 and native interaction parity is still in development. Large CPU jobs may be
 slow or stop safely at the memory guard.
 
@@ -22,3 +22,9 @@ Official VC++ download: https://learn.microsoft.com/en-us/cpp/windows/latest-sup
 
 Uninstall removes the program and its
 shortcuts, but keeps downloaded models, preferences and your images/results.
+
+GPU On requests DirectML with explicit CPU fallback; GPU Off uses CPU. The
+control is hidden without compatible GPU execution. First compilation can be
+slow; acceleration is not guaranteed for every workload. Soft/Fluent/Studio
+appearance is saved for new windows. The DirectML native library has separate
+Microsoft software license terms included with the installed application.

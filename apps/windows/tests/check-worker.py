@@ -55,6 +55,8 @@ def launch(source, destination, preset, scale):
         preset,
         "--scale",
         str(scale),
+        "--backend",
+        "cpu",
         "--model-root",
         str(models),
     ]

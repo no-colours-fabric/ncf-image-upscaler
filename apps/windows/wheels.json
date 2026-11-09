@@ -18,10 +18,10 @@
     "requirement": "scipy==1.13.0"
   },
   {
-    "sha256": "570760ca53a74cdd751ee49f13de70d1384dcf73d9888b8deac0917023ccda6d",
-    "filename": "onnxruntime-1.17.3-cp311-cp311-win_amd64.whl",
-    "url": "https://files.pythonhosted.org/packages/ea/ef/202d3fb284c5936f8aa6d87021963e8e8f776834aa18e8f440c268827639/onnxruntime-1.17.3-cp311-cp311-win_amd64.whl",
-    "requirement": "onnxruntime==1.17.3"
+    "sha256": "667a3ac9901554aa9bd89a58e05b4be5010eaccbdde93ef99640ccfa9f4ebfa1",
+    "filename": "onnxruntime_directml-1.17.3-cp311-cp311-win_amd64.whl",
+    "url": "https://files.pythonhosted.org/packages/ce/2f/6f9d32316044c53975efe035a4c68a99097147f388eb75f3994501a3dbf0/onnxruntime_directml-1.17.3-cp311-cp311-win_amd64.whl",
+    "requirement": "onnxruntime-directml==1.17.3"
   },
   {
     "sha256": "8db4c1b57507eef143a15a6884ca10f7c73876cdf5d51e713151c1236a0e68cf",

@@ -39,3 +39,8 @@ Cancelled/failed preparation never launches inference or silently retries; Model
 offers an explicit retry/repair action. The image worker itself never downloads.
 Downloaded caches are kept on uninstall to avoid forcing another download, and
 may be removed manually after closing all application windows.
+
+Windows 0.2.0 uses the same four pinned graphs with DirectML or CPU execution.
+Provider selection changes no preset mapping or alpha pipeline. Diagnostics count
+profiled node events from the first successful forward per session; CPU fallback
+is explicit. Historical CPU, small GPU and full-size timings remain distinct.

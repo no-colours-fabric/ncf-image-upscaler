@@ -1,4 +1,4 @@
-"""CPU RGB inference; shared by worker and bounded tiling checks."""
+"""Local RGB inference; shared by worker and bounded tiling checks."""
 
 import numpy as np
 

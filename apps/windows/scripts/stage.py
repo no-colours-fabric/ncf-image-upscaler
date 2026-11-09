@@ -67,6 +67,7 @@ def main():
         shutil.copy2(repo / "src/ncf_image_upscaler" / name, package / name)
     shutil.copytree(app / "resources", stage / "resources")
     shutil.copy2(app / "models.json", stage / "resources/models.json")
+    shutil.copy2(app / "native-components.json", stage / "resources/native-components.json")
     shutil.copytree(repo / "licenses", stage / "licenses")
     for name in ["LICENSE", "THIRD_PARTY.md"]:
         shutil.copy2(repo / name, stage / "licenses" / name)
@@ -76,10 +77,16 @@ def main():
     )
     shutil.copy2(app / "README.md", stage / "README.md")
     shutil.copy2(app / "VERSION", stage / "VERSION")
+    shutil.copy2(
+        app / "resources/notices/Microsoft-DirectML-LICENSE.txt",
+        stage / "licenses/Microsoft-DirectML-LICENSE.txt",
+    )
     (stage / "licenses/WINDOWS-NOTICES.txt").write_text(
         "NCF Image Upscaler: BSD-3-Clause. CPython: runtime/LICENSE.txt. "
         "ONNX Runtime, NumPy, Pillow, SciPy and transitive dependencies retain their "
-        "license/NOTICE files in runtime/Lib/site-packages. Lucide and Feather "
+        "license/NOTICE files in runtime/Lib/site-packages. DirectML native runtime is "
+        "covered by the included Microsoft DirectML software license, not the ORT MIT license. "
+        "Lucide and Feather "
         "notices accompany the unchanged SVGs. Model weights are NOT bundled; "
         "explicit Hugging Face preparation is required. Downloaded Real-ESRGAN "
         "weights retain their upstream BSD-3-Clause terms. See model-cards.\n",

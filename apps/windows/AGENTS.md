@@ -1,6 +1,6 @@
 # Windows application
 
-- This is a Windows CPU application, independently versioned from
+- This is a Windows DirectML GPU/CPU application, independently versioned from
   macOS. Do not change the macOS source, dependency pins or `v*` release workflow
   as part of Windows changes.
 - English interface and diagnostics. Preserve Unicode paths, input/alias safety,
@@ -22,3 +22,8 @@
   harness evidence separately from native desktop input and manual observations.
 - Preserve licenses/notices. Public reports contain relative paths, safe samples
   and necessary OS/runtime versions only. Do not publish usernames or hostnames.
+
+- DirectML is optional at execution time: hide the GPU control without a successful
+  local capability probe; retain CPU fallback and report actual profiled providers.
+  Disable ORT telemetry before both capability and image sessions. Preserve the
+  separate Microsoft DirectML license and pinned native DLL/export checks.

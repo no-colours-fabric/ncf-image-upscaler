@@ -1,0 +1,171 @@
+{
+  "version": "0.2.0",
+  "origin": "Earlier local GPU build from current PR lineage; first-forward provider profiles, not availability-only",
+  "hardware": "Intel UHD Graphics; driver31.0.101.5333; Windows10x64 build19045",
+  "ort": "onnxruntime-directml1.17.3",
+  "rows": [
+    {
+      "preset": "fast",
+      "mode": "RGB",
+      "requested_backend": "auto",
+      "scale": 1,
+      "backend": "GPU DirectML",
+      "node_events": {
+        "DmlExecutionProvider": 70
+      },
+      "seconds": 22.363,
+      "wall_seconds": 24.545,
+      "output": "fast-RGB-auto.png",
+      "alpha_icc_decode_source": "PASS"
+    },
+    {
+      "preset": "fast",
+      "mode": "RGBA",
+      "requested_backend": "auto",
+      "scale": 1,
+      "backend": "GPU DirectML",
+      "node_events": {
+        "DmlExecutionProvider": 70
+      },
+      "seconds": 21.678,
+      "wall_seconds": 22.308,
+      "output": "fast-RGBA-auto.png",
+      "alpha_icc_decode_source": "PASS"
+    },
+    {
+      "preset": "photo",
+      "mode": "RGBA",
+      "requested_backend": "auto",
+      "scale": 1,
+      "backend": "GPU DirectML + CPU nodes",
+      "node_events": {
+        "DmlExecutionProvider": 749,
+        "CPUExecutionProvider": 15
+      },
+      "seconds": 219.996,
+      "wall_seconds": 221.557,
+      "output": "photo-RGBA-auto.png",
+      "alpha_icc_decode_source": "PASS"
+    },
+    {
+      "preset": "photo",
+      "mode": "RGBA",
+      "requested_backend": "cpu",
+      "scale": 1,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 1428
+      },
+      "seconds": 0.125,
+      "wall_seconds": 1.936,
+      "output": "photo-RGBA-cpu.png",
+      "alpha_icc_decode_source": "PASS"
+    },
+    {
+      "preset": "illustration",
+      "mode": "RGBA",
+      "requested_backend": "auto",
+      "scale": 4,
+      "backend": "GPU DirectML",
+      "node_events": {
+        "DmlExecutionProvider": 201
+      },
+      "seconds": 70.716,
+      "wall_seconds": 72.03,
+      "output": "illustration-RGBA-auto.png",
+      "alpha_icc_decode_source": "PASS"
+    },
+    {
+      "preset": "fast",
+      "mode": "RGB",
+      "requested_backend": "cpu",
+      "scale": 1,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 137
+      },
+      "seconds": 0.019,
+      "wall_seconds": 1.147,
+      "output": "fast-RGB-cpu.png",
+      "alpha_icc_decode_source": "PASS"
+    },
+    {
+      "preset": "fast",
+      "mode": "RGBA",
+      "requested_backend": "cpu",
+      "scale": 1,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 137
+      },
+      "seconds": 0.021,
+      "wall_seconds": 0.774,
+      "output": "fast-RGBA-cpu.png",
+      "alpha_icc_decode_source": "PASS"
+    }
+  ],
+  "controlled_failures_with_real_CPU": {
+    "origin": "Controlled GPU absence/failure; real CPU inference; no hardware disable",
+    "rows": [
+      {
+        "case": "unavailable",
+        "backend": "CPU",
+        "reason": "DirectML is unavailable; using CPU",
+        "node_events": {
+          "CPUExecutionProvider": 137
+        },
+        "passed": true
+      },
+      {
+        "case": "initialization_failure",
+        "backend": "CPU",
+        "reason": "DirectML initialization failed; using CPU: Controlled GPU initialization failure",
+        "node_events": {
+          "CPUExecutionProvider": 137
+        },
+        "passed": true
+      },
+      {
+        "case": "execution_failure",
+        "backend": "CPU",
+        "reason": "DirectML execution failed; using CPU: Controlled device execution failure",
+        "node_events": {
+          "CPUExecutionProvider": 137
+        },
+        "passed": true
+      }
+    ]
+  },
+  "user_evidence": "User reported that GPU works well on the local build; not a claim of every preset/scale/dialog/installer workflow",
+  "limitations": [
+    "Other GPU vendors and Windows11 not tested",
+    "First GPU compilation is slow; no universal speedup claim",
+    "GPU VRAM is not bounded by the existing8GiB process commit guard",
+    "OS-level network-block not verified",
+    "Native full parity not verified"
+  ],
+  "historical_timings": "One-off small image cases with initial compilation, not typical throughput or FullHD benchmark",
+  "additional_release_precheck_photo4": {
+    "backend": "GPU DirectML",
+    "node_events": {
+      "DmlExecutionProvider": 745
+    },
+    "artifact": "photo4",
+    "artifact_sha256": "4851ec156207d271f5328605d0582eeb851e656227da8aca093ced9e60789291",
+    "seconds": 217.548,
+    "width": 132,
+    "height": 100,
+    "alpha": false,
+    "source_unchanged": true,
+    "decode": true,
+    "icc": true,
+    "input_size": [
+      33,
+      25
+    ],
+    "input_mode": "RGB",
+    "requested_scale": 4,
+    "scope": "one small real GPU worker execution; not benchmark or native input"
+  },
+  "additional_scope": "Photo4 real worker tested with release-precheck source; first-forward provider aggregation/unknown-provider diagnostics subsequently hardened without changing graph/inference math"
+}
