@@ -1,4 +1,8 @@
-# Local GPU build 20261109-02
+# Local GPU build 20261109-03 — appearance comparison
+
+Appearance selector: Soft / Fluent / Studio. Small 24-DIP toolbar controls,
+a 24-DIP caption and a 32-DIP toolbar. Appearance changes retain the image,
+GPU state and enhancement settings.
 
 GPU On prefers DirectML, with explicit CPU fallback. GPU Off forces local CPU.
 The button sits left of the preset selector and is hidden unless an offline,

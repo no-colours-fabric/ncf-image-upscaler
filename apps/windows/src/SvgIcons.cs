@@ -21,8 +21,8 @@ public static class SvgIcons {
 public sealed class SvgIcon : FrameworkElement {
  public static readonly DependencyProperty IconNameProperty=DependencyProperty.Register("IconName",typeof(string),typeof(SvgIcon),new FrameworkPropertyMetadata("image",FrameworkPropertyMetadataOptions.AffectsRender));
  public string IconName {get{return (string)GetValue(IconNameProperty);}set{SetValue(IconNameProperty,value);}}
- public Brush Stroke= new SolidColorBrush(Color.FromRgb(88,88,88));
+ public Brush Stroke;
  public SvgIcon(string name,double size){IconName=name;Width=Height=size;VerticalAlignment=VerticalAlignment.Center;IsHitTestVisible=false;IsEnabledChanged+=delegate{InvalidateVisual();};}
- protected override void OnRender(DrawingContext dc){base.OnRender(dc);if(!IsEnabled)dc.PushOpacity(.4);SvgIcons.Draw(dc,IconName,new Rect(0,0,ActualWidth,ActualHeight),Stroke);if(!IsEnabled)dc.Pop();}
+ protected override void OnRender(DrawingContext dc){base.OnRender(dc);if(!IsEnabled)dc.PushOpacity(.4);SvgIcons.Draw(dc,IconName,new Rect(0,0,ActualWidth,ActualHeight),Stroke??System.Windows.Documents.TextElement.GetForeground(this));if(!IsEnabled)dc.Pop();}
 }
 }
