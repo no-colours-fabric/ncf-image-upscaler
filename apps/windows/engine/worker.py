@@ -91,6 +91,8 @@ def main():
         scale=args.scale,
         backend=session.backend,
         node_events=session.node_events,
+        profile_note=session.profile_note,
+        profile_scope="first successful forward per session",
         fallback_reason=session.fallback_reason,
         artifact=key,
         artifact_sha256=spec["sha256"],

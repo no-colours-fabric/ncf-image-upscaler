@@ -4,7 +4,7 @@ $app=Split-Path -Parent $PSScriptRoot
 $framework=Join-Path $env:WINDIR 'Microsoft.NET/Framework64/v4.0.30319'
 $references=@('System.dll','System.Core.dll','System.Xaml.dll','System.Web.Extensions.dll','Microsoft.VisualBasic.dll','System.Xml.dll') | ForEach-Object {Join-Path $framework $_}
 $references+=@('WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll') | ForEach-Object {Join-Path $framework ('WPF/'+$_)}
-foreach($test in @('DialogAppearanceRegression','AppearancePreferencesRegression','MaximizeRegression')) {
+foreach($test in @('DialogAppearanceRegression','AppearancePreferencesRegression','MaximizeRegression','GpuStartupRegression')) {
     $directory=Join-Path $TestRoot $test
     New-Item -ItemType Directory -Path $directory -Force | Out-Null
     $exe=Join-Path $directory ($test+'.exe')

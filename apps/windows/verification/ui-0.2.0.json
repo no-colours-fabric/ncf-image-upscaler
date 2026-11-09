@@ -4,10 +4,12 @@
   "dialog_checks": 84,
   "scope": "Actual WPF modal dialogs and effective contrast>=4.5 in all3styles, controlled close; component renders inspected; not native mouse input",
   "appearance_preferences_checks": 18,
-  "workarea_checks": 16,
+  "workarea_checks": 17,
   "close_component_cases": 7,
   "locate_escape_component_assertions": 10,
   "input_privacy": "Synthetic text/images only; raw model folder paths not published",
   "native_user_feedback": "GPU works well; subsequent reported UI defects corrected with component regression; no claim user rechecked corrected installer",
-  "maximum_work_area": "Actual controlled HWND maximize/restore matches queried current monitor work area; other taskbar sides/negative coordinates tested as synthetic rectangles"
+  "maximum_work_area": "Actual controlled HWND maximize/restore matches queried current monitor work area; other taskbar sides/negative coordinates tested as synthetic rectangles",
+  "gpu_startup_checks": 11,
+  "gpu_startup_scope": "Controlled deferred capability task: initial A opens before probe; B opened during pending probe stays selected; shared Enhance entry blocked; Closed stops probe and ignores late completion"
 }

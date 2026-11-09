@@ -60,14 +60,23 @@ class Session:
         self.calls += 1
         if self.gpu and (
             self.runtime.mode == "run_failure"
-            or self.runtime.mode == "late_failure"
+            or self.runtime.mode in ("late_failure", "late_profile_failure")
             and self.calls == 2
         ):
             raise RuntimeError("Controlled GPU execution failure")
         return [42]
 
     def end_profiling(self):
-        path = args.output / (self.runtime.mode + str(self.index) + ".json")
+        path = args.output / (self.runtime.mode + ".execution_" + str(self.index) + ".json")
+        if self.runtime.mode == "profile_end_failure":
+            raise RuntimeError("Controlled end_profiling failure")
+        if self.runtime.mode == "profile_missing" or (
+            self.runtime.mode == "late_profile_failure" and not self.gpu
+        ):
+            return str(path)
+        if self.runtime.mode == "profile_corrupt":
+            path.write_text("NOT JSON", encoding="utf-8")
+            return str(path)
         provider = "DmlExecutionProvider" if self.gpu else "CPUExecutionProvider"
         path.write_text(
             json.dumps(
@@ -89,12 +98,16 @@ for case in [
     "late_failure",
     "silent_fallback",
     "unverified",
+    "profile_end_failure",
+    "profile_missing",
+    "profile_corrupt",
+    "late_profile_failure",
 ]:
     runtime = Runtime(case)
     backend = ExecutionBackend(
         runtime,
         Path("controlled-no-model"),
-        "cpu" if case == "cpu" else "auto",
+        "cpu" if case == "cpu" or case.startswith("profile_") else "auto",
         args.output / case,
         lambda *a, **kw: None,
     )
@@ -103,7 +116,12 @@ for case in [
         assert backend.run(None, {}) == [42]
         assert backend.node_events == {"DmlExecutionProvider": 20, "CPUExecutionProvider": 7}
         assert "CPU nodes" in backend.backend
-    elif case == "unverified":
+    elif case == "late_profile_failure":
+        assert backend.run(None, {}) == [42]
+        assert backend.node_events == {"DmlExecutionProvider": 20}
+        assert backend.backend == "Execution provider unverified"
+        assert backend.profile_note
+    elif case == "unverified" or case.startswith("profile_"):
         assert backend.node_events == {}
         assert backend.backend == "Execution provider unverified"
     elif case == "gpu":
@@ -111,8 +129,18 @@ for case in [
     else:
         assert backend.node_events == {"CPUExecutionProvider": 7}
         assert backend.backend == "CPU"
-    if case not in ["gpu", "cpu"]:
+    if case in [
+        "unavailable",
+        "init_failure",
+        "run_failure",
+        "late_failure",
+        "silent_fallback",
+        "late_profile_failure",
+    ]:
         assert backend.fallback_reason
+    else:
+        assert not backend.fallback_reason
+    assert not list(args.output.glob(case + ".execution_*.json"))
     rows.append(
         dict(case=case, passed=True, backend=backend.backend, node_events=backend.node_events)
     )

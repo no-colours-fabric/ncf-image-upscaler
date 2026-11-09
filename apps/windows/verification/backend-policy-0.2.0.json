@@ -1,0 +1,94 @@
+{
+  "origin": "controlled sessions, no actual inference",
+  "rows": [
+    {
+      "case": "gpu",
+      "passed": true,
+      "backend": "GPU DirectML",
+      "node_events": {
+        "DmlExecutionProvider": 20
+      }
+    },
+    {
+      "case": "cpu",
+      "passed": true,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 7
+      }
+    },
+    {
+      "case": "unavailable",
+      "passed": true,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 7
+      }
+    },
+    {
+      "case": "init_failure",
+      "passed": true,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 7
+      }
+    },
+    {
+      "case": "run_failure",
+      "passed": true,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 7
+      }
+    },
+    {
+      "case": "late_failure",
+      "passed": true,
+      "backend": "GPU DirectML + CPU nodes",
+      "node_events": {
+        "DmlExecutionProvider": 20,
+        "CPUExecutionProvider": 7
+      }
+    },
+    {
+      "case": "silent_fallback",
+      "passed": true,
+      "backend": "CPU",
+      "node_events": {
+        "CPUExecutionProvider": 7
+      }
+    },
+    {
+      "case": "unverified",
+      "passed": true,
+      "backend": "Execution provider unverified",
+      "node_events": {}
+    },
+    {
+      "case": "profile_end_failure",
+      "passed": true,
+      "backend": "Execution provider unverified",
+      "node_events": {}
+    },
+    {
+      "case": "profile_missing",
+      "passed": true,
+      "backend": "Execution provider unverified",
+      "node_events": {}
+    },
+    {
+      "case": "profile_corrupt",
+      "passed": true,
+      "backend": "Execution provider unverified",
+      "node_events": {}
+    },
+    {
+      "case": "late_profile_failure",
+      "passed": true,
+      "backend": "Execution provider unverified",
+      "node_events": {
+        "DmlExecutionProvider": 20
+      }
+    }
+  ]
+}
