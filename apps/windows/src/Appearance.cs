@@ -66,6 +66,12 @@ public sealed partial class MainWindow {
   Resources[typeof(Button)]=CompactButton(typeof(Button),false);Resources[typeof(ToggleButton)]=CompactButton(typeof(ToggleButton),false);Resources[typeof(ComboBox)]=CompactCombo();Resources[typeof(ComboBoxItem)]=ComboItemStyle();Resources[typeof(ScrollBar)]=SlimScrollBar();
   ThemeTree(appearanceRoot);enhance.Style=CompactButton(typeof(Button),true);StyleGpuToggle();sidebar.ApplyAppearance(appearance);canvas.Palette=appearance;canvas.InvalidateVisual();status.Foreground=appearance.Muted;zoomLabel.Foreground=appearance.Muted;
  }
+ public void ApplyDialogAppearance(Window dialog){
+  dialog.Background=appearance.Window;dialog.Foreground=appearance.Text;dialog.FontFamily=FontFamily;dialog.FontSize=11.5;
+  dialog.Resources[typeof(Button)]=CompactButton(typeof(Button),false);dialog.Resources[typeof(ToggleButton)]=CompactButton(typeof(ToggleButton),false);dialog.Resources[typeof(ComboBox)]=CompactCombo();dialog.Resources[typeof(ComboBoxItem)]=ComboItemStyle();
+  var textStyle=new Style(typeof(TextBox));textStyle.Setters.Add(new Setter(Control.BackgroundProperty,appearance.Surface));textStyle.Setters.Add(new Setter(Control.ForegroundProperty,appearance.Text));textStyle.Setters.Add(new Setter(Control.BorderBrushProperty,appearance.Line));textStyle.Setters.Add(new Setter(TextBox.CaretBrushProperty,appearance.Text));dialog.Resources[typeof(TextBox)]=textStyle;
+  var content=dialog.Content as DependencyObject;if(content!=null)ThemeTree(content);
+ }
  void ThemeTree(DependencyObject node){
   var bar=node as ScrollBar;if(bar!=null&&bar.Orientation==Orientation.Vertical)bar.Style=SlimScrollBar();var button=node as Button;if(button!=null)button.Style=CompactButton(typeof(Button),false);var toggle=node as ToggleButton;if(toggle!=null)toggle.Style=CompactButton(typeof(ToggleButton),false);var combo=node as ComboBox;if(combo!=null){combo.Style=CompactCombo();combo.ItemContainerStyle=ComboItemStyle();}var text=node as TextBlock;if(text!=null)text.ClearValue(TextBlock.ForegroundProperty);var box=node as TextBox;if(box!=null){box.Background=appearance.Surface;box.Foreground=appearance.Text;box.BorderBrush=appearance.Line;box.CaretBrush=appearance.Text;}
   for(int i=0;i<VisualTreeHelper.GetChildrenCount(node);i++)ThemeTree(VisualTreeHelper.GetChild(node,i));

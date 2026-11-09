@@ -102,6 +102,11 @@ def main():
         r'"([^"]+)"', (app / "src/RequiredMsvcExports.cs").read_text(encoding="utf-8")
     )
     assert required == sorted(declared), "Pinned ORT required-export gate must be updated"
+    components = json.loads((app / "native-components.json").read_text(encoding="utf-8"))
+    dml = runtime / "Lib/site-packages/onnxruntime/capi/DirectML.dll"
+    assert hashlib.sha256(dml.read_bytes()).hexdigest() == components["bundled_dll_sha256"]
+    notice = app / components["license_file"]
+    assert hashlib.sha256(notice.read_bytes()).hexdigest() == components["license_sha256"]
     local = []
     for name in ["vcruntime140.dll", "vcruntime140_1.dll"]:
         path = runtime / name

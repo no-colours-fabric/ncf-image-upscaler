@@ -41,12 +41,12 @@ The release includes a SHA-256 checksum. Do not override a malware or damaged-ap
 
 Open **NCF Image Upscaler → Models…** to check models, finish downloading them, or retry
 an interrupted download. The app never downloads models when you start inference.
-Intel Macs and Linux are not supported. Windows is a separate CPU application
+Intel Macs and Linux are not supported. Windows is a separate GPU/CPU application
 described below. See [limitations](#limitations).
 
 ## Windows
 
-**[NCF Image Upscaler for Windows 0.1.0 — CPU installer](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0/NCFImageUpscaler-0.1.0-windows-x64-setup.exe)** · [Windows checksums](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.1.0/SHA256SUMS.txt)
+**[NCF Image Upscaler for Windows 0.2.0 — GPU/CPU installer](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.2.0/NCFImageUpscaler-0.2.0-windows-x64-setup.exe)** · [Windows checksums](https://github.com/no-colours-fabric/ncf-image-upscaler/releases/download/windows-v0.2.0/SHA256SUMS.txt)
 
 This independently versioned Windows application is **unsigned**.
 Windows source and build instructions are in [apps/windows](apps/windows/README.md)
@@ -59,7 +59,10 @@ cancellable setup before image inference. Verified caches need no network;
 **Models → Download / Repair Models** remains available for repair/retry.
 No manual model downloads or Python commands are needed. Windows 10 x64 build
 19045 is the tested environment;
-Windows 11, GPU support and full native macOS parity remain unverified.
+DirectML execution has been checked on Intel UHD Graphics, with CPU fallback.
+Windows 11, other GPU vendors and full native macOS parity remain unverified.
+GPU speedups depend on hardware and workload; initial compilation can be slow.
+The compact interface offers Soft / Fluent / Studio appearances.
 The app installs per-user; system .NET Framework 4.8 and Microsoft Visual C++ x64
 Runtime prerequisites must be present. Installing missing prerequisites may need
 administrator permission; see the Windows guide.

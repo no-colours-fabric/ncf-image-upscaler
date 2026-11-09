@@ -6,7 +6,7 @@ and output directories must remain outside Git. No model export stack is needed.
 
 ```powershell
 $cache = Join-Path $env:LOCALAPPDATA 'NCF Image Upscaler\build-cache'
-$build = Join-Path $env:LOCALAPPDATA 'NCF Image Upscaler\builds\windows-0.1.0'
+$build = Join-Path $env:LOCALAPPDATA 'NCF Image Upscaler\builds\windows-0.2.0'
 # Explicit HTTPS preparation; system certificate validation stays enabled.
 .\apps\windows\scripts\prepare-dependencies.ps1 -Cache $cache
 # Install the pinned compiler locally (not in Program Files).
@@ -98,10 +98,10 @@ before publishing. Retain relative public reports; keep local paths private.
 ## Release
 
 Windows versions are independent: `apps/windows/VERSION`, assembly information,
-installer metadata and release notes must agree. First tag:
-`windows-v0.1.0`. It must not trigger the macOS `v*` workflow.
+installer metadata and release notes must agree. Current tag:
+`windows-v0.2.0`. It must not trigger the macOS `v*` workflow.
 Use the reviewed merged commit as tag target. Publish only
-`NCFImageUpscaler-0.1.0-windows-x64-setup.exe` and `SHA256SUMS.txt` in
+`NCFImageUpscaler-0.2.0-windows-x64-setup.exe` and `SHA256SUMS.txt` in
 a GitHub release, without marking it latest. Verify downloaded asset hashes
 and the release flags before completion. Keep stable macOS downloads prominent.
 
@@ -114,3 +114,18 @@ to verify hashes. It does not publish. An existing release (draft or published)
 causes a safe failure instead of replacement. Final publication remains a separate
 reviewed operation. Local builds use scratch space inside the chosen build root;
 developer artifacts can stay entirely on D:.
+
+## Windows 0.2.0 checks
+
+The lock uses `onnxruntime-directml==1.17.3`, including its CPU provider; do not
+install the CPU and DirectML wheels together. `native-components.json` pins the
+bundled DirectML DLL and its license notice. The native import checker validates
+202 required MSVCP140 exports for this wheel and the DirectML file hash.
+
+Run `scripts/check-ui.ps1 -TestRoot <external-root>` from `apps/windows` for
+controlled appearance/dialog/settings/maximized-bound checks. These create safe
+fixtures and do not download models. They do not establish native mouse flow.
+Image matrix/privacy checks explicitly select CPU for predictable reproduction.
+Actual GPU evidence must separately show model execution provider events, not
+just `get_available_providers()`. The capability probe is a weight-free Add graph;
+it does not imply support or performance for every image model or GPU.

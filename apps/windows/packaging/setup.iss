@@ -7,8 +7,8 @@
 [Setup]
 AppId={{9E930EC1-F26D-4D70-A5F3-18F7C2D22360}
 AppName=NCF Image Upscaler
-AppVersion=0.1.0
-AppVerName=NCF Image Upscaler for Windows 0.1.0
+AppVersion=0.2.0
+AppVerName=NCF Image Upscaler for Windows 0.2.0
 AppPublisher=no-colours-fabric
 AppPublisherURL=https://github.com/no-colours-fabric/ncf-image-upscaler
 DefaultDirName={localappdata}\Programs\NCF Image Upscaler
@@ -21,7 +21,7 @@ WizardStyle=modern
 Compression=lzma2
 SolidCompression=yes
 OutputDir={#ArtifactRoot}
-OutputBaseFilename=NCFImageUpscaler-0.1.0-windows-x64-setup
+OutputBaseFilename=NCFImageUpscaler-0.2.0-windows-x64-setup
 SetupIconFile={#Payload}\resources\App.ico
 UninstallDisplayIcon={app}\NCF Image Upscaler.exe
 CloseApplications=yes
@@ -37,6 +37,16 @@ Name: desktopicon; Description: "Create a desktop shortcut"; Flags: unchecked
 [Files]
 Source: "{#Payload}\resources\NativePrerequisiteCheck.exe"; Flags: dontcopy
 Source: "{#Payload}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+; Remove only the five obsolete CPU-wheel metadata files during an upgrade.
+; Runtime modules are replaced by [Files]; model caches and user images are untouched.
+[InstallDelete]
+Type: files; Name: "{app}\runtime\Lib\site-packages\onnxruntime-1.17.3.dist-info\METADATA"
+Type: files; Name: "{app}\runtime\Lib\site-packages\onnxruntime-1.17.3.dist-info\RECORD"
+Type: files; Name: "{app}\runtime\Lib\site-packages\onnxruntime-1.17.3.dist-info\WHEEL"
+Type: files; Name: "{app}\runtime\Lib\site-packages\onnxruntime-1.17.3.dist-info\entry_points.txt"
+Type: files; Name: "{app}\runtime\Lib\site-packages\onnxruntime-1.17.3.dist-info\top_level.txt"
+Type: dirifempty; Name: "{app}\runtime\Lib\site-packages\onnxruntime-1.17.3.dist-info"
 
 [Icons]
 Name: "{autoprograms}\NCF Image Upscaler"; Filename: "{app}\NCF Image Upscaler.exe"

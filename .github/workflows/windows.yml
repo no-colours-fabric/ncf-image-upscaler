@@ -53,9 +53,16 @@ jobs:
           if($LASTEXITCODE -ne 0){throw 'Runtime import check failed'}
           python apps/windows/scripts/audit-payload.py "$env:RUNNER_TEMP/ncf-build/app"
           if($LASTEXITCODE -ne 0){throw 'Payload audit failed'}
+      - name: Backend selection and diagnostic policy (controlled, no models)
+        run: |
+          & "$env:RUNNER_TEMP/ncf-build/app/runtime/python.exe" apps/windows/tests/check-backend-policy.py --output "$env:RUNNER_TEMP/ncf-backend-policy"
+          if($LASTEXITCODE -ne 0){throw 'Backend policy checks failed'}
       - name: Controlled WPF lifecycle and Locate/Escape checks (no inference)
         run: |
           ./apps/windows/scripts/check-components.ps1 -TestRoot "$env:RUNNER_TEMP/ncf-components"
+      - name: Appearance, settings, dialogs and maximized work-area regressions
+        run: |
+          ./apps/windows/scripts/check-ui.ps1 -TestRoot "$env:RUNNER_TEMP/ncf-ui"
       - name: Native prerequisite policy and actual runtime readiness
         run: |
           ./apps/windows/scripts/check-prerequisites.ps1 -TestRoot "$env:RUNNER_TEMP/ncf-prerequisites"
@@ -67,7 +74,7 @@ jobs:
         run: |
           $build=Get-Content "$env:RUNNER_TEMP/ncf-build/app/resources/build.json" -Raw | ConvertFrom-Json
           if($build.source_commit -ne $env:GITHUB_SHA -or $build.source_dirty -ne $false -or $build.model_weights_bundled -ne $false){throw 'Clean tagged source / weight-free provenance mismatch'}
-          $setup='NCFImageUpscaler-0.1.0-windows-x64-setup.exe'
+          $setup='NCFImageUpscaler-0.2.0-windows-x64-setup.exe'
           $allowed=@($setup,'SHA256SUMS.txt') | Sort-Object
           $actual=@(Get-ChildItem "$env:RUNNER_TEMP/ncf-build/installer" -Recurse -File | ForEach-Object {$_.Name}) | Sort-Object
           if(Compare-Object $allowed $actual){throw 'Unexpected distributable file'}
@@ -83,7 +90,7 @@ jobs:
           if-no-files-found: error
           retention-days: 7
           path: |
-            ${{ runner.temp }}/ncf-build/installer/NCFImageUpscaler-0.1.0-windows-x64-setup.exe
+            ${{ runner.temp }}/ncf-build/installer/NCFImageUpscaler-0.2.0-windows-x64-setup.exe
             ${{ runner.temp }}/ncf-build/installer/SHA256SUMS.txt
 
   draft-release:

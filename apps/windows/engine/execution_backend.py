@@ -25,6 +25,10 @@ class ExecutionBackend:
             if "DmlExecutionProvider" in self.session.get_providers()
             else "CPU"
         )
+        if use_gpu and "DmlExecutionProvider" not in self.session.get_providers():
+            self.fallback_reason = (
+                self.fallback_reason or "DirectML could not be selected; using CPU"
+            )
         self.profile_pending = True
 
     def create(self, gpu):
@@ -59,18 +63,25 @@ class ExecutionBackend:
         if self.profile_pending:
             profile = Path(self.session.end_profiling())
             events = json.loads(profile.read_text(encoding="utf-8"))
-            self.node_events = dict(
-                Counter(
-                    e.get("args", {}).get("provider")
-                    for e in events
-                    if e.get("args", {}).get("provider")
-                )
+            measured = Counter(
+                e.get("args", {}).get("provider")
+                for e in events
+                if e.get("args", {}).get("provider")
             )
+            cumulative = Counter(self.node_events)
+            cumulative.update(measured)
+            self.node_events = dict(cumulative)
             gpu = self.node_events.get("DmlExecutionProvider", 0)
             cpu = self.node_events.get("CPUExecutionProvider", 0)
-            self.backend = ("GPU DirectML" + (" + CPU nodes" if cpu else "")) if gpu else "CPU"
-            if not gpu and "DmlExecutionProvider" in self.session.get_providers():
-                self.fallback_reason = "No DirectML node execution recorded; CPU execution"
+            self.backend = (
+                ("GPU DirectML" + (" + CPU nodes" if cpu else ""))
+                if gpu
+                else ("CPU" if cpu else "Execution provider unverified")
+            )
+            if not gpu and not cpu:
+                self.fallback_reason = "No execution-provider events recorded"
+            elif not gpu and "DmlExecutionProvider" in self.session.get_providers():
+                self.fallback_reason = "No DirectML node execution recorded in the profiled forward"
             self.profile_pending = False
             self.emit(
                 "backend",

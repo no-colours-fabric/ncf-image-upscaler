@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "dialog_fix": "Owner palette, foreground and local control resources applied to confirmation, rename, Models; native OS file pickers/message boxes retain OS rendering",
+  "dialog_checks": 84,
+  "scope": "Actual WPF modal dialogs and effective contrast>=4.5 in all3styles, controlled close; component renders inspected; not native mouse input",
+  "appearance_preferences_checks": 18,
+  "workarea_checks": 16,
+  "close_component_cases": 7,
+  "locate_escape_component_assertions": 10,
+  "input_privacy": "Synthetic text/images only; raw model folder paths not published",
+  "native_user_feedback": "GPU works well; subsequent reported UI defects corrected with component regression; no claim user rechecked corrected installer",
+  "maximum_work_area": "Actual controlled HWND maximize/restore matches queried current monitor work area; other taskbar sides/negative coordinates tested as synthetic rectangles"
+}

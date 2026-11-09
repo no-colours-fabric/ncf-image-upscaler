@@ -10,7 +10,12 @@ app = Path(__file__).resolve().parents[1]
 repo = app.parents[1]
 stage = Path(sys.argv[1])
 paths = list((app / "src").glob("*.cs")) + list((app / "engine").glob("*.py"))
-paths += [app / "models.json", app / "wheels.json", app / "toolchain.json"]
+paths += [
+    app / "models.json",
+    app / "wheels.json",
+    app / "toolchain.json",
+    app / "native-components.json",
+]
 paths += [repo / "src/ncf_image_upscaler/imaging.py", repo / "native/Tools/MakeIcon.swift"]
 sources = {
     p.relative_to(repo).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in paths

@@ -1,0 +1,11 @@
+{
+  "component": "Microsoft DirectML",
+  "bundled_version": "1.13.1+240111-2204.1.dml-1.13.9b0890f",
+  "bundled_source": "onnxruntime_directml-1.17.3-cp311-cp311-win_amd64.whl",
+  "bundled_dll_sha256": "a27c02b81f29d45d9dce982242f40b3fa487d4c588ab11f858f99a9ee1450ed3",
+  "license_source": "https://api.nuget.org/v3-flatcontainer/microsoft.ai.directml/1.13.1/microsoft.ai.directml.1.13.1.nupkg",
+  "license_package_sha256": "a38cef0d59f314fbcc0cd6551c5a762db7cfdaf8a977f85df32a0b1e279d3ba7",
+  "license_file": "resources/notices/Microsoft-DirectML-LICENSE.txt",
+  "license_sha256": "a05138e3a085ff60a44881eedfa58dccb03ecc1d7b1f6ae888418e8c2fec4b8d",
+  "note": "The DLL is pinned from the official Microsoft ORT wheel, not copied from the system. The license notice is retained from the official DirectML 1.13.1 redistributable; that package DLL is not byte-identical to the wheel DLL."
+}

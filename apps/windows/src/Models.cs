@@ -36,7 +36,7 @@ public static class ModelStore {
    string temporary=Path.Combine(Root,"download-"+Guid.NewGuid().ToString("N")+".partial");
    try{
     ServicePointManager.SecurityProtocol|=SecurityProtocolType.Tls12;
-    var request=(HttpWebRequest)WebRequest.Create(model.Url);request.Timeout=30000;request.ReadWriteTimeout=30000;request.UserAgent="NCF-Image-Upscaler-Windows/0.1.0";
+    var request=(HttpWebRequest)WebRequest.Create(model.Url);request.Timeout=30000;request.ReadWriteTimeout=30000;request.UserAgent="NCF-Image-Upscaler-Windows/0.2.0";
     using(stop.Register(request.Abort))using(var response=(HttpWebResponse)request.GetResponse())using(var input=response.GetResponseStream())using(var output=new FileStream(temporary,FileMode.CreateNew,FileAccess.Write,FileShare.None))using(var hash=SHA256.Create()){
      if(response.ResponseUri.Scheme!="https")throw new IOException("An insecure download redirect was refused.");
      long received=0;var buffer=new byte[131072];int count;
@@ -69,6 +69,7 @@ public sealed class ModelsWindow : Window {
   PreviewKeyDown+=delegate(object sender,System.Windows.Input.KeyEventArgs e){if(e.Key==System.Windows.Input.Key.Escape){e.Handled=true;CancelAndClose();}};
   Closing+=delegate(object sender,System.ComponentModel.CancelEventArgs e){if(running){e.Cancel=true;closeAfter=true;if(stop!=null)stop.Cancel();}};
   text.Text=String.Join("\n",models.Select(x=>x.name+" · "+(x.bytes/1048576.0).ToString("0.0")+" MiB"))+"\n\nTotal: "+(models.Sum(x=>x.bytes)/1048576.0).ToString("0.0")+" MiB. Existing verified files are reused.";
+  var main=owner as MainWindow;if(main!=null)main.ApplyDialogAppearance(this);
   if(automatic)Loaded+=async delegate{if(automaticStarted)return;automaticStarted=true;await Prepare();};
  }
  void RequestCancel(bool close){Ready=false;if(close)closeAfter=true;if(stop!=null){cancel.IsEnabled=false;text.Text="Cancelling — waiting for preparation to stop…";stop.Cancel();}}

@@ -63,7 +63,7 @@ public sealed partial class MainWindow : Window {
     int resultScale=4;
     Process worker;
     public MainWindow(string initial) {
-        Title="NCF Image Upscaler — GPU Local 20261109-02";Width=1296;Height=839;MinWidth=1056;MinHeight=579;WindowStartupLocation=WindowStartupLocation.CenterScreen;
+        Title="NCF Image Upscaler";Width=1296;Height=839;MinWidth=1056;MinHeight=579;WindowStartupLocation=WindowStartupLocation.CenterScreen;
         Background=Brushes.WhiteSmoke;FontFamily=new FontFamily("Segoe UI");FontSize=13;
         TemporarySession.RemoveAbandoned(TemporarySession.DefaultRoot);ownedSession=new TemporarySession(TemporarySession.DefaultRoot);session=ownedSession.DirectoryPath;sidebar.MetadataLoader=(paths,stop)=>MetadataReader.Read(bundle,session,paths,stop);
         var root=new DockPanel{Background=Brushes.WhiteSmoke};Content=root;
@@ -266,7 +266,7 @@ public sealed partial class MainWindow : Window {
         var buttons=new StackPanel {Orientation=Orientation.Horizontal,HorizontalAlignment=HorizontalAlignment.Right};stack.Children.Add(buttons);
         for(int i=0;i<labels.Length;i++){int index=i;var button=new Button();Configure(button,labels[i],delegate {result=index;dialog.DialogResult=true;});button.IsDefault=i==0;buttons.Children.Add(button);}
         dialog.PreviewKeyDown+=delegate(object sender,KeyEventArgs e){if(e.Key==Key.Escape){result=labels.Length-1;dialog.DialogResult=false;e.Handled=true;}};
-        dialog.ShowDialog();return result;
+        ApplyDialogAppearance(dialog);dialog.ShowDialog();return result;
     }
     void ShowError(string message) {
 #if CLOSE_REGRESSION

@@ -1,0 +1,22 @@
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using NCF;
+class AppearancePreferencesRegression {
+ static readonly BindingFlags Flags=BindingFlags.Instance|BindingFlags.NonPublic;
+ static int count;static void Check(bool ok,string name){if(!ok)throw new Exception(name);count++;Console.WriteLine("PASS "+name);}
+ static ComboBox Choice(MainWindow w){return (ComboBox)typeof(MainWindow).GetField("appearanceChoice",Flags).GetValue(w);}
+ [STAThread]static void Main(string[] args){TemporarySession.RegressionRoot=args[0];Directory.CreateDirectory(args[0]);string file=Path.Combine(args[0],"appearance.preferences");if(args.Length>1&&args[1]=="read"){Console.WriteLine(AppearancePreferences.ReadIndex());return;}
+ Check(!File.Exists(file)&&AppearancePreferences.ReadIndex()==0,"Missing preference defaults to Soft");
+ var app=new Application();System.Threading.SynchronizationContext.SetSynchronizationContext(new DispatcherSynchronizationContext());var first=new MainWindow(null);first.ErrorOverride=message=>{throw new Exception(message);};var c=Choice(first);Check(c.Items.Count==3&&c.SelectedIndex==0,"All three styles retained");Check(!File.Exists(file),"Opening an initial window does not write defaults");var group=(StackPanel)System.Windows.LogicalTreeHelper.GetParent(c);Check(group.Children.IndexOf(c)==1&&group.Children[0] is Button,"Appearance control immediately after Models");
+ c.SelectedIndex=2;Check(File.ReadAllText(file).Trim()=="Studio"&&AppearancePreferences.ReadIndex()==2,"Choice saved immediately as Studio");var second=new MainWindow(null);Check(Choice(second).SelectedIndex==2,"New window reads latest Studio setting");Check(File.ReadAllText(file).Trim()=="Studio","New window does not overwrite saved setting");
+ c.SelectedIndex=1;Check(AppearancePreferences.ReadIndex()==1&&Choice(second).SelectedIndex==2,"New selection saved without changing existing other window");var third=new MainWindow(null);Check(Choice(third).SelectedIndex==1,"Next window reads latest Fluent setting");second.ForceTestClose();Check(AppearancePreferences.ReadIndex()==1,"Closing an older window does not restore its outdated choice");
+ var process=new ProcessStartInfo(Assembly.GetExecutingAssembly().Location,"\""+args[0]+"\" read"){UseShellExecute=false,CreateNoWindow=true,RedirectStandardOutput=true};using(var p=Process.Start(process)){string value=p.StandardOutput.ReadToEnd();p.WaitForExit();Check(p.ExitCode==0&&value.Trim()=="1","Separate fresh process reads saved appearance");}
+ string error;Check(!AppearancePreferences.TrySave(99,out error)&&AppearancePreferences.ReadIndex()==1,"Unknown value rejected without changing saved style");File.WriteAllText(file,"unknown");Check(AppearancePreferences.ReadIndex()==0,"Invalid stored value falls back to Soft");Check(AppearancePreferences.TrySave(0,out error)&&File.ReadAllText(file).Trim()=="Soft","Repairing stored preference is atomic");Check(Directory.GetFiles(args[0],"*.tmp").Length==0,"No temporary settings file left behind");
+ string blocker=Path.Combine(args[0],"blocked");File.WriteAllText(blocker,"sentinel");TemporarySession.RegressionRoot=Path.Combine(blocker,"child");Check(!AppearancePreferences.TrySave(2,out error)&&File.ReadAllText(blocker)=="sentinel","Write error reported and existing data preserved");TemporarySession.RegressionRoot=args[0];first.Width=1056;first.Show();var frame=new DispatcherFrame();var timer=new DispatcherTimer{Interval=TimeSpan.FromMilliseconds(200)};timer.Tick+=delegate{timer.Stop();frame.Continue=false;};timer.Start();Dispatcher.PushFrame(frame);typeof(MainWindow).GetMethod("SetGpuAvailable",Flags).Invoke(first,new object[]{true});first.UpdateLayout();var models=(FrameworkElement)group.Children[0];double modelsRight=models.TranslatePoint(new Point(models.ActualWidth,0),first).X,choiceLeft=c.TranslatePoint(new Point(0,0),first).X;Check(choiceLeft>=modelsRight&&choiceLeft-modelsRight<=8,"Appearance follows Models visually at minimum window width");var saveAs=(Button)typeof(MainWindow).GetField("saveAs",Flags).GetValue(first);Check(saveAs.TranslatePoint(new Point(saveAs.ActualWidth,0),first).X<=first.ActualWidth,"Compact toolbar fits minimum width with GPU visible");first.ForceTestClose();third.ForceTestClose();Console.WriteLine(count+" assertions; isolated D settings; no native user input/inference");
+ }
+}

@@ -4,3 +4,6 @@
 *.icns binary
 *.swift linguist-language=Swift
 src/ncf_image_upscaler/_vendor/** linguist-vendored
+
+# Preserve the upstream Microsoft DirectML license notice byte for byte.
+apps/windows/resources/notices/Microsoft-DirectML-LICENSE.txt -text whitespace=-blank-at-eol,-blank-at-eof
