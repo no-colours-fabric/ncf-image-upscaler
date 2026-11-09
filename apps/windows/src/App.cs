@@ -68,9 +68,9 @@ public sealed partial class MainWindow : Window {
         TemporarySession.RemoveAbandoned(TemporarySession.DefaultRoot);ownedSession=new TemporarySession(TemporarySession.DefaultRoot);session=ownedSession.DirectoryPath;sidebar.MetadataLoader=(paths,stop)=>MetadataReader.Read(bundle,session,paths,stop);
         var root=new DockPanel{Background=Brushes.WhiteSmoke};Content=root;
         var toolbar=new Grid{Margin=new Thickness(12,4,12,4)};DockPanel.SetDock(toolbar,Dock.Top);root.Children.Add(toolbar);
-        for(int i=0;i<10;i++)toolbar.ColumnDefinitions.Add(new ColumnDefinition{Width=i==1||i==5?new GridLength(1,GridUnitType.Star):GridLength.Auto});
+        for(int i=0;i<10;i++)toolbar.ColumnDefinitions.Add(new ColumnDefinition{Width=i==5?new GridLength(1,GridUnitType.Star):GridLength.Auto});
         Configure(open,"Open",async delegate{await OpenDialog();});SvgIcons.Button(open,"folder-open","Open",14);toolbar.Children.Add(open);
-        var modelsButton=new Button();Configure(modelsButton,"Models…",async delegate{await OpenModels();});Grid.SetColumn(modelsButton,1);modelsButton.HorizontalAlignment=HorizontalAlignment.Left;toolbar.Children.Add(modelsButton);
+        var modelsButton=new Button();Configure(modelsButton,"Models…",async delegate{await OpenModels();});appearanceLeadingControls.Orientation=Orientation.Horizontal;appearanceLeadingControls.Margin=new Thickness(0,0,12,0);Grid.SetColumn(appearanceLeadingControls,1);toolbar.Children.Add(appearanceLeadingControls);appearanceLeadingControls.Children.Add(modelsButton);
         var modes=new StackPanel{Orientation=Orientation.Horizontal};Grid.SetColumn(modes,2);toolbar.Children.Add(modes);InitializeGpuToggle();modes.Children.Add(gpuToggle);
         model.ItemsSource=new[]{"Photo","Illustration","Fast"};model.SelectedIndex=0;model.Width=112;model.Height=24;model.Margin=new Thickness(0,0,8,0);model.VerticalContentAlignment=VerticalAlignment.Center;modes.Children.Add(model);
         scale.ItemsSource=new[]{"×1","×2","×4"};scale.SelectedIndex=2;

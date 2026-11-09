@@ -1,6 +1,8 @@
-# Local GPU build 20261109-03 — appearance comparison
+# Local GPU build 20261109-05 — saved appearance
 
-Appearance selector: Soft / Fluent / Studio. Small 24-DIP toolbar controls,
+Appearance selector after Models: Soft / Fluent / Studio. The choice is saved
+immediately in per-user settings; newly opened windows and future launches read
+the latest saved choice. Existing windows retain their own appearance. Small 24-DIP toolbar controls,
 a 24-DIP caption and a 32-DIP toolbar. Appearance changes retain the image,
 GPU state and enhancement settings.
 

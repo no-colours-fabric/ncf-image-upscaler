@@ -21,10 +21,11 @@ public sealed class AppearancePalette {
 public sealed partial class MainWindow {
  AppearancePalette appearance=AppearancePalette.Create(0);
  readonly ComboBox appearanceChoice=new ComboBox();
+ readonly StackPanel appearanceLeadingControls=new StackPanel();
  Grid appearanceToolbar;DockPanel appearanceRoot,appearanceFooter;Grid caption;
  void InitializeAppearance(DockPanel root,Grid toolbar,DockPanel footer){
   appearanceRoot=root;appearanceToolbar=toolbar;appearanceFooter=footer;
-  appearanceChoice.ItemsSource=new[]{"Soft","Fluent","Studio"};appearanceChoice.SelectedIndex=0;appearanceChoice.Width=100;appearanceChoice.Height=24;appearanceChoice.Margin=new Thickness(10,0,10,0);appearanceChoice.HorizontalAlignment=HorizontalAlignment.Right;appearanceChoice.ToolTip="Appearance: Soft minimalism / Fluent Windows / Studio graphite";System.Windows.Automation.AutomationProperties.SetName(appearanceChoice,"Appearance");Grid.SetColumn(appearanceChoice,5);toolbar.Children.Add(appearanceChoice);
+  appearanceChoice.ItemsSource=new[]{"Soft","Fluent","Studio"};appearanceChoice.SelectedIndex=AppearancePreferences.ReadIndex();appearanceChoice.Width=100;appearanceChoice.Height=24;appearanceChoice.Margin=new Thickness(0,0,6,0);appearanceChoice.HorizontalAlignment=HorizontalAlignment.Left;appearanceChoice.ToolTip="Appearance: Soft minimalism / Fluent Windows / Studio graphite";System.Windows.Automation.AutomationProperties.SetName(appearanceChoice,"Appearance");appearanceLeadingControls.Children.Add(appearanceChoice);
   // Compact custom caption keeps native WindowChrome dragging, resize and system menu.
   WindowStyle=WindowStyle.None;WindowChrome.SetWindowChrome(this,new WindowChrome{CaptionHeight=24,ResizeBorderThickness=new Thickness(6),GlassFrameThickness=new Thickness(0),CornerRadius=new CornerRadius(0),UseAeroCaptionButtons=false});
   caption=new Grid{Height=24,Margin=new Thickness(12,0,0,0)};caption.ColumnDefinitions.Add(new ColumnDefinition());caption.ColumnDefinitions.Add(new ColumnDefinition{Width=GridLength.Auto});
@@ -34,7 +35,7 @@ public sealed partial class MainWindow {
   AddCaptionButton(buttons,"Maximize / restore","M 1,1 L 9,1 L 9,9 L 1,9 Z",delegate{WindowState=WindowState==WindowState.Maximized?WindowState.Normal:WindowState.Maximized;});
   AddCaptionButton(buttons,"Close","M 1,1 L 9,9 M 9,1 L 1,9",delegate{Close();});
   DockPanel.SetDock(caption,Dock.Top);root.Children.Insert(0,caption);
-  appearanceChoice.SelectionChanged+=delegate{ApplyAppearance(appearanceChoice.SelectedIndex);};ApplyAppearance(0);
+  appearanceChoice.SelectionChanged+=delegate{ApplyAppearance(appearanceChoice.SelectedIndex);string error;if(!AppearancePreferences.TrySave(appearanceChoice.SelectedIndex,out error))ShowError("Could not save the appearance preference.\n"+error);};ApplyAppearance(appearanceChoice.SelectedIndex);
  }
  void AddCaptionButton(Panel parent,string name,string geometry,RoutedEventHandler handler){var button=new Button{Width=34,Height=24,Padding=new Thickness(0),BorderThickness=new Thickness(0),ToolTip=name};var path=new Path{Data=Geometry.Parse(geometry),Width=10,Height=10,Stretch=Stretch.Uniform,StrokeThickness=1};path.SetBinding(Shape.StrokeProperty,new Binding("Foreground"){Source=button});button.Content=path;button.Click+=handler;System.Windows.Automation.AutomationProperties.SetName(button,name);WindowChrome.SetIsHitTestVisibleInChrome(button,true);parent.Children.Add(button);}
  static Binding ParentBinding(string name){return new Binding(name){RelativeSource=new RelativeSource(RelativeSourceMode.TemplatedParent)};}
