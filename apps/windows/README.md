@@ -1,6 +1,8 @@
-# Local GPU build 20261109-01
+# Local GPU build 20261109-02
 
-Auto GPU prefers DirectML, with explicit CPU fallback. CPU forces local CPU.
+GPU On prefers DirectML, with explicit CPU fallback. GPU Off forces local CPU.
+The button sits left of the preset selector and is hidden unless an offline,
+weight-free DirectML execution probe succeeds. On uses active system colors.
 The status reports selected backend, then measured ONNX node execution after the first forward. Mixed GPU/CPU graphs are labelled. Profiles beside private results retain diagnostic evidence. No driver changes or downloads during inference. Intel UHD Graphics tested locally; this is a separate local build, not the published 0.1.0 installer.
 
 # NCF Image Upscaler for Windows
