@@ -1,3 +1,8 @@
+# Local GPU build 20261109-01
+
+Auto GPU prefers DirectML, with explicit CPU fallback. CPU forces local CPU.
+The status reports selected backend, then measured ONNX node execution after the first forward. Mixed GPU/CPU graphs are labelled. Profiles beside private results retain diagnostic evidence. No driver changes or downloads during inference. Intel UHD Graphics tested locally; this is a separate local build, not the published 0.1.0 installer.
+
 # NCF Image Upscaler for Windows
 
 Local CPU image enhancement. Windows 10 x64 build 19045 is the tested environment;

@@ -40,7 +40,7 @@ dirty = bool(
             source_dirty=dirty,
             source_sha256=sources,
             model_weights_bundled=False,
-            runtime="CPython 3.11.3 / ONNX Runtime 1.17.3 CPU",
+            runtime="CPython 3.11.3 / ONNX Runtime DirectML 1.17.3 / CPU fallback",
             signed=False,
         ),
         indent=2,

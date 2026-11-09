@@ -35,7 +35,7 @@ public sealed partial class MainWindow : Window {
     static bool NativeControlFocus(){DependencyObject focus=Keyboard.FocusedElement as DependencyObject;while(focus!=null){if(focus is System.Windows.Controls.Primitives.TextBoxBase||focus is System.Windows.Controls.Primitives.ButtonBase||focus is System.Windows.Controls.Primitives.Selector||focus is Slider)return true;focus=focus is Visual?VisualTreeHelper.GetParent(focus):LogicalTreeHelper.GetParent(focus);}return false;}
     protected override void OnSourceInitialized(EventArgs args){base.OnSourceInitialized(args);var host=System.Windows.Interop.HwndSource.FromHwnd(new System.Windows.Interop.WindowInteropHelper(this).Handle);host.AddHook(delegate(IntPtr hwnd,int message,IntPtr wparam,IntPtr lparam,ref bool handled){if(message==0x100&&IsActive&&!NativeControlFocus()&&(Keyboard.Modifiers& (ModifierKeys.Control|ModifierKeys.Alt|ModifierKeys.Windows))==0){int scan=(int)((lparam.ToInt64()>>16)&255);Key key=scan==0x2c?Key.Z:scan==0x2d?Key.X:scan==0x39?Key.Space:scan==1?Key.Escape:Key.None;if(key!=Key.None){var e=new KeyEventArgs(Keyboard.PrimaryDevice,host,Environment.TickCount,key){RoutedEvent=Keyboard.PreviewKeyDownEvent};HandleNavigation(e);handled=e.Handled;}}return IntPtr.Zero;});}
     readonly Button open=new Button(),enhance=new Button(),cancel=new Button(),save=new Button(),saveAs=new Button();
-    readonly ComboBox model=new ComboBox(),scale=new ComboBox(),view=new ComboBox();
+    readonly ComboBox model=new ComboBox(),scale=new ComboBox(),view=new ComboBox(),backendChoice=new ComboBox();
     readonly TextBlock status=new TextBlock(),filename=new TextBlock(),zoomLabel=new TextBlock(),elapsed=new TextBlock();
     readonly ProgressBar progress=new ProgressBar();
     readonly DispatcherTimer timer=new DispatcherTimer();
@@ -63,7 +63,7 @@ public sealed partial class MainWindow : Window {
     int resultScale=4;
     Process worker;
     public MainWindow(string initial) {
-        Title="NCF Image Upscaler";Width=1296;Height=839;MinWidth=1056;MinHeight=579;WindowStartupLocation=WindowStartupLocation.CenterScreen;
+        Title="NCF Image Upscaler — GPU Local 20261109-01";Width=1296;Height=839;MinWidth=1056;MinHeight=579;WindowStartupLocation=WindowStartupLocation.CenterScreen;
         Background=Brushes.WhiteSmoke;FontFamily=new FontFamily("Segoe UI");FontSize=13;
         TemporarySession.RemoveAbandoned(TemporarySession.DefaultRoot);ownedSession=new TemporarySession(TemporarySession.DefaultRoot);session=ownedSession.DirectoryPath;sidebar.MetadataLoader=(paths,stop)=>MetadataReader.Read(bundle,session,paths,stop);
         var root=new DockPanel{Background=Brushes.WhiteSmoke};Content=root;
@@ -71,6 +71,7 @@ public sealed partial class MainWindow : Window {
         for(int i=0;i<10;i++)toolbar.ColumnDefinitions.Add(new ColumnDefinition{Width=i==1||i==5?new GridLength(1,GridUnitType.Star):GridLength.Auto});
         Configure(open,"Open",async delegate{await OpenDialog();});SvgIcons.Button(open,"folder-open","Open",18);toolbar.Children.Add(open);
         var modelsButton=new Button();Configure(modelsButton,"Models…",async delegate{await OpenModels();});Grid.SetColumn(modelsButton,1);modelsButton.HorizontalAlignment=HorizontalAlignment.Left;toolbar.Children.Add(modelsButton);
+        backendChoice.ItemsSource=new[]{"Auto GPU","CPU"};backendChoice.SelectedIndex=0;backendChoice.Width=110;backendChoice.Height=30;backendChoice.HorizontalAlignment=HorizontalAlignment.Right;backendChoice.ToolTip="Auto: DirectML GPU with CPU fallback. CPU: force local CPU.";Grid.SetColumn(backendChoice,5);toolbar.Children.Add(backendChoice);
         model.ItemsSource=new[]{"Photo","Illustration","Fast"};model.SelectedIndex=0;model.Width=138;model.Height=30;model.Margin=new Thickness(0,0,8,0);model.VerticalContentAlignment=VerticalAlignment.Center;Grid.SetColumn(model,2);toolbar.Children.Add(model);
         scale.ItemsSource=new[]{"×1","×2","×4"};scale.SelectedIndex=2;
         var segments=new UniformGrid{Rows=1,Columns=3,Width=118,Height=30,Margin=new Thickness(0,0,8,0)};Grid.SetColumn(segments,3);toolbar.Children.Add(segments);
@@ -171,17 +172,17 @@ public sealed partial class MainWindow : Window {
         if(dirty && Choice("Enhance again?","The current result will remain available if the new enhancement fails.",new string[]{"Enhance Again","Cancel"})!=0)return;
         StoreDocument();jobDocument=document;string input=sourcePath;
         string requested=Path.Combine(session,"result-"+Guid.NewGuid().ToString("N")+".png");
-        string preset=Convert.ToString(model.SelectedItem).ToLowerInvariant();int requestedScale=new int[]{1,2,4}[scale.SelectedIndex];
+        string requestedBackend=backendChoice.SelectedIndex==1?"cpu":"auto";string preset=Convert.ToString(model.SelectedItem).ToLowerInvariant();int requestedScale=new int[]{1,2,4}[scale.SelectedIndex];
         if(jobDocument!=null){jobDocument.Processing=true;jobDocument.WorkState="Preparing";}
-        jobGeneration++;lastJobNote="";processing.Reset();busy=true;cancelRequested=false;watch.Restart();cancelSince.Reset();timer.Start();progress.IsIndeterminate=true;progress.Visibility=Visibility.Visible;status.Text="Preparing local CPU processing…";Refresh();
+        jobGeneration++;lastJobNote="";processing.Reset();busy=true;cancelRequested=false;watch.Restart();cancelSince.Reset();timer.Start();progress.IsIndeterminate=true;progress.Visibility=Visibility.Visible;status.Text="Preparing local GPU / CPU processing…";Refresh();
         Outcome outcome=null;
         try {
-            outcome=await Task.Factory.StartNew(()=>RunWorker(new string[]{"--input",input,"--output",requested,"--model",preset,"--scale",requestedScale.ToString()}));
+            outcome=await Task.Factory.StartNew(()=>RunWorker(new string[]{"--input",input,"--output",requested,"--model",preset,"--scale",requestedScale.ToString(),"--backend",requestedBackend}));
             if(outcome.Completed!=null && File.Exists(requested)) {
                 var bitmap=await Task.Factory.StartNew(()=>LoadBitmap(requested));
                 if(jobDocument!=null){string old=jobDocument.Result;jobDocument.Result=requested;jobDocument.Saved=null;jobDocument.ResultScale=requestedScale;if(old!=null&&old!=requested)try{File.Delete(old);}catch{}}
                 if(document==jobDocument){resultPath=requested;savedPath=null;resultScale=requestedScale;dirty=true;canvas.SetResult(bitmap);displayedResult=requested;}
-                double seconds=Convert.ToDouble(outcome.Completed["seconds"]);lastJobNote="Completed in "+seconds.ToString("0.0",System.Globalization.CultureInfo.InvariantCulture)+" s";
+                double seconds=Convert.ToDouble(outcome.Completed["seconds"]);lastJobNote="Completed · "+Convert.ToString(outcome.Completed["backend"])+(outcome.Completed.ContainsKey("fallback_reason")&&!String.IsNullOrEmpty(Convert.ToString(outcome.Completed["fallback_reason"]))?" · CPU fallback":"")+" · "+seconds.ToString("0.0",System.Globalization.CultureInfo.InvariantCulture)+" s";
                 status.Text="Enhanced to "+bitmap.PixelWidth+" × "+bitmap.PixelHeight+" in "+seconds.ToString("0.0",System.Globalization.CultureInfo.InvariantCulture)+" s · Not saved";
             } else if(cancelRequested || outcome.Cancelled){lastJobNote="Cancelled · Previous result retained";status.Text=lastJobNote;}
             else {lastJobNote="Processing failed · Previous result retained";status.Text=lastJobNote;ShowError(outcome.Error??"The worker ended without a complete image result.");}

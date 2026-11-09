@@ -25,6 +25,7 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--model", choices=["photo", "illustration", "fast"], required=True)
     parser.add_argument("--scale", type=int, choices=[1, 2, 4], required=True)
+    parser.add_argument("--backend", choices=["auto", "cpu"], default="auto")
     args = parser.parse_args()
     from ncf_image_upscaler.imaging import open_image, upscale_image, validate_paths
     from runtime_policy import configure_runtime
@@ -55,25 +56,21 @@ def main():
         total=total,
         model=args.model,
         scale=args.scale,
-        backend="CPU",
+        backend="Preparing local backend",
     )
     if hashlib.sha256(model.read_bytes()).hexdigest() != spec["sha256"]:
         raise RuntimeError(
             "The installed model failed its integrity check. "
             "Open Models and choose Download / Repair Models."
         )
-    options = ort.SessionOptions()
-    options.intra_op_num_threads = 4
-    options.inter_op_num_threads = 1
-    session = ort.InferenceSession(
-        str(model), sess_options=options, providers=["CPUExecutionProvider"]
-    )
-    if session.get_providers() != ["CPUExecutionProvider"]:
-        raise RuntimeError("Could not select the local CPU backend.")
+    from execution_backend import ExecutionBackend
+
+    session = ExecutionBackend(ort, model, args.backend, args.output, emit)
     emit(
         "ready",
         total=total,
-        backend="CPU",
+        backend=session.backend,
+        fallback_reason=session.fallback_reason,
         inference_mode="full_frame" if key == "photo2" else "tiled",
     )
     from onnx_engine import OnnxEngine
@@ -92,6 +89,9 @@ def main():
         alpha=result.has_alpha,
         model=args.model,
         scale=args.scale,
+        backend=session.backend,
+        node_events=session.node_events,
+        fallback_reason=session.fallback_reason,
         artifact=key,
         artifact_sha256=spec["sha256"],
     )

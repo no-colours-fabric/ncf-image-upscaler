@@ -4,7 +4,7 @@
 def configure_runtime():
     import onnxruntime as ort
 
-    # Official Windows 1.17.3 builds enable platform TraceLogging by default.
+    # Official Windows 1.17.3 CPU/DirectML builds enable platform TraceLogging by default.
     # Use that version's supported API, not unrelated/newer environment flags.
     ort.disable_telemetry_events()
     return ort
